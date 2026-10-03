@@ -34,7 +34,8 @@ public class DebugGroups {
         .build();
     CHUNK_RENDERING = Builder.titled("Chunk Rendering").withAccentColor(15773856)
         .build();
-    PERFORMANCE_IMPACTORS = Builder.titled("Performance Impactors").withAccentColor(65280)
+    PERFORMANCE_IMPACTORS = Builder.titled("Performance Impactors")
+        .withAccentColor(65280)
         .withPreferredColumn(Side.RIGHT)
         .build();
     SYSTEM_SPECS = Builder.titled("System Specs").withAccentColor(16711680).withPreferredColumn(Side.RIGHT)

@@ -27,15 +27,18 @@ public class DebugEntryMemory implements DebugScreenEntry {
     long total = Runtime.getRuntime().totalMemory();
     long free = Runtime.getRuntime().freeMemory();
     long used = total - free;
-    displayer.addFactToGroup(DebugGroups.MEMORY, "Used",
-                             (fact) -> fact.formattedValue("%2d", used * 100L / max).text("% ")
-                                 .formattedValue("%03d", bytesToMebibytes(used)).text("/")
-                                 .formattedValue("%03d", bytesToMebibytes(max)).text("MiB"));
+    displayer.addFactToGroup(DebugGroups.MEMORY, "Used", (fact) -> fact.formattedValue("%2d", used * 100L / max)
+        .text("% ")
+        .formattedValue("%03d", bytesToMebibytes(used))
+        .text("/")
+        .formattedValue("%03d", bytesToMebibytes(max))
+        .text("MiB"));
     displayer.addFactToGroup(DebugGroups.MEMORY, "Alloc rate", (fact) -> fact.formattedValue("%03d", bytesToMebibytes(
         this.allocationRateCalculator.bytesAllocatedPerSecond(used))).text("MiB/s"));
-    displayer.addFactToGroup(DebugGroups.MEMORY, "Allocated",
-                             (fact) -> fact.formattedValue("%2d", total * 100L / max).text("% ")
-                                 .formattedValue("%03d", bytesToMebibytes(total)).text("MiB"));
+    displayer.addFactToGroup(DebugGroups.MEMORY, "Allocated", (fact) -> fact.formattedValue("%2d", total * 100L / max)
+        .text("% ")
+        .formattedValue("%03d", bytesToMebibytes(total))
+        .text("MiB"));
   }
 
   public boolean isAllowed(final boolean reducedDebugInfo) {

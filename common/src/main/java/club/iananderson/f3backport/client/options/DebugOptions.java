@@ -24,8 +24,9 @@ public class DebugOptions {
                                                 return var10000;
                                               }, new OptionInstance.ClampingLazyMaxIntRange(-1, () -> {
       Minecraft minecraft = Minecraft.getInstance();
-      return !minecraft.isRunning() ? 2147483646
-                                    : minecraft.getWindow().calculateScale(0, minecraft.isEnforceUnicode());
+      return !minecraft.isRunning()
+             ? 2147483646
+             : minecraft.getWindow().calculateScale(0, minecraft.isEnforceUnicode());
     }, 2147483646), 0, (var0) -> {
     });
 

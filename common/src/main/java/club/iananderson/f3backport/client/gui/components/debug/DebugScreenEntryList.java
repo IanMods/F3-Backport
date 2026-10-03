@@ -82,8 +82,7 @@ public class DebugScreenEntryList {
       case NEVER:
         if (this.isOverlayVisible) {
           this.setStatus(location, DebugScreenEntryStatus.IN_OVERLAY);
-        }
-        else {
+        } else {
           this.setStatus(location, DebugScreenEntryStatus.ALWAYS_ON);
         }
 
@@ -142,9 +141,10 @@ public class DebugScreenEntryList {
   }
 
   public void save() {
-    SerializedOptions serializedOptions = new SerializedOptions(Optional.ofNullable(this.profile),
-                                                                this.profile == null ? Optional.of(this.allStatuses)
-                                                                                     : Optional.empty());
+    SerializedOptions serializedOptions = new SerializedOptions(Optional.ofNullable(this.profile), this.profile == null
+                                                                                                   ? Optional.of(
+        this.allStatuses)
+                                                                                                   : Optional.empty());
 
     // try {
     //   FileUtils.writeStringToFile(this.debugProfileFile,

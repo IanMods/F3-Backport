@@ -56,7 +56,8 @@ public class DebugColumn {
   }
 
   public enum Side {
-    LEFT, RIGHT;
+    LEFT,
+    RIGHT;
 
     Side() {
     }

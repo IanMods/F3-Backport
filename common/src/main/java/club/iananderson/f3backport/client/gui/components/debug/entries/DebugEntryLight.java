@@ -20,9 +20,12 @@ public class DebugEntryLight implements DebugScreenEntry {
 
   private static DebugFact populateClientLightFact(final DebugFact fact, final Minecraft minecraft,
       final BlockPos feetPos) {
-    return fact.value(minecraft.level.getChunkSource().getLightEngine().getRawBrightness(feetPos, 0)).text(" (")
-        .value(minecraft.level.getBrightness(LightLayer.SKY, feetPos)).text(" sky, ")
-        .value(minecraft.level.getBrightness(LightLayer.BLOCK, feetPos)).text(" block)");
+    return fact.value(minecraft.level.getChunkSource().getLightEngine().getRawBrightness(feetPos, 0))
+        .text(" (")
+        .value(minecraft.level.getBrightness(LightLayer.SKY, feetPos))
+        .text(" sky, ")
+        .value(minecraft.level.getBrightness(LightLayer.BLOCK, feetPos))
+        .text(" block)");
   }
 
   public void display(final DebugScreenDisplayer displayer, final @Nullable Level serverOrClientLevel,
@@ -35,17 +38,17 @@ public class DebugEntryLight implements DebugScreenEntry {
         if (serverChunk != null) {
           LevelLightEngine lightEngine = serverChunk.getLevel().getLightEngine();
           displayer.addFactToGroup(DebugGroups.LIGHT, "Server", (fact) -> fact.value(
-                  lightEngine.getLayerListener(LightLayer.SKY).getLightValue(feetPos)).text("sky, ")
-              .value(lightEngine.getLayerListener(LightLayer.BLOCK).getLightValue(feetPos)).text(" block)"));
-        }
-        else {
+                  lightEngine.getLayerListener(LightLayer.SKY).getLightValue(feetPos))
+              .text("sky, ")
+              .value(lightEngine.getLayerListener(LightLayer.BLOCK).getLightValue(feetPos))
+              .text(" block)"));
+        } else {
           displayer.addFactToGroup(DebugGroups.LIGHT, "Server", (fact) -> fact.value("Unavailable"));
         }
 
         displayer.addFactToGroup(DebugGroups.LIGHT, "Client",
                                  (fact) -> populateClientLightFact(fact, minecraft, feetPos));
-      }
-      else {
+      } else {
         displayer.addFactToGroup(DebugGroups.MISC, "Light",
                                  (fact) -> populateClientLightFact(fact, minecraft, feetPos));
       }

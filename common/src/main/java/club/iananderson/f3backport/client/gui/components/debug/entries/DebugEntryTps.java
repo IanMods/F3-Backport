@@ -32,11 +32,9 @@ public class DebugEntryTps implements DebugScreenEntry {
         String runStatus;
         if (tickRateManager.isSteppingForward()) {
           runStatus = "frozen - stepping";
-        }
-        else if (tickRateManager.isFrozen()) {
+        } else if (tickRateManager.isFrozen()) {
           runStatus = "frozen";
-        }
-        else {
+        } else {
           runStatus = "";
         }
 
@@ -47,12 +45,16 @@ public class DebugEntryTps implements DebugScreenEntry {
             runStatus = "sprinting";
           }
 
-          String tpsTarget =
-              isSpriting ? "-" : String.format(Locale.ROOT, "%.1f", tickRateManager.millisecondsPerTick());
-          fact.value("Integrated").text(" @ ").formattedValue("%.1f", server.getCurrentSmoothedTickTime()).text("/")
-              .value(tpsTarget).text(" ms");
-        }
-        else {
+          String tpsTarget = isSpriting
+                             ? "-"
+                             : String.format(Locale.ROOT, "%.1f", tickRateManager.millisecondsPerTick());
+          fact.value("Integrated")
+              .text(" @ ")
+              .formattedValue("%.1f", server.getCurrentSmoothedTickTime())
+              .text("/")
+              .value(tpsTarget)
+              .text(" ms");
+        } else {
           fact.text("\"").value(connectionListener.serverBrand()).text("\"");
         }
 
@@ -61,9 +63,10 @@ public class DebugEntryTps implements DebugScreenEntry {
         }
 
       });
-      displayer.addFactToGroup(DebugGroups.MISC, "Packets",
-                               (fact) -> fact.formattedValue("%.0f", averageSentPackets).text(" tx, ")
-                                   .formattedValue("%.0f", averageReceivedPackets).text(" rx"));
+      displayer.addFactToGroup(DebugGroups.MISC, "Packets", (fact) -> fact.formattedValue("%.0f", averageSentPackets)
+          .text(" tx, ")
+          .formattedValue("%.0f", averageReceivedPackets)
+          .text(" rx"));
     }
   }
 

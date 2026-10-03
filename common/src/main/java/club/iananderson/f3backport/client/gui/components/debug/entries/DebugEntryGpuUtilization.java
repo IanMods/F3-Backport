@@ -19,8 +19,7 @@ public class DebugEntryGpuUtilization implements DebugScreenEntry {
     displayer.addFactToGroup(DebugGroups.MISC, "GPU Utilization", (fact) -> {
       if (minecraft.getGpuUtilization() > (double) 100.0F) {
         fact.text(Component.literal("100%").withColor(-65536));
-      }
-      else {
+      } else {
         fact.value((int) Math.round(minecraft.getGpuUtilization())).text("%");
       }
 

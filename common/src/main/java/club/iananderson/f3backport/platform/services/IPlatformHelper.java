@@ -31,6 +31,8 @@ public interface IPlatformHelper {
    */
   default String getEnvironmentName() {
 
-    return isDevelopmentEnvironment() ? "development" : "production";
+    return isDevelopmentEnvironment()
+           ? "development"
+           : "production";
   }
 }

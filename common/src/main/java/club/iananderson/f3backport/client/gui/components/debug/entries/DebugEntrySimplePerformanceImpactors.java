@@ -20,9 +20,11 @@ public class DebugEntrySimplePerformanceImpactors implements DebugScreenEntry {
     Options options = minecraft.options;
     // displayer.addFactToGroup(DebugGroups.PERFORMANCE_IMPACTORS, "OIT", (fact) -> fact.value((Boolean)options.improvedTransparency().get() ? "On" : "Off"));
     displayer.addFactToGroup(DebugGroups.PERFORMANCE_IMPACTORS, "Clouds", (fact) -> fact.value(
-        options.cloudStatus().get() == CloudStatus.OFF ? "Off"
-                                                       : (options.cloudStatus().get() == CloudStatus.FAST ? "Fast"
-                                                                                                          : "Fancy")));
+        options.cloudStatus().get() == CloudStatus.OFF
+        ? "Off"
+        : (options.cloudStatus().get() == CloudStatus.FAST
+           ? "Fast"
+           : "Fancy")));
     displayer.addFactToGroup(DebugGroups.PERFORMANCE_IMPACTORS, "Biome Blend",
                              (fact) -> fact.value(options.biomeBlendRadius().get()));
     // TextureFilteringMethod filteringMethod = (TextureFilteringMethod)options.textureFiltering().get();

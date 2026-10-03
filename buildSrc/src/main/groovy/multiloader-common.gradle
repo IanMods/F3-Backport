@@ -63,7 +63,6 @@ dependencies {
 }
 
 
-
 jar {
     from(rootProject.file('LICENSE')) {
         rename { "${it}_${mod_name}" }
@@ -88,8 +87,8 @@ processResources {
             "group"                        : project.group, //Else we target the task's group.
             "minecraft_version"            : minecraft_version,
             "minecraft_version_range"      : minecraft_version_range,
-            "parchment_version": parchment_version,
-            "parchment_minecraft": parchment_minecraft,
+            "parchment_version"            : parchment_version,
+            "parchment_minecraft"          : parchment_minecraft,
             "fabric_api_version"           : fabric_api_version,
             "fabric_loader_version"        : fabric_loader_version,
             "fabric_version_range"         : fabric_version_range,

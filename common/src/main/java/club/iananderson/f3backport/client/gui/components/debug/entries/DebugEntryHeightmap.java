@@ -37,15 +37,15 @@ public class DebugEntryHeightmap implements DebugScreenEntry {
       for (Heightmap.Types type : Types.values()) {
         displayer.addFactToGroup(DebugGroups.HEIGHTMAP, HEIGHTMAP_NAMES.get(type), (fact) -> {
           int clientHeight = clientChunk.getHeight(type, feetPos.getX(), feetPos.getZ());
-          int serverHeight = serverChunk == null ? -1 : serverChunk.getHeight(type, feetPos.getX(), feetPos.getZ());
+          int serverHeight = serverChunk == null
+                             ? -1
+                             : serverChunk.getHeight(type, feetPos.getX(), feetPos.getZ());
           boolean verbose = type.sendToClient() && serverChunk != null && clientHeight != serverHeight;
           if (verbose) {
             fact.value(clientHeight).text(" (client), ").value(serverHeight).text(" (server)");
-          }
-          else if (type.sendToClient()) {
+          } else if (type.sendToClient()) {
             fact.value(clientHeight);
-          }
-          else if (serverChunk != null) {
+          } else if (serverChunk != null) {
             fact.value(serverHeight);
           }
 

@@ -25,8 +25,7 @@ public class DebugEntrySpawnCounts implements DebugScreenEntry {
     ServerLevel var10000;
     if (serverOrClientLevel instanceof ServerLevel level) {
       var10000 = level;
-    }
-    else {
+    } else {
       var10000 = null;
     }
 

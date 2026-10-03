@@ -62,7 +62,9 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
       fullHeight += customRenderer.height();
     }
 
-    int left = side == Side.LEFT ? 3 : scaledScreenWidth - 3 - fullWidth;
+    int left = side == Side.LEFT
+               ? 3
+               : scaledScreenWidth - 3 - fullWidth;
     int y = top;
     if (titleWidth > 0) {
       int var10001 = left - 1;
@@ -107,8 +109,7 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
       int accentColor = FastColor.ARGB32.opaque(this.group.accentColor().getAsInt());
       if (side == Side.LEFT) {
         graphics.fill(0, top - 1, 1, top + fullHeight + 1, accentColor);
-      }
-      else {
+      } else {
         graphics.fill(scaledScreenWidth - 1, top - 1, scaledScreenWidth, top + fullHeight + 1, accentColor);
       }
     }

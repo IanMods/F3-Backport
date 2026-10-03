@@ -35,7 +35,10 @@ public enum DataFixTypes {
 
       public <T> DataResult<Pair<A, T>> decode(final DynamicOps<T> ops, final T input) {
         Objects.requireNonNull(ops);
-        int fromVersion = ops.get(input, "DataVersion").flatMap(ops::getNumberValue).map(Number::intValue).result()
+        int fromVersion = ops.get(input, "DataVersion")
+            .flatMap(ops::getNumberValue)
+            .map(Number::intValue)
+            .result()
             .orElse(defaultVersion);
         Dynamic<T> dataWithoutVersion = new Dynamic<>(ops, ops.remove(input, "DataVersion"));
         Dynamic<T> fixedData = updateToCurrentVersion(dataFixer, dataWithoutVersion, fromVersion);

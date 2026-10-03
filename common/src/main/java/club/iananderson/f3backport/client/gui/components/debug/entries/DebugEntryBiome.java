@@ -34,8 +34,7 @@ public class DebugEntryBiome implements DebugScreenEntry {
                                    (fact) -> fact.value(printBiome(minecraft.level.getBiome(feetPos))));
           displayer.addFactToGroup(DebugGroups.POSITION, "Server Biome",
                                    (fact) -> fact.value(printBiome(serverOrClientLevel.getBiome(feetPos))));
-        }
-        else {
+        } else {
           displayer.addFactToGroup(DebugGroups.POSITION, "Biome",
                                    (fact) -> fact.value(printBiome(minecraft.level.getBiome(feetPos))));
         }

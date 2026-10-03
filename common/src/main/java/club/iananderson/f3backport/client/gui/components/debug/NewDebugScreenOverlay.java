@@ -53,12 +53,15 @@ public class NewDebugScreenOverlay {
 
   private static String formatChart(final KeyMapping keyDebugModifier, final KeyMapping keybind, final String name,
       final boolean status) {
-    return formatKeybind(keyDebugModifier, keybind) + " " + name + " " + (status ? "visible" : "hidden");
+    return formatKeybind(keyDebugModifier, keybind) + " " + name + " " + (status
+                                                                          ? "visible"
+                                                                          : "hidden");
   }
 
   private static String formatKeybind(final KeyMapping keyDebugModifier, final KeyMapping keybind) {
-    String debugModifier =
-        keyDebugModifier.isUnbound() ? "" : keyDebugModifier.getTranslatedKeyMessage().getString() + "+";
+    String debugModifier = keyDebugModifier.isUnbound()
+                           ? ""
+                           : keyDebugModifier.getTranslatedKeyMessage().getString() + "+";
     return "[" + debugModifier + keybind.getTranslatedKeyMessage().getString() + "]";
   }
 
@@ -74,8 +77,7 @@ public class NewDebugScreenOverlay {
       Collection<ResourceLocation> visibleEntries = this.debugEntries.getCurrentlyEnabled();
       if (visibleEntries.isEmpty()) {
         this.clearColumnCache();
-      }
-      else {
+      } else {
         if (this.lastDebugEntriesVersion != this.debugEntries.getCurrentlyEnabledVersion()) {
           this.lastDebugEntriesVersion = this.debugEntries.getCurrentlyEnabledVersion();
           this.clearColumnCache();
@@ -87,8 +89,7 @@ public class NewDebugScreenOverlay {
         if (this.minecraft.getCameraEntity() != null && this.minecraft.level != null) {
           BlockPos feetPos = this.minecraft.getCameraEntity().blockPosition();
           chunkPos = new ChunkPos(feetPos);
-        }
-        else {
+        } else {
           chunkPos = null;
         }
 
@@ -124,11 +125,13 @@ public class NewDebugScreenOverlay {
           String charts = formatChart(keyDebugModifier, debugKeyBinds.keyDebugProfilingChart, "Profiler",
                                       renderProfilerChart);
           charts = "Debug charts: " + charts + "; " + formatChart(keyDebugModifier, debugKeyBinds.keyDebugFpsCharts,
-                                                                  hasServer ? "fps + tps" : "fps", renderFpsCharts)
-              + ";";
+                                                                  hasServer
+                                                                  ? "fps + tps"
+                                                                  : "fps", renderFpsCharts) + ";";
           String networkChartText = formatChart(keyDebugModifier, debugKeyBinds.keyDebugNetworkCharts,
-                                                !this.minecraft.isLocalServer() ? "Bandwidth + Ping" : "Ping",
-                                                renderNetworkCharts);
+                                                !this.minecraft.isLocalServer()
+                                                ? "Bandwidth + Ping"
+                                                : "Ping", renderNetworkCharts);
           String helpText = "For help: press F3 + Q";
           displayer.addToGroup(debugHelp, List.of(charts, networkChartText, helpText));
         }
@@ -138,12 +141,10 @@ public class NewDebugScreenOverlay {
         int newScale = standardGuiScale;
         if (newScale == -1) {
           newScale = standardGuiScale;
-        }
-        else if (newScale == 0) {
+        } else if (newScale == 0) {
           int maxGuiScale = this.minecraft.getWindow().calculateScale(0, this.minecraft.isEnforceUnicode());
           newScale = maxGuiScale / 2;
-        }
-        else {
+        } else {
           newScale = window.calculateScale(newScale, this.minecraft.isEnforceUnicode());
         }
 
@@ -155,8 +156,7 @@ public class NewDebugScreenOverlay {
               .scale((float) newScale / (float) standardGuiScale, (float) newScale / (float) standardGuiScale, 1); //
           scaledScreenWidth = window.getWidth() / newScale;
           scaledScreenHeight = window.getHeight() / newScale;
-        }
-        else {
+        } else {
           scaledScreenWidth = graphics.guiWidth();
           scaledScreenHeight = graphics.guiHeight();
         }
@@ -171,9 +171,10 @@ public class NewDebugScreenOverlay {
           this.rightColumn.add(rightPriority, graphics, this.font, scaledScreenWidth);
         }
 
-        groups.values().removeIf(
-            (contentsx) -> contentsx.lines().isEmpty() && contentsx.facts().isEmpty() && contentsx.customRenderers()
-                .isEmpty());
+        groups.values()
+            .removeIf(
+                (contentsx) -> contentsx.lines().isEmpty() && contentsx.facts().isEmpty() && contentsx.customRenderers()
+                    .isEmpty());
 
         for (DebugGroup group : this.leftColumn.getPreviousGroups()) {
           if (!this.leftColumn.isFull(scaledScreenHeight)) {
@@ -202,8 +203,7 @@ public class NewDebugScreenOverlay {
             if (preferredSide.get() == Side.LEFT && !this.leftColumn.isFull(scaledScreenHeight)) {
               this.leftColumn.add(contents, graphics, this.font, scaledScreenWidth);
               iterator.remove();
-            }
-            else if (preferredSide.get() == Side.RIGHT && !this.rightColumn.isFull(scaledScreenHeight)) {
+            } else if (preferredSide.get() == Side.RIGHT && !this.rightColumn.isFull(scaledScreenHeight)) {
               this.rightColumn.add(contents, graphics, this.font, scaledScreenWidth);
               iterator.remove();
             }
@@ -214,8 +214,7 @@ public class NewDebugScreenOverlay {
           if (this.leftColumn.getHeightSoFar() < this.rightColumn.getHeightSoFar() && !this.leftColumn.isFull(
               scaledScreenHeight)) {
             this.leftColumn.add(contents, graphics, this.font, scaledScreenWidth);
-          }
-          else if (!this.rightColumn.isFull(scaledScreenHeight)) {
+          } else if (!this.rightColumn.isFull(scaledScreenHeight)) {
             this.rightColumn.add(contents, graphics, this.font, scaledScreenWidth);
           }
         }
@@ -228,8 +227,9 @@ public class NewDebugScreenOverlay {
           int maxWidth = scaledScreenWidth / 2;
           fpsChart.drawChart(graphics, 0, fpsChart.getWidth(maxWidth));
           if (tickTimeLogger.size() > 0) {
-            TpsDebugChart tpsChart = new TpsDebugChart(this.font, tickTimeLogger, () -> minecraft.level == null ? 0.0F
-                                                                                                                : minecraft.level.tickRateManager()
+            TpsDebugChart tpsChart = new TpsDebugChart(this.font, tickTimeLogger, () -> minecraft.level == null
+                                                                                        ? 0.0F
+                                                                                        : minecraft.level.tickRateManager()
                                                                                             .millisecondsPerTick());
 
             int width = tpsChart.getWidth(maxWidth);
@@ -254,8 +254,7 @@ public class NewDebugScreenOverlay {
         graphics.pose().popPose();
         profiler.pop();
       }
-    }
-    else {
+    } else {
       this.clearColumnCache();
     }
   }
@@ -268,17 +267,20 @@ public class NewDebugScreenOverlay {
   private @Nullable ServerLevel getServerLevel() {
     if (this.minecraft.level == null) {
       return null;
-    }
-    else {
+    } else {
       IntegratedServer server = this.minecraft.getSingleplayerServer();
-      return server != null ? server.getLevel(this.minecraft.level.dimension()) : null;
+      return server != null
+             ? server.getLevel(this.minecraft.level.dimension())
+             : null;
     }
   }
 
   private @Nullable Level getLevel() {
-    return this.minecraft.level == null ? null : DataFixUtils.orElse(
-        Optional.ofNullable(this.minecraft.getSingleplayerServer())
-            .flatMap((s) -> Optional.ofNullable(s.getLevel(this.minecraft.level.dimension()))), this.minecraft.level);
+    return this.minecraft.level == null
+           ? null
+           : DataFixUtils.orElse(Optional.ofNullable(this.minecraft.getSingleplayerServer())
+                                     .flatMap((s) -> Optional.ofNullable(s.getLevel(this.minecraft.level.dimension()))),
+                                 this.minecraft.level);
   }
 
   private @Nullable LevelChunk getServerChunk() {
@@ -295,8 +297,7 @@ public class NewDebugScreenOverlay {
       }
 
       return this.serverChunk.getNow(null);
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -308,8 +309,7 @@ public class NewDebugScreenOverlay {
       }
 
       return this.clientChunk;
-    }
-    else {
+    } else {
       return null;
     }
   }

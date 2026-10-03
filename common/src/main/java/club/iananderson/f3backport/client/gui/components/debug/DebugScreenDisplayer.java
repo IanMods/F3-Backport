@@ -13,8 +13,7 @@ public class DebugScreenDisplayer {
   public void addPriorityLine(final String line) {
     if (leftPriority.lines().size() > rightPriority.lines().size()) {
       rightPriority.lines().add(line);
-    }
-    else {
+    } else {
       leftPriority.lines().add(line);
     }
 
