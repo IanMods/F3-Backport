@@ -2,6 +2,9 @@ package club.iananderson.f3backport.client.gui.components.debug.entries;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
+import com.mojang.blaze3d.platform.Monitor;
+import com.mojang.blaze3d.platform.VideoMode;
+import java.util.Locale;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -13,27 +16,42 @@ public class DebugEntryFps implements DebugScreenEntry {
 
   public void display(final DebugScreenDisplayer displayer, final @Nullable Level serverOrClientLevel,
       final @Nullable LevelChunk clientChunk, final @Nullable LevelChunk serverChunk) {
-    Minecraft minecraft = Minecraft.getInstance();
-    // int framerateLimit = minecraft.getWindow().getFramerateLimit();
-    displayer.addPriorityLine(minecraft.fpsString);
-    // displayer.addPriorityLine(String.format(Locale.ROOT, "%d fps T: %s%s @%sHz", minecraft.getFps(), framerateLimit == 260 ? "inf" : framerateLimit, presentModeName((GpuSurface.PresentMode)surfaceConfiguration.map(GpuSurface.Configuration::presentMode).orElse((Object)null)), activeMode == null ? "0" : activeMode.refreshRateLabel()));
+    Minecraft mc = Minecraft.getInstance();
+
+    int framerateLimit = mc.getWindow().getFramerateLimit();
+
+    String frameRateLimitString = (framerateLimit == 260
+                                   ? "inf"
+                                   : String.valueOf(framerateLimit));
+
+    String vsyncString = mc.options.enableVsync().get()
+                         ? " (vsync)"
+                         : " ";
+
+    Monitor monitor = mc.getWindow().findBestMonitor();
+    VideoMode activeMode = null;
+    if (monitor != null) {
+      activeMode = monitor.getCurrentMode();
+    }
+
+    String refreshRateString = activeMode == null
+                               ? "0"
+                               : refreshRateLabel(activeMode.getRefreshRate());
+
+    displayer.addPriorityLine(
+        String.format(Locale.ROOT, "%d fps T: %s%s @%sHz", mc.getFps(), frameRateLimitString, vsyncString,
+                      refreshRateString));
+
+    // displayer.addPriorityLine(mc.fpsString);
+  }
+
+  public String refreshRateLabel(float refreshRate) {
+    return (double) refreshRate == Math.rint((double) refreshRate)
+           ? Integer.toString((int) refreshRate)
+           : String.format(Locale.ROOT, "%.2f", refreshRate);
   }
 
   public boolean isAllowed(final boolean reducedDebugInfo) {
     return true;
   }
-
-  // private static String presentModeName(final GpuSurface.@Nullable PresentMode mode) {
-  //   String var10000;
-  //   switch (mode) {
-  //     case null -> var10000 = "";
-  //     case IMMEDIATE -> var10000 = " (immediate)";
-  //     case MAILBOX -> var10000 = " (mailbox)";
-  //     case FIFO -> var10000 = " (fifo)";
-  //     case FIFO_RELAXED -> var10000 = " (fifo relaxed)";
-  //     default -> throw new MatchException((String)null, (Throwable)null);
-  //   }
-  //
-  //   return var10000;
-  // }
 }

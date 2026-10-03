@@ -1,6 +1,7 @@
 package club.iananderson.f3backport.mixin;
 
 import club.iananderson.f3backport.client.gui.components.debug.NewDebugScreenOverlay;
+import club.iananderson.f3backport.config.F3BackportClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
@@ -38,15 +39,21 @@ public abstract class MixinDebugScreen {
 
   @Inject(method = "<init>", at = @At(value = "TAIL"))
   private void init(Minecraft minecraft, CallbackInfo ci) {
-    f3_Backport$newDebugScreenOverlay = new NewDebugScreenOverlay(minecraft);
+    if (F3BackportClient.getEnableMod()) {
+      f3_Backport$newDebugScreenOverlay = new NewDebugScreenOverlay(minecraft);
+    }
   }
 
   @Inject(method = "render", at = @At(value = "HEAD"), cancellable = true)
   private void render(GuiGraphics guiGraphics, CallbackInfo ci) {
-    f3_Backport$newDebugScreenOverlay.debugEntries.setOverlayVisible(minecraft.gui.getDebugOverlay().showDebugScreen());
-    f3_Backport$newDebugScreenOverlay.render(guiGraphics, this.renderProfilerChart, this.renderFpsCharts,
-                                             this.renderNetworkCharts, this.frameTimeLogger, this.bandwidthLogger,
-                                             this.pingLogger);
-    ci.cancel();
+    if (F3BackportClient.getEnableMod()) {
+      f3_Backport$newDebugScreenOverlay.debugEntries.setOverlayVisible(
+          minecraft.gui.getDebugOverlay().showDebugScreen());
+
+      f3_Backport$newDebugScreenOverlay.render(guiGraphics, this.renderProfilerChart, this.renderFpsCharts,
+                                               this.renderNetworkCharts, this.frameTimeLogger, this.bandwidthLogger,
+                                               this.pingLogger);
+      ci.cancel();
+    }
   }
 }

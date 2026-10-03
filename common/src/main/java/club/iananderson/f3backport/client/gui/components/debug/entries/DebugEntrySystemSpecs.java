@@ -4,6 +4,8 @@ import club.iananderson.f3backport.client.gui.components.debug.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
 import com.mojang.blaze3d.platform.GlUtil;
+import com.mojang.blaze3d.platform.Monitor;
+import com.mojang.blaze3d.platform.VideoMode;
 import com.mojang.blaze3d.platform.Window;
 import java.util.List;
 import java.util.Locale;
@@ -38,14 +40,18 @@ public class DebugEntrySystemSpecs implements DebugScreenEntry {
   public void display(final DebugScreenDisplayer displayer, final @Nullable Level serverOrClientLevel,
       final @Nullable LevelChunk clientChunk, final @Nullable LevelChunk serverChunk) {
     Window window = Minecraft.getInstance().getWindow();
+    Monitor monitor = window.findBestMonitor();
+    VideoMode activeMode = monitor.getCurrentMode();
+
     displayer.addFactToGroup(DebugGroups.SYSTEM_SPECS, "Java",
                              (fact) -> fact.value(System.getProperty("java.version")));
     displayer.addFactToGroup(DebugGroups.SYSTEM_SPECS, "CPU", (fact) -> fact.value(getCpuInfo()));
     displayer.addFactToGroup(DebugGroups.SYSTEM_SPECS, "Display",
-                             (fact) -> fact.value(window.getWidth()).text("x").value(window.getHeight()));
+                             (fact) -> fact.value(activeMode.getWidth()).text("x").value(activeMode.getHeight()));
     displayer.addFactToGroup(DebugGroups.SYSTEM_SPECS, "Window",
                              (fact) -> fact.value(window.getScreenWidth()).text("x").value(window.getScreenHeight()));
-    displayer.addToGroup(DebugGroups.SYSTEM_SPECS, List.of(GlUtil.getRenderer(), GlUtil.getOpenGLVersion()));
+    displayer.addToGroup(DebugGroups.SYSTEM_SPECS,
+                         List.of(GlUtil.getRenderer(), "OpenGL " + GlUtil.getOpenGLVersion()));
   }
 
   public boolean isAllowed(final boolean reducedDebugInfo) {

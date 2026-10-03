@@ -67,7 +67,7 @@ publishMods {
         minecraftVersions.addAll(modrinth_gameVersions.split(","))
         projectId = curseforge_id
         client = true
-        server = true
+        server = false
 
         requires("forge-config-api-port")
     }

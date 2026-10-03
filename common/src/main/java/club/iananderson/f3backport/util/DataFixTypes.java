@@ -52,13 +52,13 @@ public enum DataFixTypes {
     return fixerUpper.update(this.type, input, fromVersion, toVersion);
   }
 
+  public CompoundTag update(final DataFixer fixer, final CompoundTag tag, final int fromVersion, final int toVersion) {
+    return (CompoundTag) this.update(fixer, new Dynamic<>(NbtOps.INSTANCE, tag), fromVersion, toVersion).getValue();
+  }
+
   public <T> Dynamic<T> updateToCurrentVersion(final DataFixer fixerUpper, final Dynamic<T> input,
       final int dataVersion) {
     return this.update(fixerUpper, input, dataVersion, currentVersion());
-  }
-
-  public CompoundTag update(final DataFixer fixer, final CompoundTag tag, final int fromVersion, final int toVersion) {
-    return (CompoundTag) this.update(fixer, new Dynamic<>(NbtOps.INSTANCE, tag), fromVersion, toVersion).getValue();
   }
 
   public CompoundTag updateToCurrentVersion(final DataFixer fixer, final CompoundTag tag, final int fromVersion) {

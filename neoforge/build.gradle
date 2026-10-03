@@ -53,7 +53,11 @@ neoForge {
     }
 }
 
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
 repositories {
+    mavenCentral()
+
     exclusiveContent {
         forRepository {
             maven {
@@ -80,3 +84,49 @@ repositories {
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+// Implement mcgradleconventions loader attribute
+def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+['apiElements', 'runtimeElements'].each { variant ->
+    configurations.named("$variant") {
+        attributes {
+            attribute(loaderAttribute, 'neoforge')
+        }
+    }
+}
+sourceSets.configureEach {
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName, it.getTaskName(null, 'jarJar')].each { variant ->
+        configurations.named("$variant") {
+            attributes {
+                attribute(loaderAttribute, 'neoforge')
+            }
+        }
+    }
+}
+
+publishMods {
+    displayName = "${mod_id}-neoforge-${minecraft_version}-${mod_version}"
+    version = "${minecraft_version}-${mod_version}"
+    file = tasks.jar.archiveFile
+    modLoaders.add("neoforge")
+
+    curseforge("curseforgeNeoForge") {
+        accessToken = System.getenv("CURSEFORGE_TOKEN")
+        changelogType = "markdown"
+        javaVersions.add(JavaVersion.toVersion(java_version))
+        minecraftVersions.addAll(curseforge_gameVersions.split(","))
+        projectId = curseforge_id
+        client = true
+        server = false
+
+        optional("serene-seasons", "terrafirmacraft", "ecliptic-seasons")
+        optional("ftb-chunks-forge", "journeymap", "xaeros-minimap", "xaeros-minimap-fair-play-edition", "map-atlases-forge")
+        optional("curios", "accessories")
+    }
+
+    modrinth("modrinthNeoForge") {
+        accessToken = System.getenv("MODRINTH_TOKEN")
+        minecraftVersions.addAll(modrinth_gameVersions.split(","))
+        projectId = modrinth_id
+    }
+}
