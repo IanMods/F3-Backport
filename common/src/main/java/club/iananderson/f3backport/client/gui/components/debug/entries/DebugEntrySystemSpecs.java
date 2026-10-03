@@ -14,7 +14,6 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import org.jspecify.annotations.Nullable;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
-import oshi.hardware.GraphicsCard;
 
 public class DebugEntrySystemSpecs implements DebugScreenEntry {
   private static @Nullable String cpuInfo;
@@ -48,9 +47,7 @@ public class DebugEntrySystemSpecs implements DebugScreenEntry {
                              (fact) -> fact.value(window.getWidth()).text("x").value(window.getHeight()));
     displayer.addFactToGroup(DebugGroups.SYSTEM_SPECS, "Window",
                              (fact) -> fact.value(window.getScreenWidth()).text("x").value(window.getScreenHeight()));
-    displayer.addToGroup(DebugGroups.SYSTEM_SPECS, List.of(
-        GlUtil.getRenderer(),
-        GlUtil.getOpenGLVersion()));
+    displayer.addToGroup(DebugGroups.SYSTEM_SPECS, List.of(GlUtil.getRenderer(), GlUtil.getOpenGLVersion()));
   }
 
   private String firstLine(final String value) {

@@ -35,14 +35,14 @@ import org.jspecify.annotations.Nullable;
 public class NewDebugScreenOverlay {
   public final DebugScreenEntryList debugEntries;
   private final Font font;
+  private final DebugColumn leftColumn;
+  private final DebugColumn rightColumn;
+  private final Minecraft minecraft;
   private LocalSampleLogger tickTimeLogger;
   private FpsDebugChart fpsChart;
   private TpsDebugChart tpsChart;
   private PingDebugChart pingChart;
   private BandwidthDebugChart bandwidthChart;
-  private final DebugColumn leftColumn;
-  private final DebugColumn rightColumn;
-  private final Minecraft minecraft;
   private @Nullable ChunkPos lastPos;
   private @Nullable LevelChunk clientChunk;
   private @Nullable CompletableFuture<LevelChunk> serverChunk;
@@ -73,8 +73,7 @@ public class NewDebugScreenOverlay {
   }
 
   public void render(final @NonNull GuiGraphics graphics, boolean renderProfilerChart, boolean renderFpsCharts,
-      boolean renderNetworkCharts,  LocalSampleLogger frameTimeLogger,
-      LocalSampleLogger bandwidthLogger,
+      boolean renderNetworkCharts, LocalSampleLogger frameTimeLogger, LocalSampleLogger bandwidthLogger,
       LocalSampleLogger pingLogger) {
     if (this.minecraft.isGameLoadFinished() && (!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
       Collection<ResourceLocation> visibleEntries = this.debugEntries.getCurrentlyEnabled();
@@ -225,7 +224,6 @@ public class NewDebugScreenOverlay {
             this.rightColumn.add(contents, graphics, this.font, scaledScreenWidth);
           }
         }
-
 
         if (renderFpsCharts) {
           this.tickTimeLogger = this.minecraft.gui.getDebugOverlay().getTickTimeLogger();

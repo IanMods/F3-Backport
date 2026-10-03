@@ -1,11 +1,9 @@
 package club.iananderson.f3backport.client.gui.components.debug;
 
 import club.iananderson.f3backport.util.DataFixTypes;
-import com.mojang.datafixers.DataFixer;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -31,13 +29,14 @@ public class DebugScreenEntryList {
 
   public DebugScreenEntryList(final Minecraft minecraft) {
     this.minecraft = minecraft;
-    this.codec = DataFixTypes.DEBUG_PROFILE.wrapCodec(DebugScreenEntryList.SerializedOptions.CODEC, minecraft.getFixerUpper(), 4649);
+    this.codec = DataFixTypes.DEBUG_PROFILE.wrapCodec(DebugScreenEntryList.SerializedOptions.CODEC,
+                                                      minecraft.getFixerUpper(), 4649);
     this.load();
   }
 
   public void load() {
-      this.resetToProfile(DebugScreenProfile.DEFAULT);
-      this.rebuildCurrentList();
+    this.resetToProfile(DebugScreenProfile.DEFAULT);
+    this.rebuildCurrentList();
   }
 
   private void resetStatuses(final Map<ResourceLocation, DebugScreenEntryStatus> newEntries) {
@@ -71,7 +70,7 @@ public class DebugScreenEntryList {
   }
 
   public boolean toggleStatus(final ResourceLocation location) {
-    switch ((DebugScreenEntryStatus)this.allStatuses.get(location)) {
+    switch ((DebugScreenEntryStatus) this.allStatuses.get(location)) {
       case ALWAYS_ON:
         this.setStatus(location, DebugScreenEntryStatus.NEVER);
         return false;
@@ -107,10 +106,6 @@ public class DebugScreenEntryList {
     return this.isOverlayVisible;
   }
 
-  public void toggleDebugOverlay() {
-    this.setOverlayVisible(!this.isOverlayVisible);
-  }
-
   public void setOverlayVisible(final boolean visible) {
     if (this.isOverlayVisible != visible) {
       this.isOverlayVisible = visible;
@@ -119,12 +114,17 @@ public class DebugScreenEntryList {
 
   }
 
+  public void toggleDebugOverlay() {
+    this.setOverlayVisible(!this.isOverlayVisible);
+  }
+
   public void rebuildCurrentList() {
     this.currentlyEnabled.clear();
     Minecraft minecraft = Minecraft.getInstance();
     boolean isReducedDebugInfo = minecraft.showOnlyReducedInfo();
     this.allStatuses.forEach((key, value) -> {
-      if (value == DebugScreenEntryStatus.ALWAYS_ON || this.isOverlayVisible && value == DebugScreenEntryStatus.IN_OVERLAY) {
+      if (value == DebugScreenEntryStatus.ALWAYS_ON
+          || this.isOverlayVisible && value == DebugScreenEntryStatus.IN_OVERLAY) {
         DebugScreenEntry debug = DebugScreenEntries.getEntry(key);
         if (debug != null && debug.isAllowed(isReducedDebugInfo)) {
           this.currentlyEnabled.add(key);

@@ -14,7 +14,7 @@ public class DebugKeyBinds {
   public DebugKeyBinds() {
     this.keyDebugOverlay = new KeyMapping("key.debug.overlay", Type.KEYSYM, InputConstants.KEY_F3, debugCategory);
     this.keyDebugProfilingChart = new KeyMapping("key.debug.profilingChart", Type.KEYSYM, InputConstants.KEY_1,
-                                                debugCategory);
+                                                 debugCategory);
     this.keyDebugFpsCharts = new KeyMapping("key.debug.fpsCharts", Type.KEYSYM, InputConstants.KEY_2, debugCategory);
     this.keyDebugNetworkCharts = new KeyMapping("key.debug.networkCharts", Type.KEYSYM, InputConstants.KEY_3,
                                                 debugCategory);

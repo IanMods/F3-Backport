@@ -21,13 +21,11 @@ public class DebugScreenDisplayer {
   }
 
   public void addToGroup(final DebugGroup group, final Collection<String> lines) {
-    ((DebugGroupContents) groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group))).lines()
-        .addAll(lines);
+    ((DebugGroupContents) groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group))).lines().addAll(lines);
   }
 
   public void addToGroup(final DebugGroup group, final String lines) {
-    ((DebugGroupContents) groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group))).lines()
-        .add(lines);
+    ((DebugGroupContents) groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group))).lines().add(lines);
   }
 
   public void addFactToGroup(final DebugGroup group, final String name, final Consumer<DebugFact> builder) {
@@ -38,8 +36,7 @@ public class DebugScreenDisplayer {
   }
 
   public void addToGroup(final DebugGroup group, final DebugCustomRenderer customRenderer) {
-    ((DebugGroupContents) groups.computeIfAbsent(group,
-                                                 (k) -> new DebugGroupContents(group))).addCustomRenderer(
+    ((DebugGroupContents) groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group))).addCustomRenderer(
         customRenderer);
   }
 }

@@ -16,19 +16,32 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(DebugScreenOverlay.class)
 public abstract class MixinDebugScreen {
-  @Shadow @Final private Minecraft minecraft;
-
-  @Shadow public abstract void toggleFpsCharts();
-
-  @Shadow private boolean renderProfilerChart;
-  @Shadow private boolean renderFpsCharts;
-  @Shadow private boolean renderNetworkCharts;
-  @Shadow @Final private LocalSampleLogger frameTimeLogger;
-  @Shadow @Final private BandwidthDebugChart bandwidthChart;
-  @Shadow @Final private LocalSampleLogger pingLogger;
-  @Shadow @Final private LocalSampleLogger bandwidthLogger;
   @Unique
   NewDebugScreenOverlay f3_Backport$newDebugScreenOverlay;
+  @Shadow
+  @Final
+  private Minecraft minecraft;
+  @Shadow
+  private boolean renderProfilerChart;
+  @Shadow
+  private boolean renderFpsCharts;
+  @Shadow
+  private boolean renderNetworkCharts;
+  @Shadow
+  @Final
+  private LocalSampleLogger frameTimeLogger;
+  @Shadow
+  @Final
+  private BandwidthDebugChart bandwidthChart;
+  @Shadow
+  @Final
+  private LocalSampleLogger pingLogger;
+  @Shadow
+  @Final
+  private LocalSampleLogger bandwidthLogger;
+
+  @Shadow
+  public abstract void toggleFpsCharts();
 
   @Inject(method = "<init>", at = @At(value = "TAIL"))
   private void init(Minecraft minecraft, CallbackInfo ci) {
