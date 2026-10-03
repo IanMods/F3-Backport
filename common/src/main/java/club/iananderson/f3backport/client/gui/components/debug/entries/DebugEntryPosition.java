@@ -47,9 +47,8 @@ public class DebugEntryPosition implements DebugScreenEntry {
       }
 
       displayer.addFactToGroup(DebugGroups.POSITION, "XYZ",
-                               (fact) -> fact.formattedValue("%.3f", new Object[]{minecraft.getCameraEntity().getX()})
-                                   .text(" / ").formattedValue("%.5f", new Object[]{minecraft.getCameraEntity().getY()})
-                                   .text(" / ")
+                               (fact) -> fact.formattedValue("%.3f", minecraft.getCameraEntity().getX()).text(" / ")
+                                   .formattedValue("%.5f", minecraft.getCameraEntity().getY()).text(" / ")
                                    .formattedValue("%.3f", new Object[]{minecraft.getCameraEntity().getZ()}));
       displayer.addFactToGroup(DebugGroups.POSITION, "Block",
                                (fact) -> fact.value(feetPos.getX()).text(" ").value(feetPos.getY()).text(" ")
@@ -57,11 +56,11 @@ public class DebugEntryPosition implements DebugScreenEntry {
       displayer.addFactToGroup(DebugGroups.POSITION, "Chunk", (fact) -> fact.value(chunkPos.x).text(" ")
           .value(SectionPos.blockToSectionCoord(feetPos.getY())).text(" ").value(chunkPos.z).text(" [")
           .value(chunkPos.getRegionLocalX()).text(" ").value(chunkPos.getRegionLocalZ()).text(" in ")
-          .formattedValue("r.%d.%d.mca", new Object[]{chunkPos.getRegionX(), chunkPos.getRegionZ()}).text("]"));
+          .formattedValue("r.%d.%d.mca", chunkPos.getRegionX(), chunkPos.getRegionZ()).text("]"));
       displayer.addFactToGroup(DebugGroups.POSITION, "Facing",
                                (fact) -> fact.value(direction.toString()).text(" (").value(faceString).text(") (")
-                                   .formattedValue("%.1f", new Object[]{Mth.wrapDegrees(entity.getYRot())}).text(" / ")
-                                   .formattedValue("%.1f", new Object[]{Mth.wrapDegrees(entity.getXRot())}).text(")"));
+                                   .formattedValue("%.1f", Mth.wrapDegrees(entity.getYRot())).text(" / ")
+                                   .formattedValue("%.1f", Mth.wrapDegrees(entity.getXRot())).text(")"));
       displayer.addFactToGroup(DebugGroups.POSITION, "Dimension",
                                (fact) -> fact.value(minecraft.level.dimension().location().toString()));
       if (!forceLoadedChunks.isEmpty()) {

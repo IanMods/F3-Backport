@@ -4,7 +4,6 @@ import club.iananderson.f3backport.client.gui.components.debug.NewDebugScreenOve
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
-import net.minecraft.client.gui.components.debugchart.BandwidthDebugChart;
 import net.minecraft.util.debugchart.LocalSampleLogger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,16 +31,10 @@ public abstract class MixinDebugScreen {
   private LocalSampleLogger frameTimeLogger;
   @Shadow
   @Final
-  private BandwidthDebugChart bandwidthChart;
-  @Shadow
-  @Final
   private LocalSampleLogger pingLogger;
   @Shadow
   @Final
   private LocalSampleLogger bandwidthLogger;
-
-  @Shadow
-  public abstract void toggleFpsCharts();
 
   @Inject(method = "<init>", at = @At(value = "TAIL"))
   private void init(Minecraft minecraft, CallbackInfo ci) {

@@ -22,10 +22,10 @@ public class DebugEntryDetailedMemory implements DebugScreenEntry {
   }
 
   private static void getMemoryUsage(final DebugFact fact, final MemoryUsage memoryUsage) {
-    fact.text("i=").formattedValue("%03d", new Object[]{bytesToMebibytes(memoryUsage.getInit())}).text("MiB u=")
-        .formattedValue("%03d", new Object[]{bytesToMebibytes(memoryUsage.getUsed())}).text("MiB c=")
-        .formattedValue("%03d", new Object[]{bytesToMebibytes(memoryUsage.getCommitted())}).text("MiB m=")
-        .formattedValue("%03d", new Object[]{bytesToMebibytes(memoryUsage.getMax())}).text("MiB");
+    fact.text("i=").formattedValue("%03d", bytesToMebibytes(memoryUsage.getInit())).text("MiB u=")
+        .formattedValue("%03d", bytesToMebibytes(memoryUsage.getUsed())).text("MiB c=")
+        .formattedValue("%03d", bytesToMebibytes(memoryUsage.getCommitted())).text("MiB m=")
+        .formattedValue("%03d", bytesToMebibytes(memoryUsage.getMax())).text("MiB");
   }
 
   public void display(final DebugScreenDisplayer displayer, final @Nullable Level serverOrClientLevel,

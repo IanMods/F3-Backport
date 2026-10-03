@@ -17,8 +17,9 @@ public class DebugEntrySoundMood implements DebugScreenEntry {
     Minecraft minecraft = Minecraft.getInstance();
     if (minecraft.player != null) {
       displayer.addFactToGroup(DebugGroups.MISC, "Sounds", (fact) -> minecraft.getSoundManager().getDebugString());
-      displayer.addFactToGroup(DebugGroups.MISC, "Mood", (fact) -> fact.formattedValue("%.2f", new Object[]{
-          minecraft.player.getCurrentMood() * 100.0F}).text("%"));
+      displayer.addFactToGroup(DebugGroups.MISC, "Mood",
+                               (fact) -> fact.formattedValue("%.2f", minecraft.player.getCurrentMood() * 100.0F)
+                                   .text("%"));
     }
   }
 }

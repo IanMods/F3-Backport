@@ -21,23 +21,21 @@ public class DebugScreenDisplayer {
   }
 
   public void addToGroup(final DebugGroup group, final Collection<String> lines) {
-    ((DebugGroupContents) groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group))).lines().addAll(lines);
+    groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group)).lines().addAll(lines);
   }
 
   public void addToGroup(final DebugGroup group, final String lines) {
-    ((DebugGroupContents) groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group))).lines().add(lines);
+    groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group)).lines().add(lines);
   }
 
   public void addFactToGroup(final DebugGroup group, final String name, final Consumer<DebugFact> builder) {
     DebugFact fact = new DebugFact();
     builder.accept(fact);
-    ((DebugGroupContents) groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group))).addFact(name,
-                                                                                                       fact.result());
+    groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group)).addFact(name, fact.result());
   }
 
   public void addToGroup(final DebugGroup group, final DebugCustomRenderer customRenderer) {
-    ((DebugGroupContents) groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group))).addCustomRenderer(
-        customRenderer);
+    groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group)).addCustomRenderer(customRenderer);
   }
 }
 

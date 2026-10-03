@@ -49,8 +49,8 @@ public class DebugEntryTps implements DebugScreenEntry {
 
           String tpsTarget =
               isSpriting ? "-" : String.format(Locale.ROOT, "%.1f", tickRateManager.millisecondsPerTick());
-          fact.value("Integrated").text(" @ ").formattedValue("%.1f", new Object[]{server.getCurrentSmoothedTickTime()})
-              .text("/").value(tpsTarget).text(" ms");
+          fact.value("Integrated").text(" @ ").formattedValue("%.1f", server.getCurrentSmoothedTickTime()).text("/")
+              .value(tpsTarget).text(" ms");
         }
         else {
           fact.text("\"").value(connectionListener.serverBrand()).text("\"");
@@ -62,8 +62,8 @@ public class DebugEntryTps implements DebugScreenEntry {
 
       });
       displayer.addFactToGroup(DebugGroups.MISC, "Packets",
-                               (fact) -> fact.formattedValue("%.0f", new Object[]{averageSentPackets}).text(" tx, ")
-                                   .formattedValue("%.0f", new Object[]{averageReceivedPackets}).text(" rx"));
+                               (fact) -> fact.formattedValue("%.0f", averageSentPackets).text(" tx, ")
+                                   .formattedValue("%.0f", averageReceivedPackets).text(" rx"));
     }
   }
 

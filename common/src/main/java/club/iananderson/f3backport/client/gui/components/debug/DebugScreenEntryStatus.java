@@ -2,6 +2,7 @@ package club.iananderson.f3backport.client.gui.components.debug;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.util.StringRepresentable;
+import org.jspecify.annotations.NonNull;
 
 public enum DebugScreenEntryStatus implements StringRepresentable {
   ALWAYS_ON("alwaysOn"), IN_OVERLAY("inOverlay"), NEVER("never");
@@ -10,11 +11,11 @@ public enum DebugScreenEntryStatus implements StringRepresentable {
       DebugScreenEntryStatus::values);
   private final String name;
 
-  private DebugScreenEntryStatus(final String name) {
+  DebugScreenEntryStatus(final String name) {
     this.name = name;
   }
 
-  public String getSerializedName() {
+  public @NonNull String getSerializedName() {
     return this.name;
   }
 }

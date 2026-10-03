@@ -39,11 +39,11 @@ public class DebugGroup {
     }
 
     public static Builder titleless() {
-      return titled((Component) Component.empty());
+      return titled(Component.empty());
     }
 
     public static Builder titled(final String title) {
-      return titled((Component) Component.literal(title));
+      return titled(Component.literal(title));
     }
 
     public static Builder titled(final Component title) {

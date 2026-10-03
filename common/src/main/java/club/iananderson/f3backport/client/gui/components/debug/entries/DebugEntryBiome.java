@@ -19,8 +19,7 @@ public class DebugEntryBiome implements DebugScreenEntry {
   }
 
   private static String printBiome(final Holder<Biome> biome) {
-    return (String) biome.unwrap()
-        .map((key) -> key.location().toString(), (l) -> "[unregistered " + String.valueOf(l) + "]");
+    return biome.unwrap().map((key) -> key.location().toString(), (b) -> "[unregistered " + b + "]");
   }
 
   public void display(final DebugScreenDisplayer displayer, final @Nullable Level serverOrClientLevel,

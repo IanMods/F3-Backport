@@ -25,7 +25,7 @@ public class DebugEntryPlayerSpeed implements DebugScreenEntry {
     if (player != null) {
       this.computeSpeed(player);
       displayer.addFactToGroup(DebugGroups.POSITION, "Speed",
-                               (fact) -> fact.formattedValue("%.3f", new Object[]{this.lastKnownSpeed.length()})
+                               (fact) -> fact.formattedValue("%.3f", this.lastKnownSpeed.length())
                                    .text(" blocks/tick"));
     }
   }

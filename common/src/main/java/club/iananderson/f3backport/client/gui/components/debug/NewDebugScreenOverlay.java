@@ -38,11 +38,6 @@ public class NewDebugScreenOverlay {
   private final DebugColumn leftColumn;
   private final DebugColumn rightColumn;
   private final Minecraft minecraft;
-  private LocalSampleLogger tickTimeLogger;
-  private FpsDebugChart fpsChart;
-  private TpsDebugChart tpsChart;
-  private PingDebugChart pingChart;
-  private BandwidthDebugChart bandwidthChart;
   private @Nullable ChunkPos lastPos;
   private @Nullable LevelChunk clientChunk;
   private @Nullable CompletableFuture<LevelChunk> serverChunk;
@@ -115,7 +110,7 @@ public class NewDebugScreenOverlay {
           }
         }
 
-        DebugGroupContents miscContents = (DebugGroupContents) groups.get(DebugGroups.MISC);
+        DebugGroupContents miscContents = groups.get(DebugGroups.MISC);
         if (miscContents != null) {
           groups.remove(DebugGroups.MISC);
           groups.put(DebugGroups.MISC, miscContents);
@@ -140,7 +135,7 @@ public class NewDebugScreenOverlay {
 
         Window window = this.minecraft.getWindow();
         int standardGuiScale = (int) window.getGuiScale();
-        int newScale = (Integer) standardGuiScale;
+        int newScale = standardGuiScale;
         if (newScale == -1) {
           newScale = standardGuiScale;
         }
@@ -182,7 +177,7 @@ public class NewDebugScreenOverlay {
 
         for (DebugGroup group : this.leftColumn.getPreviousGroups()) {
           if (!this.leftColumn.isFull(scaledScreenHeight)) {
-            DebugGroupContents contents = (DebugGroupContents) groups.remove(group);
+            DebugGroupContents contents = groups.remove(group);
             if (contents != null) {
               this.leftColumn.add(contents, graphics, this.font, scaledScreenWidth);
             }
@@ -191,7 +186,7 @@ public class NewDebugScreenOverlay {
 
         for (DebugGroup group : this.rightColumn.getPreviousGroups()) {
           if (!this.rightColumn.isFull(scaledScreenHeight)) {
-            DebugGroupContents contents = (DebugGroupContents) groups.remove(group);
+            DebugGroupContents contents = groups.remove(group);
             if (contents != null) {
               this.rightColumn.add(contents, graphics, this.font, scaledScreenWidth);
             }
@@ -201,7 +196,7 @@ public class NewDebugScreenOverlay {
         Iterator<DebugGroupContents> iterator = groups.values().iterator();
 
         while (iterator.hasNext()) {
-          DebugGroupContents contents = (DebugGroupContents) iterator.next();
+          DebugGroupContents contents = iterator.next();
           Optional<DebugColumn.Side> preferredSide = contents.group().preferredColumn();
           if (preferredSide.isPresent()) {
             if (preferredSide.get() == Side.LEFT && !this.leftColumn.isFull(scaledScreenHeight)) {
@@ -226,34 +221,34 @@ public class NewDebugScreenOverlay {
         }
 
         if (renderFpsCharts) {
-          this.tickTimeLogger = this.minecraft.gui.getDebugOverlay().getTickTimeLogger();
+          LocalSampleLogger tickTimeLogger = this.minecraft.gui.getDebugOverlay().getTickTimeLogger();
 
-          this.fpsChart = new FpsDebugChart(this.font, frameTimeLogger);
+          FpsDebugChart fpsChart = new FpsDebugChart(this.font, frameTimeLogger);
 
           int maxWidth = scaledScreenWidth / 2;
-          this.fpsChart.drawChart(graphics, 0, this.fpsChart.getWidth(maxWidth));
-          if (this.tickTimeLogger.size() > 0) {
-            this.tpsChart = new TpsDebugChart(this.font, this.tickTimeLogger, () -> minecraft.level == null ? 0.0F
-                                                                                                            : minecraft.level.tickRateManager()
-                                                                                        .millisecondsPerTick());
+          fpsChart.drawChart(graphics, 0, fpsChart.getWidth(maxWidth));
+          if (tickTimeLogger.size() > 0) {
+            TpsDebugChart tpsChart = new TpsDebugChart(this.font, tickTimeLogger, () -> minecraft.level == null ? 0.0F
+                                                                                                                : minecraft.level.tickRateManager()
+                                                                                            .millisecondsPerTick());
 
-            int width = this.tpsChart.getWidth(maxWidth);
-            this.tpsChart.drawChart(graphics, scaledScreenWidth - width, width);
+            int width = tpsChart.getWidth(maxWidth);
+            tpsChart.drawChart(graphics, scaledScreenWidth - width, width);
           }
 
         }
 
         if (renderNetworkCharts) {
-          this.pingChart = new PingDebugChart(this.font, pingLogger);
+          PingDebugChart pingChart = new PingDebugChart(this.font, pingLogger);
 
           int maxWidth = scaledScreenWidth / 2;
           if (!this.minecraft.isLocalServer()) {
-            this.bandwidthChart = new BandwidthDebugChart(this.font, bandwidthLogger);
-            this.bandwidthChart.drawChart(graphics, 0, this.bandwidthChart.getWidth(maxWidth));
+            BandwidthDebugChart bandwidthChart = new BandwidthDebugChart(this.font, bandwidthLogger);
+            bandwidthChart.drawChart(graphics, 0, bandwidthChart.getWidth(maxWidth));
           }
 
-          int width = this.pingChart.getWidth(maxWidth);
-          this.pingChart.drawChart(graphics, scaledScreenWidth - width, width);
+          int width = pingChart.getWidth(maxWidth);
+          pingChart.drawChart(graphics, scaledScreenWidth - width, width);
         }
 
         graphics.pose().popPose();
@@ -281,7 +276,7 @@ public class NewDebugScreenOverlay {
   }
 
   private @Nullable Level getLevel() {
-    return this.minecraft.level == null ? null : (Level) DataFixUtils.orElse(
+    return this.minecraft.level == null ? null : DataFixUtils.orElse(
         Optional.ofNullable(this.minecraft.getSingleplayerServer())
             .flatMap((s) -> Optional.ofNullable(s.getLevel(this.minecraft.level.dimension()))), this.minecraft.level);
   }
@@ -299,7 +294,7 @@ public class NewDebugScreenOverlay {
             .thenApply((chunkResult) -> (LevelChunk) chunkResult.orElse(null));
       }
 
-      return (LevelChunk) this.serverChunk.getNow(null);
+      return this.serverChunk.getNow(null);
     }
     else {
       return null;

@@ -24,7 +24,7 @@ public class DebugEntrySimplePerformanceImpactors implements DebugScreenEntry {
                                                        : (options.cloudStatus().get() == CloudStatus.FAST ? "Fast"
                                                                                                           : "Fancy")));
     displayer.addFactToGroup(DebugGroups.PERFORMANCE_IMPACTORS, "Biome Blend",
-                             (fact) -> fact.value((Integer) options.biomeBlendRadius().get()));
+                             (fact) -> fact.value(options.biomeBlendRadius().get()));
     // TextureFilteringMethod filteringMethod = (TextureFilteringMethod)options.textureFiltering().get();
     // if (filteringMethod == TextureFilteringMethod.ANISOTROPIC) {
     //   displayer.addFactToGroup(DebugGroups.PERFORMANCE_IMPACTORS, "Filtering", (fact) -> fact.value(filteringMethod.caption().getString()).text(" ").value(options.maxAnisotropyValue()).text("x"));

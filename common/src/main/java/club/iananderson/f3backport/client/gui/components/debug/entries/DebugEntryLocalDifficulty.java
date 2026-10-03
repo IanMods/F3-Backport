@@ -28,10 +28,10 @@ public class DebugEntryLocalDifficulty implements DebugScreenEntry {
         DifficultyInstance localDifficulty = new DifficultyInstance(serverLevel.getDifficulty(),
                                                                     serverLevel.getDayTime(), localTime,
                                                                     moonBrightness);
-        displayer.addFactToGroup(DebugGroups.MISC, "Local Difficulty", (fact) -> fact.formattedValue("%.2f",
-                                                                                                     new Object[]{
-                                                                                                         localDifficulty.getEffectiveDifficulty()})
-            .text(" // ").formattedValue("%.2f", new Object[]{localDifficulty.getSpecialMultiplier()}));
+        displayer.addFactToGroup(DebugGroups.MISC, "Local Difficulty",
+                                 (fact) -> fact.formattedValue("%.2f", localDifficulty.getEffectiveDifficulty())
+                                     .text(" // ")
+                                     .formattedValue("%.2f", new Object[]{localDifficulty.getSpecialMultiplier()}));
       }
 
     }

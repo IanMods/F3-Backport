@@ -18,7 +18,7 @@ public enum DataFixTypes {
 
   private final DSL.TypeReference type;
 
-  private DataFixTypes(final DSL.TypeReference type) {
+  DataFixTypes(final DSL.TypeReference type) {
     this.type = type;
   }
 
@@ -27,7 +27,7 @@ public enum DataFixTypes {
   }
 
   public <A> Codec<A> wrapCodec(final Codec<A> codec, final DataFixer dataFixer, final int defaultVersion) {
-    return new Codec<A>() {
+    return new Codec<>() {
       public <T> DataResult<T> encode(final A input, final DynamicOps<T> ops, final T prefix) {
         return codec.encode(input, ops, prefix)
             .flatMap((data) -> ops.mergeToMap(data, ops.createString("DataVersion"), ops.createInt(currentVersion())));
@@ -35,9 +35,9 @@ public enum DataFixTypes {
 
       public <T> DataResult<Pair<A, T>> decode(final DynamicOps<T> ops, final T input) {
         Objects.requireNonNull(ops);
-        int fromVersion = (Integer) ops.get(input, "DataVersion").flatMap(ops::getNumberValue).map(Number::intValue)
-            .result().orElse(defaultVersion);
-        Dynamic<T> dataWithoutVersion = new Dynamic(ops, ops.remove(input, "DataVersion"));
+        int fromVersion = ops.get(input, "DataVersion").flatMap(ops::getNumberValue).map(Number::intValue).result()
+            .orElse(defaultVersion);
+        Dynamic<T> dataWithoutVersion = new Dynamic<>(ops, ops.remove(input, "DataVersion"));
         Dynamic<T> fixedData = updateToCurrentVersion(dataFixer, dataWithoutVersion, fromVersion);
         return codec.decode(fixedData);
       }
@@ -55,7 +55,7 @@ public enum DataFixTypes {
   }
 
   public CompoundTag update(final DataFixer fixer, final CompoundTag tag, final int fromVersion, final int toVersion) {
-    return (CompoundTag) this.update(fixer, new Dynamic(NbtOps.INSTANCE, tag), fromVersion, toVersion).getValue();
+    return (CompoundTag) this.update(fixer, new Dynamic<>(NbtOps.INSTANCE, tag), fromVersion, toVersion).getValue();
   }
 
   public CompoundTag updateToCurrentVersion(final DataFixer fixer, final CompoundTag tag, final int fromVersion) {

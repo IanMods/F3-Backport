@@ -55,10 +55,10 @@ public class DebugColumn {
     return this.heightSoFar;
   }
 
-  public static enum Side {
+  public enum Side {
     LEFT, RIGHT;
 
-    private Side() {
+    Side() {
     }
   }
 }

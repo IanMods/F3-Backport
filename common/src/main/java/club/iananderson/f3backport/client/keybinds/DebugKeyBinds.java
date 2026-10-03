@@ -9,7 +9,7 @@ public class DebugKeyBinds {
   public final KeyMapping keyDebugFpsCharts;
   public final KeyMapping keyDebugNetworkCharts;
   public final KeyMapping keyDebugProfilingChart;
-  public String debugCategory = "key.category.minecraft.debug";
+  public final String debugCategory = "key.category.minecraft.debug";
 
   public DebugKeyBinds() {
     this.keyDebugOverlay = new KeyMapping("key.debug.overlay", Type.KEYSYM, InputConstants.KEY_F3, debugCategory);

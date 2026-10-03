@@ -28,14 +28,14 @@ public class DebugEntryMemory implements DebugScreenEntry {
     long free = Runtime.getRuntime().freeMemory();
     long used = total - free;
     displayer.addFactToGroup(DebugGroups.MEMORY, "Used",
-                             (fact) -> fact.formattedValue("%2d", new Object[]{used * 100L / max}).text("% ")
-                                 .formattedValue("%03d", new Object[]{bytesToMebibytes(used)}).text("/")
-                                 .formattedValue("%03d", new Object[]{bytesToMebibytes(max)}).text("MiB"));
-    displayer.addFactToGroup(DebugGroups.MEMORY, "Alloc rate", (fact) -> fact.formattedValue("%03d", new Object[]{
-        bytesToMebibytes(this.allocationRateCalculator.bytesAllocatedPerSecond(used))}).text("MiB/s"));
+                             (fact) -> fact.formattedValue("%2d", used * 100L / max).text("% ")
+                                 .formattedValue("%03d", bytesToMebibytes(used)).text("/")
+                                 .formattedValue("%03d", bytesToMebibytes(max)).text("MiB"));
+    displayer.addFactToGroup(DebugGroups.MEMORY, "Alloc rate", (fact) -> fact.formattedValue("%03d", bytesToMebibytes(
+        this.allocationRateCalculator.bytesAllocatedPerSecond(used))).text("MiB/s"));
     displayer.addFactToGroup(DebugGroups.MEMORY, "Allocated",
-                             (fact) -> fact.formattedValue("%2d", new Object[]{total * 100L / max}).text("% ")
-                                 .formattedValue("%03d", new Object[]{bytesToMebibytes(total)}).text("MiB"));
+                             (fact) -> fact.formattedValue("%2d", total * 100L / max).text("% ")
+                                 .formattedValue("%03d", bytesToMebibytes(total)).text("MiB"));
   }
 
   public boolean isAllowed(final boolean reducedDebugInfo) {
@@ -65,10 +65,7 @@ public class DebugEntryMemory implements DebugScreenEntry {
 
     private long bytesAllocatedPerSecond(final long currentHeapUsage) {
       long time = System.currentTimeMillis();
-      if (time - this.lastTime < 500L) {
-        return this.lastRate;
-      }
-      else {
+      if (time - this.lastTime >= 500L) {
         long gcCounts = gcCounts();
         if (this.lastTime != 0L && gcCounts == this.lastGcCounts) {
           double multiplier = (double) TimeUnit.SECONDS.toMillis(1L) / (double) (time - this.lastTime);
@@ -79,8 +76,8 @@ public class DebugEntryMemory implements DebugScreenEntry {
         this.lastTime = time;
         this.lastHeapUsage = currentHeapUsage;
         this.lastGcCounts = gcCounts;
-        return this.lastRate;
       }
+      return this.lastRate;
     }
   }
 }

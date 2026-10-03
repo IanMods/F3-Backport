@@ -10,7 +10,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
 import net.minecraft.util.FastColor;
 
 public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair<String, Component>> facts,
@@ -21,7 +20,7 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
   private static final int FACT_NAME_VALUE_PADDING = 5;
 
   public DebugGroupContents(final DebugGroup group) {
-    this(group, new ArrayList(), new ArrayList(), new ArrayList());
+    this(group, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
   }
 
   public void addFact(final String name, final Component value) {
@@ -49,10 +48,10 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
       fullHeight += 9;
     }
 
-    int factNameWidth = this.facts.stream().mapToInt((f) -> font.width((String) f.getFirst())).max().orElse(0);
+    int factNameWidth = this.facts.stream().mapToInt((f) -> font.width(f.getFirst())).max().orElse(0);
 
     for (Pair<String, Component> fact : this.facts) {
-      int width = factNameWidth + 5 + font.width((FormattedText) fact.getSecond());
+      int width = factNameWidth + 5 + font.width(fact.getSecond());
       if (width > fullWidth) {
         fullWidth = width;
       }
@@ -79,10 +78,9 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
     graphics.fill(left - 1, y - 1, left + fullWidth + 1, top + fullHeight + 1, -1873784752);
 
     for (Pair<String, Component> fact : this.facts) {
-      String name = (String) fact.getFirst() + ":";
-      graphics.drawString(font, name, left + (factNameWidth - font.width((String) fact.getFirst())), y, -2039584,
-                          false);
-      graphics.drawString(font, (Component) fact.getSecond(), left + factNameWidth + 5, y, -3092272, false);
+      String name = fact.getFirst() + ":";
+      graphics.drawString(font, name, left + (factNameWidth - font.width(fact.getFirst())), y, -2039584, false);
+      graphics.drawString(font, fact.getSecond(), left + factNameWidth + 5, y, -3092272, false);
       Objects.requireNonNull(font);
       y += 9;
     }

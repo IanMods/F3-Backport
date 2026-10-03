@@ -19,18 +19,15 @@ import org.slf4j.Logger;
 public class DebugScreenEntryList {
   private static final Logger LOGGER = LogUtils.getLogger();
   private static final int DEFAULT_DEBUG_PROFILE_VERSION = 4649;
-  private final Minecraft minecraft;
   private final Map<ResourceLocation, DebugScreenEntryStatus> allStatuses = new HashMap<>();
   private final List<ResourceLocation> currentlyEnabled = new ArrayList<>();
-  private final Codec<SerializedOptions> codec;
   private @Nullable DebugScreenProfile profile;
   private boolean isOverlayVisible = false;
   private long currentlyEnabledVersion;
 
   public DebugScreenEntryList(final Minecraft minecraft) {
-    this.minecraft = minecraft;
-    this.codec = DataFixTypes.DEBUG_PROFILE.wrapCodec(DebugScreenEntryList.SerializedOptions.CODEC,
-                                                      minecraft.getFixerUpper(), 4649);
+    Codec<SerializedOptions> codec = DataFixTypes.DEBUG_PROFILE.wrapCodec(SerializedOptions.CODEC,
+                                                                          minecraft.getFixerUpper(), 4649);
     this.load();
   }
 
@@ -55,7 +52,7 @@ public class DebugScreenEntryList {
   }
 
   public DebugScreenEntryStatus getStatus(final ResourceLocation location) {
-    return (DebugScreenEntryStatus) this.allStatuses.getOrDefault(location, DebugScreenEntryStatus.NEVER);
+    return this.allStatuses.getOrDefault(location, DebugScreenEntryStatus.NEVER);
   }
 
   public boolean isCurrentlyEnabled(final ResourceLocation location) {
@@ -70,7 +67,7 @@ public class DebugScreenEntryList {
   }
 
   public boolean toggleStatus(final ResourceLocation location) {
-    switch ((DebugScreenEntryStatus) this.allStatuses.get(location)) {
+    switch (this.allStatuses.get(location)) {
       case ALWAYS_ON:
         this.setStatus(location, DebugScreenEntryStatus.NEVER);
         return false;
@@ -159,8 +156,8 @@ public class DebugScreenEntryList {
 
   }
 
-  private static record SerializedOptions(Optional<DebugScreenProfile> profile,
-                                          Optional<Map<ResourceLocation, DebugScreenEntryStatus>> custom) {
+  private record SerializedOptions(Optional<DebugScreenProfile> profile,
+                                   Optional<Map<ResourceLocation, DebugScreenEntryStatus>> custom) {
     public static final Codec<SerializedOptions> CODEC;
     private static final Codec<Map<ResourceLocation, DebugScreenEntryStatus>> CUSTOM_ENTRIES_CODEC;
 
