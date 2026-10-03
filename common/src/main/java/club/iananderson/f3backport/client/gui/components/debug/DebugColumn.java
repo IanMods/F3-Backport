@@ -25,7 +25,7 @@ public class DebugColumn {
 
   public void newFrame() {
     this.previousGroups = this.currentGroups;
-    this.currentGroups = new ArrayList();
+    this.currentGroups = new ArrayList<>();
     this.heightSoFar = 2;
   }
 
@@ -37,7 +37,8 @@ public class DebugColumn {
     return this.heightSoFar >= maxHeight;
   }
 
-  public void add(final DebugGroupContents contents, final GuiGraphics graphics, final Font font, final int scaledScreenWidth) {
+  public void add(final DebugGroupContents contents, final GuiGraphics graphics, final Font font,
+      final int scaledScreenWidth) {
     Rect2i rect = contents.extract(graphics, this.heightSoFar, font, this.side, scaledScreenWidth);
     int var10001 = this.heightSoFar;
     int var10002 = rect.getHeight();
@@ -55,8 +56,7 @@ public class DebugColumn {
   }
 
   public static enum Side {
-    LEFT,
-    RIGHT;
+    LEFT, RIGHT;
 
     private Side() {
     }

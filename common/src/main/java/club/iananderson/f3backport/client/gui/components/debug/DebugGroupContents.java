@@ -6,7 +6,6 @@ import com.mojang.datafixers.util.Pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
@@ -14,7 +13,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.util.FastColor;
 
-public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair<String, Component>> facts, List<DebugCustomRenderer> customRenderers) {
+public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair<String, Component>> facts,
+                                 List<DebugCustomRenderer> customRenderers) {
   private static final int MARGIN_RIGHT = 3;
   private static final int MARGIN_LEFT = 3;
   private static final int TITLE_LEFT_PADDING = 3;
@@ -32,7 +32,8 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
     this.customRenderers.add(renderer);
   }
 
-  public Rect2i extract(final GuiGraphics graphics, final int top, final Font font, final DebugColumn.Side side, final int scaledScreenWidth) {
+  public Rect2i extract(final GuiGraphics graphics, final int top, final Font font, final DebugColumn.Side side,
+      final int scaledScreenWidth) {
     Objects.requireNonNull(font);
     int fullWidth = this.lines.stream().mapToInt(font::width).max().orElse(0);
     int titleWidth = font.width(this.group.title());
@@ -48,16 +49,16 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
       fullHeight += 9;
     }
 
-    int factNameWidth = this.facts.stream().mapToInt((f) -> font.width((String)f.getFirst())).max().orElse(0);
+    int factNameWidth = this.facts.stream().mapToInt((f) -> font.width((String) f.getFirst())).max().orElse(0);
 
-    for(Pair<String, Component> fact : this.facts) {
-      int width = factNameWidth + 5 + font.width((FormattedText)fact.getSecond());
+    for (Pair<String, Component> fact : this.facts) {
+      int width = factNameWidth + 5 + font.width((FormattedText) fact.getSecond());
       if (width > fullWidth) {
         fullWidth = width;
       }
     }
 
-    for(DebugCustomRenderer customRenderer : this.customRenderers) {
+    for (DebugCustomRenderer customRenderer : this.customRenderers) {
       fullWidth = Math.max(fullWidth, customRenderer.width(fullWidth));
       fullHeight += customRenderer.height();
     }
@@ -77,10 +78,11 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
 
     graphics.fill(left - 1, y - 1, left + fullWidth + 1, top + fullHeight + 1, -1873784752);
 
-    for(Pair<String, Component> fact : this.facts) {
-      String name = (String)fact.getFirst() + ":";
-      graphics.drawString(font, name, left + (factNameWidth - font.width((String)fact.getFirst())), y, -2039584, false);
-      graphics.drawString(font, (Component)fact.getSecond(), left + factNameWidth + 5, y, -3092272, false);
+    for (Pair<String, Component> fact : this.facts) {
+      String name = (String) fact.getFirst() + ":";
+      graphics.drawString(font, name, left + (factNameWidth - font.width((String) fact.getFirst())), y, -2039584,
+                          false);
+      graphics.drawString(font, (Component) fact.getSecond(), left + factNameWidth + 5, y, -3092272, false);
       Objects.requireNonNull(font);
       y += 9;
     }
@@ -89,7 +91,7 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
       y += 2;
     }
 
-    for(String line : this.lines) {
+    for (String line : this.lines) {
       if (!Strings.isNullOrEmpty(line)) {
         graphics.drawString(font, line, left, y, -2039584, false);
       }
@@ -98,7 +100,7 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
       y += 9;
     }
 
-    for(DebugCustomRenderer customRenderer : this.customRenderers) {
+    for (DebugCustomRenderer customRenderer : this.customRenderers) {
       customRenderer.extract(graphics, left, y, side);
       y += customRenderer.height();
     }
@@ -107,7 +109,8 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
       int accentColor = FastColor.ARGB32.opaque(this.group.accentColor().getAsInt());
       if (side == Side.LEFT) {
         graphics.fill(0, top - 1, 1, top + fullHeight + 1, accentColor);
-      } else {
+      }
+      else {
         graphics.fill(scaledScreenWidth - 1, top - 1, scaledScreenWidth, top + fullHeight + 1, accentColor);
       }
     }

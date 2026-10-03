@@ -15,6 +15,9 @@
   "icon": "${mod_id}.png",
   "environment": "*",
   "entrypoints": {
+    "client": [
+      "club.iananderson.f3backport.client.F3BackportClientFabric"
+    ],
     "main": [
       "club.iananderson.f3backport.F3Backport"
     ]

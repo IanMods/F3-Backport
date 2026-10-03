@@ -4,7 +4,6 @@ import club.iananderson.f3backport.client.gui.components.debug.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
 import java.util.Locale;
-import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.server.IntegratedServer;
@@ -13,12 +12,14 @@ import net.minecraft.server.ServerTickRateManager;
 import net.minecraft.world.TickRateManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
+import org.jspecify.annotations.Nullable;
 
 public class DebugEntryTps implements DebugScreenEntry {
   public DebugEntryTps() {
   }
 
-  public void display(final DebugScreenDisplayer displayer, final @Nullable Level serverOrClientLevel, final @Nullable LevelChunk clientChunk, final @Nullable LevelChunk serverChunk) {
+  public void display(final DebugScreenDisplayer displayer, final @Nullable Level serverOrClientLevel,
+      final @Nullable LevelChunk clientChunk, final @Nullable LevelChunk serverChunk) {
     Minecraft minecraft = Minecraft.getInstance();
     IntegratedServer server = minecraft.getSingleplayerServer();
     ClientPacketListener connectionListener = minecraft.getConnection();
@@ -31,9 +32,11 @@ public class DebugEntryTps implements DebugScreenEntry {
         String runStatus;
         if (tickRateManager.isSteppingForward()) {
           runStatus = "frozen - stepping";
-        } else if (tickRateManager.isFrozen()) {
+        }
+        else if (tickRateManager.isFrozen()) {
           runStatus = "frozen";
-        } else {
+        }
+        else {
           runStatus = "";
         }
 
@@ -44,9 +47,12 @@ public class DebugEntryTps implements DebugScreenEntry {
             runStatus = "sprinting";
           }
 
-          String tpsTarget = isSpriting ? "-" : String.format(Locale.ROOT, "%.1f", tickRateManager.millisecondsPerTick());
-          fact.value("Integrated").text(" @ ").formattedValue("%.1f", new Object[]{server.getCurrentSmoothedTickTime()}).text("/").value(tpsTarget).text(" ms");
-        } else {
+          String tpsTarget =
+              isSpriting ? "-" : String.format(Locale.ROOT, "%.1f", tickRateManager.millisecondsPerTick());
+          fact.value("Integrated").text(" @ ").formattedValue("%.1f", new Object[]{server.getCurrentSmoothedTickTime()})
+              .text("/").value(tpsTarget).text(" ms");
+        }
+        else {
           fact.text("\"").value(connectionListener.serverBrand()).text("\"");
         }
 
@@ -55,7 +61,9 @@ public class DebugEntryTps implements DebugScreenEntry {
         }
 
       });
-      displayer.addFactToGroup(DebugGroups.MISC, "Packets", (fact) -> fact.formattedValue("%.0f", new Object[]{averageSentPackets}).text(" tx, ").formattedValue("%.0f", new Object[]{averageReceivedPackets}).text(" rx"));
+      displayer.addFactToGroup(DebugGroups.MISC, "Packets",
+                               (fact) -> fact.formattedValue("%.0f", new Object[]{averageSentPackets}).text(" tx, ")
+                                   .formattedValue("%.0f", new Object[]{averageReceivedPackets}).text(" rx"));
     }
   }
 

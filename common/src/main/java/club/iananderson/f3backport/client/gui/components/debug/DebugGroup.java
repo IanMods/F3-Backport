@@ -10,7 +10,8 @@ public class DebugGroup {
   private final OptionalInt accentColor;
   private final Optional<Side> preferredColumn;
 
-  protected DebugGroup(final Component title, final OptionalInt accentColor, final Optional<DebugColumn.Side> preferredColumn) {
+  protected DebugGroup(final Component title, final OptionalInt accentColor,
+      final Optional<DebugColumn.Side> preferredColumn) {
     this.title = title;
     this.accentColor = accentColor;
     this.preferredColumn = preferredColumn;
@@ -38,11 +39,11 @@ public class DebugGroup {
     }
 
     public static Builder titleless() {
-      return titled((Component)Component.empty());
+      return titled((Component) Component.empty());
     }
 
     public static Builder titled(final String title) {
-      return titled((Component)Component.literal(title));
+      return titled((Component) Component.literal(title));
     }
 
     public static Builder titled(final Component title) {

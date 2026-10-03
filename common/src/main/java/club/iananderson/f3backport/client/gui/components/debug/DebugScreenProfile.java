@@ -3,10 +3,10 @@ package club.iananderson.f3backport.client.gui.components.debug;
 import net.minecraft.util.StringRepresentable;
 
 public enum DebugScreenProfile implements StringRepresentable {
-  DEFAULT("default", "debug.options.profile.default"),
-  PERFORMANCE("performance", "debug.options.profile.performance");
+  DEFAULT("default", "debug.options.profile.default"), PERFORMANCE("performance", "debug.options.profile.performance");
 
-  public static final StringRepresentable.EnumCodec<DebugScreenProfile> CODEC = StringRepresentable.fromEnum(DebugScreenProfile::values);
+  public static final StringRepresentable.EnumCodec<DebugScreenProfile> CODEC = StringRepresentable.fromEnum(
+      DebugScreenProfile::values);
   private final String name;
   private final String translationKey;
 

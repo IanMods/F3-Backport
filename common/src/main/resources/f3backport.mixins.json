@@ -4,9 +4,10 @@
   "package": "club.iananderson.f3backport.mixin",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_18",
-  "mixins": [],
+  "mixins": [
+  ],
   "client": [
-    "MixinMinecraft"
+    "MixinDebugScreen"
   ],
   "server": [],
   "injectors": {

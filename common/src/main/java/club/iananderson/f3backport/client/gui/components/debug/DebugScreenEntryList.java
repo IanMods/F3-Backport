@@ -1,19 +1,11 @@
 package club.iananderson.f3backport.client.gui.components.debug;
 
-import static net.minecraft.resources.ResourceLocation.*;
-
 import club.iananderson.f3backport.util.DataFixTypes;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSyntaxException;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.Dynamic;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -21,53 +13,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import org.apache.commons.io.FileUtils;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 public class DebugScreenEntryList {
   private static final Logger LOGGER = LogUtils.getLogger();
   private static final int DEFAULT_DEBUG_PROFILE_VERSION = 4649;
-  private final Map<ResourceLocation, DebugScreenEntryStatus> allStatuses = new HashMap();
-  private final List<ResourceLocation> currentlyEnabled = new ArrayList();
-  private boolean isOverlayVisible = false;
-  private @Nullable DebugScreenProfile profile;
-  private final File debugProfileFile;
-  private long currentlyEnabledVersion;
+  private final Minecraft minecraft;
+  private final Map<ResourceLocation, DebugScreenEntryStatus> allStatuses = new HashMap<>();
+  private final List<ResourceLocation> currentlyEnabled = new ArrayList<>();
   private final Codec<SerializedOptions> codec;
+  private @Nullable DebugScreenProfile profile;
+  private boolean isOverlayVisible = false;
+  private long currentlyEnabledVersion;
 
-  public DebugScreenEntryList(final File workingDirectory, final DataFixer dataFixer) {
-    this.debugProfileFile = new File(workingDirectory, "debug-profile.json");
-    this.codec = DataFixTypes.DEBUG_PROFILE.wrapCodec(DebugScreenEntryList.SerializedOptions.CODEC, dataFixer, 4649);
+  public DebugScreenEntryList(final Minecraft minecraft) {
+    this.minecraft = minecraft;
+    this.codec = DataFixTypes.DEBUG_PROFILE.wrapCodec(DebugScreenEntryList.SerializedOptions.CODEC, minecraft.getFixerUpper(), 4649);
     this.load();
   }
 
   public void load() {
-    try {
-      if (!this.debugProfileFile.isFile()) {
-        this.resetToProfile(DebugScreenProfile.DEFAULT);
-        this.rebuildCurrentList();
-        return;
-      }
-
-      Dynamic<JsonElement> data = new Dynamic(JsonOps.INSTANCE, StrictJsonParser.parse(
-          FileUtils.readFileToString(this.debugProfileFile, StandardCharsets.UTF_8)));
-      SerializedOptions serializedOptions = (SerializedOptions)this.codec.parse(data).getOrThrow((error) -> new IOException("Could not parse debug profile JSON: " + error));
-      if (serializedOptions.profile().isPresent()) {
-        this.resetToProfile((DebugScreenProfile)serializedOptions.profile().get());
-      } else {
-        this.resetStatuses((Map)serializedOptions.custom().orElse(Map.of()));
-        this.profile = null;
-      }
-    } catch (JsonSyntaxException | IOException e) {
-      LOGGER.error("Couldn't read debug profile file {}, resetting to default", this.debugProfileFile, e);
       this.resetToProfile(DebugScreenProfile.DEFAULT);
-      this.save();
-    }
-
-    this.rebuildCurrentList();
+      this.rebuildCurrentList();
   }
 
   private void resetStatuses(final Map<ResourceLocation, DebugScreenEntryStatus> newEntries) {
@@ -77,7 +47,7 @@ public class DebugScreenEntryList {
 
   private void resetToProfile(final DebugScreenProfile profile) {
     this.profile = profile;
-    this.resetStatuses((Map)DebugScreenEntries.PROFILES.get(profile));
+    this.resetStatuses(DebugScreenEntries.PROFILES.get(profile));
   }
 
   public void loadProfile(final DebugScreenProfile profile) {
@@ -86,7 +56,7 @@ public class DebugScreenEntryList {
   }
 
   public DebugScreenEntryStatus getStatus(final ResourceLocation location) {
-    return (DebugScreenEntryStatus)this.allStatuses.getOrDefault(location, DebugScreenEntryStatus.NEVER);
+    return (DebugScreenEntryStatus) this.allStatuses.getOrDefault(location, DebugScreenEntryStatus.NEVER);
   }
 
   public boolean isCurrentlyEnabled(final ResourceLocation location) {
@@ -116,7 +86,8 @@ public class DebugScreenEntryList {
       case NEVER:
         if (this.isOverlayVisible) {
           this.setStatus(location, DebugScreenEntryStatus.IN_OVERLAY);
-        } else {
+        }
+        else {
           this.setStatus(location, DebugScreenEntryStatus.ALWAYS_ON);
         }
 
@@ -132,6 +103,10 @@ public class DebugScreenEntryList {
     return List.copyOf(this.currentlyEnabled);
   }
 
+  public boolean isOverlayVisible() {
+    return this.isOverlayVisible;
+  }
+
   public void toggleDebugOverlay() {
     this.setOverlayVisible(!this.isOverlayVisible);
   }
@@ -142,10 +117,6 @@ public class DebugScreenEntryList {
       this.rebuildCurrentList();
     }
 
-  }
-
-  public boolean isOverlayVisible() {
-    return this.isOverlayVisible;
   }
 
   public void rebuildCurrentList() {
@@ -174,23 +145,31 @@ public class DebugScreenEntryList {
   }
 
   public void save() {
-    SerializedOptions serializedOptions = new SerializedOptions(Optional.ofNullable(this.profile), this.profile == null ? Optional.of(this.allStatuses) : Optional.empty());
+    SerializedOptions serializedOptions = new SerializedOptions(Optional.ofNullable(this.profile),
+                                                                this.profile == null ? Optional.of(this.allStatuses)
+                                                                                     : Optional.empty());
 
-    try {
-      FileUtils.writeStringToFile(this.debugProfileFile, ((JsonElement)this.codec.encodeStart(JsonOps.INSTANCE, serializedOptions).getOrThrow()).toString(), StandardCharsets.UTF_8);
-    } catch (IOException e) {
-      LOGGER.error("Failed to save debug profile file {}", this.debugProfileFile, e);
-    }
+    // try {
+    //   FileUtils.writeStringToFile(this.debugProfileFile,
+    //                               ((JsonElement) this.codec.encodeStart(JsonOps.INSTANCE, serializedOptions)
+    //                                   .getOrThrow()).toString(), StandardCharsets.UTF_8);
+    // } catch (IOException e) {
+    //   LOGGER.error("Failed to save debug profile file {}", this.debugProfileFile, e);
+    // }
 
   }
 
-  private static record SerializedOptions(Optional<DebugScreenProfile> profile, Optional<Map<ResourceLocation, DebugScreenEntryStatus>> custom) {
-    private static final Codec<Map<ResourceLocation, DebugScreenEntryStatus>> CUSTOM_ENTRIES_CODEC;
+  private static record SerializedOptions(Optional<DebugScreenProfile> profile,
+                                          Optional<Map<ResourceLocation, DebugScreenEntryStatus>> custom) {
     public static final Codec<SerializedOptions> CODEC;
+    private static final Codec<Map<ResourceLocation, DebugScreenEntryStatus>> CUSTOM_ENTRIES_CODEC;
 
     static {
       CUSTOM_ENTRIES_CODEC = Codec.unboundedMap(ResourceLocation.CODEC, DebugScreenEntryStatus.CODEC);
-      CODEC = RecordCodecBuilder.create((i) -> i.group(DebugScreenProfile.CODEC.optionalFieldOf("profile").forGetter(SerializedOptions::profile), CUSTOM_ENTRIES_CODEC.optionalFieldOf("custom").forGetter(SerializedOptions::custom)).apply(i, SerializedOptions::new));
+      CODEC = RecordCodecBuilder.create(
+          (i) -> i.group(DebugScreenProfile.CODEC.optionalFieldOf("profile").forGetter(SerializedOptions::profile),
+                         CUSTOM_ENTRIES_CODEC.optionalFieldOf("custom").forGetter(SerializedOptions::custom))
+              .apply(i, SerializedOptions::new));
     }
   }
 }

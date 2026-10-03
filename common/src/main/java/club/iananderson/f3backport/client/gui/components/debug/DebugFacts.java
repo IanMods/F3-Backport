@@ -6,6 +6,10 @@ import net.minecraft.network.chat.Style;
 public class DebugFacts {
   private static final Style VALUE_STYLE;
 
+  static {
+    VALUE_STYLE = Style.EMPTY.withColor(-1);
+  }
+
   private DebugFacts() {
   }
 
@@ -19,9 +23,5 @@ public class DebugFacts {
 
   public static Component filler(final String value) {
     return Component.literal(value);
-  }
-
-  static {
-    VALUE_STYLE = Style.EMPTY.withColor(-1);
   }
 }

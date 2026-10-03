@@ -7,6 +7,11 @@ import net.minecraft.network.chat.Style;
 
 public class DebugFact {
   private static final Style VALUE_STYLE;
+
+  static {
+    VALUE_STYLE = Style.EMPTY.withColor(-1);
+  }
+
   private final MutableComponent component = Component.empty();
 
   public DebugFact() {
@@ -41,10 +46,6 @@ public class DebugFact {
 
   public Component result() {
     return this.component;
-  }
-
-  static {
-    VALUE_STYLE = Style.EMPTY.withColor(-1);
   }
 }
 
