@@ -16,6 +16,40 @@ neoForge {
     }
 }
 
+repositories {
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "CurseMaven"
+                url = uri("https://cursemaven.com")
+            }
+        }
+        filter {
+            includeGroup "curse.maven"
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth Maven"
+                url = uri("https://api.modrinth.com/maven")
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
+
+    maven {
+        name = "Forge Config API Port Maven"
+        url = uri("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
+        content {
+            includeGroup "fuzs.forgeconfigapiport"
+        }
+    }
+}
+
 dependencies {
     compileOnly "org.spongepowered:mixin:0.8.5"
     // fabric and neoforge both bundle mixinextras, so it is safe to use it in common
@@ -25,6 +59,9 @@ dependencies {
     implementation "org.ow2.asm:asm-tree:9.5"
     implementation "org.ow2.asm:asm-commons:9.5"
     implementation "org.ow2.asm:asm-util:9.5"
+
+    // Config Mod
+    api "fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi:${project.forge_config_api_port_version}"
 }
 
 configurations {

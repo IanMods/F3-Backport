@@ -10,7 +10,16 @@ dependencies {
         parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
     }
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+
+    // Forge Config API Port
+    modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${project.forge_config_api_port_version}"
+    modImplementation("maven.modrinth:forge-config-api-port:v${project.forge_config_api_port_version}-${project.minecraft_version}-Fabric") {
+        exclude group: 'net.fabricmc', module: 'fabric-loader'
+    }
+
+    // Development QOL
+    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 loom {
@@ -42,5 +51,32 @@ loom {
             }
             getRunDirectory().set(getProject().file((serverDir)))
         }
+    }
+}
+
+publishMods {
+    displayName = "${mod_id}-fabric-${minecraft_version}-${mod_version}"
+    version = "${minecraft_version}-${mod_version}"
+    file = tasks.remapJar.archiveFile
+    modLoaders.add("fabric")
+
+    curseforge("curseforgeFabric") {
+        accessToken = System.getenv("CURSEFORGE_TOKEN")
+        changelogType = "markdown"
+        javaVersions.add(JavaVersion.toVersion(java_version))
+        minecraftVersions.addAll(modrinth_gameVersions.split(","))
+        projectId = curseforge_id
+        client = true
+        server = true
+
+        requires("forge-config-api-port")
+    }
+
+    modrinth("modrinthFabric") {
+        accessToken = System.getenv("MODRINTH_TOKEN")
+        minecraftVersions.addAll(modrinth_gameVersions.split(","))
+        projectId = modrinth_id
+
+        requires("forge-config-api-port")
     }
 }

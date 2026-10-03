@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Fabric" pattern="ext[Gradle: *-fabric*]:*&amp;&amp;!ext[Gradle:*-common*:*]:*||file[F3-Backport*.fabric.main]:*||file[F3-Backport*.fabric*]:*//*||file[F3-Backport*.fabric]:*||file[F3-Backport*.fabric]:*/" />
+</component>

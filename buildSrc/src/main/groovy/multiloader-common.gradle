@@ -3,15 +3,15 @@ plugins {
     id 'idea'
     id 'java-library'
     id 'maven-publish'
+    id 'me.modmuss50.mod-publish-plugin'
 }
 
 base {
-    archivesName = "${mod_id}-${project.name}-${minecraft_version}"
+    archivesName = "${project.mod_id}-${project.name}-${project.minecraft_version}"
 }
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(java_version)
-    withSourcesJar()
 }
 
 repositories {
@@ -51,7 +51,7 @@ dependencies {
 
 // Declare capabilities on the outgoing configurations.
 // Read more about capabilities here: https://docs.gradle.org/current/userguide/component_capabilities.html#sec:declaring-additional-capabilities-for-a-local-component
-['apiElements', 'runtimeElements', 'sourcesElements'].each { variant ->
+['apiElements', 'runtimeElements'].each { variant ->
     configurations."$variant".outgoing {
         capability("$group:${base.archivesName.get()}:$version")
         capability("$group:$mod_id-${project.name}-${minecraft_version}:$version")
@@ -62,11 +62,7 @@ dependencies {
     }
 }
 
-sourcesJar {
-    from(rootProject.file('LICENSE')) {
-        rename { "${it}_${mod_name}" }
-    }
-}
+
 
 jar {
     from(rootProject.file('LICENSE')) {
@@ -88,28 +84,41 @@ jar {
 
 processResources {
     var expandProps = [
-            'version'                      : version,
-            'group'                        : project.group, //Else we target the task's group.
-            'minecraft_version'            : minecraft_version,
-            'minecraft_version_range'      : minecraft_version_range,
-            'fabric_version'               : fabric_version,
-            'fabric_loader_version'        : fabric_loader_version,
-            'mod_name'                     : mod_name,
-            'mod_author'                   : mod_author,
-            'mod_id'                       : mod_id,
-            'license'                      : license,
-            'description'                  : project.description,
-            'neoforge_version'             : neoforge_version,
-            'neoforge_loader_version_range': neoforge_loader_version_range,
-            "forge_version"                : forge_version,
-            "forge_loader_version_range"   : forge_loader_version_range,
-            'credits'                      : credits,
-            'java_version'                 : java_version
+            "version"                      : version,
+            "group"                        : project.group, //Else we target the task's group.
+            "minecraft_version"            : minecraft_version,
+            "minecraft_version_range"      : minecraft_version_range,
+            "parchment_version": parchment_version,
+            "parchment_minecraft": parchment_minecraft,
+            "fabric_api_version"           : fabric_api_version,
+            "fabric_loader_version"        : fabric_loader_version,
+            "fabric_version_range"         : fabric_version_range,
+            "neoforge_version"             : neoforge_version,
+            "neoforge_loader_version_range": neoforge_loader_version_range,
+            "neoforge_version_range"       : neoforge_version_range,
+            "mod_name"                     : mod_name,
+            "mod_author"                   : mod_author,
+            "mod_id"                       : mod_id,
+            "mod_description"              : mod_description,
+            "license"                      : license,
+            "repoURL"                      : repoURL,
+            "issueTrackerURL"              : issueTrackerURL,
+            "credits"                      : credits,
+            "java_version"                 : java_version
     ]
 
-    filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', 'META-INF/neoforge.mods.toml', '*.mixins.json']) {
+    var jsonExpandProps = expandProps.collectEntries {
+        key, value -> [(key): value instanceof String ? value.replace("\n", "\\\\n") : value]
+    }
+
+    filesMatching(['META-INF/mods.toml', 'META-INF/neoforge.mods.toml']) {
         expand expandProps
     }
+
+    filesMatching(['pack.mcmeta', 'fabric.mod.json', '*.mixins.json']) {
+        expand jsonExpandProps
+    }
+
     inputs.properties(expandProps)
 }
 
@@ -125,4 +134,43 @@ publishing {
             url System.getenv('local_maven_url')
         }
     }
+}
+
+tasks.register('latestChangelog') {
+    group = "changelog"
+
+    def fullChangelog = projectDir.toPath().getParent().resolve("CHANGELOG.md").toFile()
+    def latestChangelog = projectDir.toPath().getParent().resolve("LATEST_CHANGELOG.md").toFile()
+
+    int firstHeading = fullChangelog.getText().indexOf("## [")
+    int nextHeading = fullChangelog.getText().indexOf("## [", firstHeading + 1)
+
+    String latestChangelogText = fullChangelog.getText().substring(firstHeading, nextHeading)
+
+    outputs.upToDateWhen {
+        if (latestChangelog.exists()) {
+            return latestChangelogText == latestChangelog.getText()
+        } else return false
+    }
+
+    outputs.file file("LATEST_CHANGELOG.md")
+    doLast {
+        latestChangelog.text = latestChangelogText
+        printf(latestChangelog.text)
+    }
+}
+
+publishMods {
+    dryRun = false
+    type = STABLE
+    changelog = project.getRootDir().toPath().resolve("LATEST_CHANGELOG.md").getText()
+}
+
+idea.module { downloadJavadoc = downloadSources = true }
+
+tasks.register('publishAll') {
+    group = "upload"
+
+    dependsOn("latestChangelog")
+    dependsOn("publishMods")
 }

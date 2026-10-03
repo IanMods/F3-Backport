@@ -1,4 +1,5 @@
 plugins {
+    id 'java'
     id 'multiloader-common'
 }
 
@@ -16,9 +17,67 @@ dependencies {
         capabilities {
             requireCapability "$group:$mod_id"
         }
+        def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
+        attributes {
+            attribute(loaderAttribute, 'common')
+        }
     }
     commonJava project(path: ':common', configuration: 'commonJava')
     commonResources project(path: ':common', configuration: 'commonResources')
+}
+
+repositories {
+    mavenCentral()
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "CurseMaven"
+                url = uri("https://cursemaven.com")
+            }
+        }
+        filter {
+            includeGroup "curse.maven"
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth Maven"
+                url = uri("https://api.modrinth.com/maven")
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
+
+    maven {
+        name = "Forge Config API Port Maven"
+        url = uri("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/")
+        content {
+            includeGroup "fuzs.forgeconfigapiport"
+        }
+    }
+
+    maven {
+        name = "DevAuth Maven"
+        url = uri("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
+        content {
+            includeGroup "me.djtheredstoner"
+        }
+    }
+
+
+    maven {
+        name = "TerraformerMC Maven"
+        url = uri("https://maven.terraformersmc.com/releases/")
+        content {
+            includeGroup "com.terraformersmc"
+            includeGroup "dev.emi"
+        }
+    }
 }
 
 tasks.named('compileJava', JavaCompile) {
@@ -27,13 +86,6 @@ tasks.named('compileJava', JavaCompile) {
 }
 
 processResources {
-    dependsOn(configurations.commonResources)
-    from(configurations.commonResources)
-}
-
-tasks.named('sourcesJar', Jar) {
-    dependsOn(configurations.commonJava)
-    from(configurations.commonJava)
     dependsOn(configurations.commonResources)
     from(configurations.commonResources)
 }

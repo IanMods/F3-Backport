@@ -1,10 +1,19 @@
-# eclipse
-bin
-*.launch
-.settings
-.metadata
-.classpath
-.project
+# Project exclude paths
+/.architectury-transformer/
+/.gradle/
+/build/
+/common/.gradle/
+/common/build/
+/common/run/
+/fabric/.gradle/
+/fabric/build/
+/fabric/run*/
+/forge/.gradle/
+/forge/build/
+/forge/run*/
+/neoforge/.gradle/
+/neoforge/build/
+/neoforge/run*/
 
 # idea
 out
@@ -12,13 +21,21 @@ out
 *.iws
 *.iml
 .idea/*
-!.idea/scopes
+!/.idea/scopes
+!/.idea/checkstyle
+!/.idea/codeStyles
+!/.idea/fileColors.xml
+!/.idea/checkstyle-idea.xml
+!/.idea/icon.svg
 
 # gradle
 build
+libs
 .gradle
 
 # other
-eclipse
 run
 runs
+/.depUpdater/
+/update-deps.ps1
+/dist/

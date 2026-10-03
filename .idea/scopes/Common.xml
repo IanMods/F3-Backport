@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Common" pattern="ext[Gradle: *-common*]:*||file[F3-Backport*.common.main]:*||file[F3-Backport*.common*]:*//*||file[F3-Backport*.common]:*||file[F3-Backport*.common]:*/" />
+</component>
