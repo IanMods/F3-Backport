@@ -1,6 +1,5 @@
 package club.iananderson.f3backport.client.gui.components.debug;
 
-import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryCategory;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.jspecify.annotations.Nullable;
@@ -16,4 +15,6 @@ public interface DebugScreenEntry {
   default DebugEntryCategory category() {
     return DebugEntryCategory.SCREEN_TEXT;
   }
+
+  boolean enabled();
 }

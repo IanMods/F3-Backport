@@ -4,6 +4,7 @@ import club.iananderson.f3backport.client.gui.components.debug.DebugFact;
 import club.iananderson.f3backport.client.gui.components.debug.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
+import club.iananderson.f3backport.config.F3BackportClient;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -54,5 +55,10 @@ public class DebugEntryLight implements DebugScreenEntry {
       }
 
     }
+  }
+
+  @Override
+  public boolean enabled() {
+    return F3BackportClient.getLight();
   }
 }

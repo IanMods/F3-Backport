@@ -15,9 +15,18 @@ public class F3BackportClient {
   private static ConfigValue<Boolean> enableSystemSpecs;
   private static ConfigValue<Boolean> enablePlayerPosition;
   private static ConfigValue<Boolean> enableBiome;
-  private static ConfigValue<Boolean> enable3dCrosshair;
   private static ConfigValue<Boolean> enableGpuUtilization;
   private static ConfigValue<Boolean> enableSimplePerformanceImpactors;
+  private static ConfigValue<Boolean> enableDayCount;
+  private static ConfigValue<Boolean> enableDetailedMemory;
+  private static ConfigValue<Boolean> enableEntityRenderStats;
+  private static ConfigValue<Boolean> enableHeightmap;
+  private static ConfigValue<Boolean> enableLight;
+  private static ConfigValue<Boolean> enableLocalDifficulty;
+  private static ConfigValue<Boolean> enablePlayerSpeed;
+  private static ConfigValue<Boolean> enablePlayerSectionPosition;
+  private static ConfigValue<Boolean> enableSoundMood;
+  private static ConfigValue<Boolean> enableSpawnCounts;
 
   static {
     ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
@@ -32,51 +41,55 @@ public class F3BackportClient {
                                     .addLine("(true/false)")
                                     .lastLine("Default is " + Client.DEFAULT_ENABLE_MOD + "."))
         .define("enable_mod", Client.DEFAULT_ENABLE_MOD);
+
     enableGameVersion = builder.comment(StringLine.builder()
                                             .addLine("Enable the Game Version entry?")
                                             .addLine("(true/false)")
                                             .lastLine("Default is " + Client.DEFAULT_ENABLE_GAME_VERSION + "."))
         .define("enable_game_version", Client.DEFAULT_ENABLE_GAME_VERSION);
+
     enableFps = builder.comment(StringLine.builder()
                                     .addLine("Enable the FPS entry")
                                     .addLine("(true/false)")
                                     .lastLine("Default is " + Client.DEFAULT_ENABLE_FPS + "."))
         .define("enable_fps", Client.DEFAULT_ENABLE_FPS);
+
     enableTps = builder.comment(StringLine.builder()
                                     .addLine("Enable the TPS entry?")
                                     .addLine("(true/false)")
                                     .lastLine("Default is " + Client.DEFAULT_ENABLE_TPS + "."))
         .define("enable_tps", Client.DEFAULT_ENABLE_TPS);
+
     enableMemory = builder.comment(StringLine.builder()
                                        .addLine("Enable the Memory entry?")
                                        .addLine("(true/false)")
                                        .lastLine("Default is " + Client.DEFAULT_ENABLE_MEMORY + "."))
         .define("enable_memory", Client.DEFAULT_ENABLE_MEMORY);
+
     enableSystemSpecs = builder.comment(StringLine.builder()
                                             .addLine("Enable the System Specs entry?")
                                             .addLine("(true/false)")
                                             .lastLine("Default is " + Client.DEFAULT_ENABLE_SYSTEM_SPECS + "."))
         .define("enable_system_specs", Client.DEFAULT_ENABLE_SYSTEM_SPECS);
+
     enablePlayerPosition = builder.comment(StringLine.builder()
                                                .addLine("Enable the Player Position entry?")
                                                .addLine("(true/false)")
                                                .lastLine("Default is " + Client.DEFAULT_ENABLE_PLAYER_POSITION + "."))
         .define("enable_player_position", Client.DEFAULT_ENABLE_PLAYER_POSITION);
+
     enableBiome = builder.comment(StringLine.builder()
                                       .addLine("Enable the Biome entry?")
                                       .addLine("(true/false)")
                                       .lastLine("Default is " + Client.DEFAULT_ENABLE_BIOME + "."))
         .define("enable_biome", Client.DEFAULT_ENABLE_BIOME);
-    enable3dCrosshair = builder.comment(StringLine.builder()
-                                            .addLine("Enable the 3d Crosshair?")
-                                            .addLine("(true/false)")
-                                            .lastLine("Default is " + Client.DEFAULT_ENABLE_3D_CROSSHAIR + "."))
-        .define("enable_3d_crosshair", Client.DEFAULT_ENABLE_3D_CROSSHAIR);
+
     enableGpuUtilization = builder.comment(StringLine.builder()
                                                .addLine("Enable the Gpu Utilization entry?")
                                                .addLine("(true/false)")
                                                .lastLine("Default is " + Client.DEFAULT_ENABLE_GPU_UTILIZATION + "."))
         .define("enable_gpu_utilization", Client.DEFAULT_ENABLE_GPU_UTILIZATION);
+
     enableSimplePerformanceImpactors = builder.comment(StringLine.builder()
                                                            .addLine("Enable the Simple Performance Impactors entry?")
                                                            .addLine("(true/false)")
@@ -84,8 +97,71 @@ public class F3BackportClient {
                                                                          + Client.DEFAULT_ENABLE_SIMPLE_PERF_IMPACTORS
                                                                          + "."))
         .define("enable_simple_performance_impactors", Client.DEFAULT_ENABLE_SIMPLE_PERF_IMPACTORS);
-    builder.pop();
 
+    enableDayCount = builder.comment(StringLine.builder()
+                                         .addLine("Enable the Day Count entry?")
+                                         .addLine("(true/false)")
+                                         .lastLine("Default is " + Client.DEFAULT_ENABLE_DAY_COUNT + "."))
+        .define("enable_day_count", Client.DEFAULT_ENABLE_DAY_COUNT);
+
+    enableDetailedMemory = builder.comment(StringLine.builder()
+                                               .addLine("Enable the Detailed Memory entry?")
+                                               .addLine("(true/false)")
+                                               .lastLine("Default is " + Client.DEFAULT_ENABLE_DETAILED_MEMORY + "."))
+        .define("enable_detailed_memory", Client.DEFAULT_ENABLE_DETAILED_MEMORY);
+
+    enableEntityRenderStats = builder.comment(StringLine.builder()
+                                                  .addLine("Enable the Entity Render Stats entry?")
+                                                  .addLine("(true/false)")
+                                                  .lastLine(
+                                                      "Default is " + Client.DEFAULT_ENABLE_ENTITY_RENDER_STATS + "."))
+        .define("enable_entity_render_stats", Client.DEFAULT_ENABLE_ENTITY_RENDER_STATS);
+
+    enableHeightmap = builder.comment(StringLine.builder()
+                                          .addLine("Enable the Heightmap entry?")
+                                          .addLine("(true/false)")
+                                          .lastLine("Default is " + Client.DEFAULT_ENABLE_HEIGHTMAP + "."))
+        .define("enable_heightmap", Client.DEFAULT_ENABLE_HEIGHTMAP);
+
+    enableLight = builder.comment(StringLine.builder()
+                                      .addLine("Enable the Light entry?")
+                                      .addLine("(true/false)")
+                                      .lastLine("Default is " + Client.DEFAULT_ENABLE_LIGHT + "."))
+        .define("enable_light", Client.DEFAULT_ENABLE_LIGHT);
+
+    enableLocalDifficulty = builder.comment(StringLine.builder()
+                                                .addLine("Enable the Local Difficulty entry?")
+                                                .addLine("(true/false)")
+                                                .lastLine("Default is " + Client.DEFAULT_ENABLE_LOCAL_DIFFICULTY + "."))
+        .define("enable_local_difficulty", Client.DEFAULT_ENABLE_LOCAL_DIFFICULTY);
+
+    enablePlayerSpeed = builder.comment(StringLine.builder()
+                                            .addLine("Enable the Player Speed entry?")
+                                            .addLine("(true/false)")
+                                            .lastLine("Default is " + Client.DEFAULT_ENABLE_PLAYER_SPEED + "."))
+        .define("enable_player_speed", Client.DEFAULT_ENABLE_PLAYER_SPEED);
+
+    enablePlayerSectionPosition = builder.comment(StringLine.builder()
+                                                      .addLine("Enable the Player Section Position entry?")
+                                                      .addLine("(true/false)")
+                                                      .lastLine(
+                                                          "Default is " + Client.DEFAULT_ENABLE_PLAYER_SECTION_POSITION
+                                                              + "."))
+        .define("enable_player_section_position", Client.DEFAULT_ENABLE_PLAYER_SECTION_POSITION);
+
+    enableSoundMood = builder.comment(StringLine.builder()
+                                          .addLine("Enable the Sound Mood entry?")
+                                          .addLine("(true/false)")
+                                          .lastLine("Default is " + Client.DEFAULT_ENABLE_SOUND_MOOD + "."))
+        .define("enable_sound_mood", Client.DEFAULT_ENABLE_SOUND_MOOD);
+
+    enableSpawnCounts = builder.comment(StringLine.builder()
+                                            .addLine("Enable the Spawn Counts entry?")
+                                            .addLine("(true/false)")
+                                            .lastLine("Default is " + Client.DEFAULT_ENABLE_SPAWN_COUNTS + "."))
+        .define("enable_spawn_counts", Client.DEFAULT_ENABLE_SPAWN_COUNTS);
+
+    builder.pop();
   }
 
   private static <T> T getOrDefault(ConfigValue<T> config) {
@@ -161,14 +237,6 @@ public class F3BackportClient {
     F3BackportClient.enableBiome.set(enable);
   }
 
-  public static boolean getEnable3dCrosshair() {
-    return getOrDefault(enable3dCrosshair);
-  }
-
-  public static void setEnable3dCrosshair(boolean enable) {
-    F3BackportClient.enable3dCrosshair.set(enable);
-  }
-
   public static boolean getEnableGpuUtilization() {
     return getOrDefault(enableGpuUtilization);
   }
@@ -183,5 +251,85 @@ public class F3BackportClient {
 
   public static void setEnableSimplePerformanceImpactors(boolean enable) {
     F3BackportClient.enableSimplePerformanceImpactors.set(enable);
+  }
+
+  public static boolean getEnableDayCount() {
+    return getOrDefault(enableDayCount);
+  }
+
+  public static void setEnableDayCount(boolean enable) {
+    F3BackportClient.enableDayCount.set(enable);
+  }
+
+  public static boolean getEnableDetailedMemory() {
+    return getOrDefault(enableDetailedMemory);
+  }
+
+  public static void setEnableDetailedMemory(boolean enable) {
+    F3BackportClient.enableDetailedMemory.set(enable);
+  }
+
+  public static boolean getEnableEntityRenderStats() {
+    return getOrDefault(enableEntityRenderStats);
+  }
+
+  public static void setEnableEntityRenderStats(boolean enable) {
+    F3BackportClient.enableEntityRenderStats.set(enable);
+  }
+
+  public static boolean getEnableHeightmap() {
+    return getOrDefault(enableHeightmap);
+  }
+
+  public static void setEnableHeightmap(boolean enable) {
+    F3BackportClient.enableHeightmap.set(enable);
+  }
+
+  public static boolean getLight() {
+    return getOrDefault(enableLight);
+  }
+
+  public static void setLight(boolean enable) {
+    F3BackportClient.enableLight.set(enable);
+  }
+
+  public static boolean getLocalDifficulty() {
+    return getOrDefault(enableLocalDifficulty);
+  }
+
+  public static void setLocalDifficulty(boolean enable) {
+    F3BackportClient.enableLocalDifficulty.set(enable);
+  }
+
+  public static boolean getPlayerSpeed() {
+    return getOrDefault(enablePlayerSpeed);
+  }
+
+  public static void setPlayerSpeed(boolean enable) {
+    F3BackportClient.enablePlayerSpeed.set(enable);
+  }
+
+  public static boolean getPlayerSectionPosition() {
+    return getOrDefault(enablePlayerSectionPosition);
+  }
+
+  public static void setPlayerSectionPosition(boolean enable) {
+    F3BackportClient.enablePlayerSectionPosition.set(enable);
+  }
+
+  public static boolean getSoundMood() {
+    return getOrDefault(enableSoundMood);
+  }
+
+  public static void setSoundMood(boolean enable) {
+    F3BackportClient.enableSoundMood.set(enable);
+  }
+
+  public static boolean getSpawnCounts() {
+    return getOrDefault(enableSpawnCounts);
+  }
+
+  public static void setSpawnCounts(boolean enable) {
+    F3BackportClient.enableSpawnCounts.set(enable);
   }
 }

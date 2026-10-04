@@ -1,5 +1,6 @@
 package club.iananderson.f3backport.client.gui.components.debug.entries;
 
+import club.iananderson.f3backport.client.gui.components.debug.DebugEntryCategory;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
 import net.minecraft.world.level.Level;
@@ -27,5 +28,10 @@ public class DebugEntryNoop implements DebugScreenEntry {
 
   public DebugEntryCategory category() {
     return DebugEntryCategory.RENDERER;
+  }
+
+  @Override
+  public boolean enabled() {
+    return true;
   }
 }

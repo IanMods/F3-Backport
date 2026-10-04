@@ -3,6 +3,7 @@ package club.iananderson.f3backport.client.gui.components.debug.entries;
 import club.iananderson.f3backport.client.gui.components.debug.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
+import club.iananderson.f3backport.config.F3BackportClient;
 import java.util.Locale;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -72,5 +73,10 @@ public class DebugEntryTps implements DebugScreenEntry {
 
   public boolean isAllowed(final boolean reducedDebugInfo) {
     return true;
+  }
+
+  @Override
+  public boolean enabled() {
+    return F3BackportClient.getEnableTps();
   }
 }

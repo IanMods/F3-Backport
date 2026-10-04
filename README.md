@@ -4,8 +4,7 @@
 
 ___
 
-A backport of 26.4 F3 debug screen changes, which rearranges the screen and adds categories. 
-
+A backport of 26.4 F3 debug screen changes, which rearranges the screen and adds categories.
 
 ## Downloads
 

@@ -3,6 +3,7 @@ package club.iananderson.f3backport.client.gui.components.debug.entries;
 import club.iananderson.f3backport.client.gui.components.debug.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
+import club.iananderson.f3backport.config.F3BackportClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.level.Level;
@@ -26,5 +27,10 @@ public class DebugEntryEntityRenderStats implements DebugScreenEntry {
 
   public boolean isAllowed(final boolean reducedDebugInfo) {
     return true;
+  }
+
+  @Override
+  public boolean enabled() {
+    return F3BackportClient.getEnableEntityRenderStats();
   }
 }

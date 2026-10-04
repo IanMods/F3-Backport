@@ -1,25 +1,26 @@
 package club.iananderson.f3backport.client.gui.components.debug;
 
+import club.iananderson.f3backport.Common;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryBiome;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryDayCount;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryDetailedMemory;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryEntityRenderStats;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryFps;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryGameVersion;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryGpuUtilization;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryHeightmap;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryLight;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryLocalDifficulty;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryMemory;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryNoop;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryPlayerPosition;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryPlayerSectionPosition;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryPlayerSpeed;
-import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryPosition;
-import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntrySectionPosition;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntrySimplePerformanceImpactors;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntrySoundMood;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntrySpawnCounts;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntrySystemSpecs;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryTps;
-import club.iananderson.f3backport.client.gui.components.debug.entries.DebugEntryVersion;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +29,7 @@ import org.jspecify.annotations.Nullable;
 public class DebugScreenEntries {
   public static final Map<DebugScreenProfile, Map<ResourceLocation, DebugScreenEntryStatus>> PROFILES;
   private static final Map<ResourceLocation, DebugScreenEntry> ENTRIES_BY_ID = new HashMap<>();
-  public static final ResourceLocation GAME_VERSION = register("game_version", new DebugEntryVersion());
+  public static final ResourceLocation GAME_VERSION = register("game_version", new DebugEntryGameVersion());
   public static final ResourceLocation FPS = register("fps", new DebugEntryFps());
   public static final ResourceLocation TPS = register("tps", new DebugEntryTps());
   public static final ResourceLocation MEMORY = register("memory", new DebugEntryMemory());
@@ -46,9 +47,9 @@ public class DebugScreenEntries {
                                                                       new DebugEntryEntityRenderStats());
   // public static final ResourceLocation PARTICLE_RENDER_STATS = register((String)"particle_render_stats", new DebugEntryParticleRenderStats());
   // public static final ResourceLocation CHUNK_SOURCE_STATS = register((String)"chunk_source_stats", new DebugEntryChunkSourceStats());
-  public static final ResourceLocation PLAYER_POSITION = register("player_position", new DebugEntryPosition());
+  public static final ResourceLocation PLAYER_POSITION = register("player_position", new DebugEntryPlayerPosition());
   public static final ResourceLocation PLAYER_SECTION_POSITION = register("player_section_position",
-                                                                          new DebugEntrySectionPosition());
+                                                                          new DebugEntryPlayerSectionPosition());
   public static final ResourceLocation PLAYER_SPEED = register("player_speed", new DebugEntryPlayerSpeed());
   public static final ResourceLocation LIGHT_LEVELS = register("light_levels", new DebugEntryLight());
   public static final ResourceLocation HEIGHTMAP = register("heightmap", new DebugEntryHeightmap());
@@ -63,7 +64,6 @@ public class DebugScreenEntries {
   public static final ResourceLocation ENTITY_HITBOXES = register("entity_hitboxes", new DebugEntryNoop());
   public static final ResourceLocation CHUNK_BORDERS = register("chunk_borders", new DebugEntryNoop());
   public static final ResourceLocation THREE_DIMENSIONAL_CROSSHAIR = register("3d_crosshair", new DebugEntryNoop());
-  public static final ResourceLocation CHUNK_SECTION_PATHS = register("chunk_section_paths", new DebugEntryNoop());
   public static final ResourceLocation GPU_UTILIZATION = register("gpu_utilization", new DebugEntryGpuUtilization());
   public static final ResourceLocation SIMPLE_PERFORMANCE_IMPACTORS = register("simple_performance_impactors",
                                                                                new DebugEntrySimplePerformanceImpactors());
@@ -118,12 +118,12 @@ public class DebugScreenEntries {
   }
 
   private static ResourceLocation register(final String id, final DebugScreenEntry entry) {
-    return register(ResourceLocation.withDefaultNamespace(id), entry);
+    return register(Common.location(id), entry);
   }
 
-  public static ResourceLocation register(final ResourceLocation ResourceLocation, final DebugScreenEntry entry) {
-    ENTRIES_BY_ID.put(ResourceLocation, entry);
-    return ResourceLocation;
+  public static ResourceLocation register(final ResourceLocation resourceLocation, final DebugScreenEntry entry) {
+    ENTRIES_BY_ID.put(resourceLocation, entry);
+    return resourceLocation;
   }
 
   public static Map<ResourceLocation, DebugScreenEntry> allEntries() {

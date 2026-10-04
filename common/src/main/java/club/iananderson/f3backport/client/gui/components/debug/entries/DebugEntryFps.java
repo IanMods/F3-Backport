@@ -2,6 +2,7 @@ package club.iananderson.f3backport.client.gui.components.debug.entries;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
+import club.iananderson.f3backport.config.F3BackportClient;
 import com.mojang.blaze3d.platform.Monitor;
 import com.mojang.blaze3d.platform.VideoMode;
 import java.util.Locale;
@@ -53,5 +54,10 @@ public class DebugEntryFps implements DebugScreenEntry {
 
   public boolean isAllowed(final boolean reducedDebugInfo) {
     return true;
+  }
+
+  @Override
+  public boolean enabled() {
+    return F3BackportClient.getEnableFps();
   }
 }

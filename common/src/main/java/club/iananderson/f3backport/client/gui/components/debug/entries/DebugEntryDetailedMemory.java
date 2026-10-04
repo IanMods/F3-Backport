@@ -4,6 +4,7 @@ import club.iananderson.f3backport.client.gui.components.debug.DebugFact;
 import club.iananderson.f3backport.client.gui.components.debug.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
+import club.iananderson.f3backport.config.F3BackportClient;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
@@ -43,5 +44,10 @@ public class DebugEntryDetailedMemory implements DebugScreenEntry {
 
   public boolean isAllowed(final boolean reducedDebugInfo) {
     return true;
+  }
+
+  @Override
+  public boolean enabled() {
+    return F3BackportClient.getEnableDetailedMemory();
   }
 }

@@ -10,7 +10,7 @@ import net.neoforged.fml.config.ModConfig;
 public class F3Backport {
 
   public F3Backport(IEventBus modBus, ModContainer modContainer) {
-    CommonClass.init();
+    Common.init();
 
     modContainer.registerConfig(ModConfig.Type.CLIENT, F3BackportClient.CLIENT_SPEC, "f3-backport-client.toml");
   }

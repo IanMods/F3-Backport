@@ -9,7 +9,7 @@ public class F3Backport implements ModInitializer {
 
   @Override
   public void onInitialize() {
-    CommonClass.init();
+    Common.init();
 
     NeoForgeConfigRegistry.INSTANCE.register(Constants.MOD_ID, ModConfig.Type.CLIENT, F3BackportClient.CLIENT_SPEC,
                                              "f3-backport-client.toml");

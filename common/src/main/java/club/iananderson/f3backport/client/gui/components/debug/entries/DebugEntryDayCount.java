@@ -3,6 +3,7 @@ package club.iananderson.f3backport.client.gui.components.debug.entries;
 import club.iananderson.f3backport.client.gui.components.debug.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
+import club.iananderson.f3backport.config.F3BackportClient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.jspecify.annotations.Nullable;
@@ -18,5 +19,10 @@ public class DebugEntryDayCount implements DebugScreenEntry {
                                (fact) -> fact.value(serverOrClientLevel.getDayTime() / 24000L));
     }
 
+  }
+
+  @Override
+  public boolean enabled() {
+    return F3BackportClient.getEnableDayCount();
   }
 }

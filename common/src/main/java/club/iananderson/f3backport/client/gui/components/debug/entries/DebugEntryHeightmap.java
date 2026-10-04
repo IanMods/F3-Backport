@@ -3,6 +3,7 @@ package club.iananderson.f3backport.client.gui.components.debug.entries;
 import club.iananderson.f3backport.client.gui.components.debug.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
+import club.iananderson.f3backport.config.F3BackportClient;
 import com.google.common.collect.Maps;
 import java.util.Map;
 import net.minecraft.client.Minecraft;
@@ -53,5 +54,10 @@ public class DebugEntryHeightmap implements DebugScreenEntry {
       }
 
     }
+  }
+
+  @Override
+  public boolean enabled() {
+    return F3BackportClient.getEnableHeightmap();
   }
 }

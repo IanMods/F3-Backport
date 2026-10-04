@@ -3,6 +3,7 @@ package club.iananderson.f3backport.client.gui.components.debug.entries;
 import club.iananderson.f3backport.client.gui.components.debug.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
+import club.iananderson.f3backport.config.F3BackportClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
@@ -28,6 +29,11 @@ public class DebugEntryPlayerSpeed implements DebugScreenEntry {
                                (fact) -> fact.formattedValue("%.3f", this.lastKnownSpeed.length())
                                    .text(" blocks/tick"));
     }
+  }
+
+  @Override
+  public boolean enabled() {
+    return F3BackportClient.getPlayerSpeed();
   }
 
   protected void computeSpeed(Entity player) {

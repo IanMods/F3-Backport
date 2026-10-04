@@ -3,6 +3,7 @@ package club.iananderson.f3backport.client.gui.components.debug.entries;
 import club.iananderson.f3backport.client.gui.components.debug.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
+import club.iananderson.f3backport.config.F3BackportClient;
 import java.util.Locale;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -11,8 +12,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.jspecify.annotations.Nullable;
 
-public class DebugEntrySectionPosition implements DebugScreenEntry {
-  public DebugEntrySectionPosition() {
+public class DebugEntryPlayerSectionPosition implements DebugScreenEntry {
+  public DebugEntryPlayerSectionPosition() {
   }
 
   public void display(final DebugScreenDisplayer displayer, final @Nullable Level serverOrClientLevel,
@@ -28,5 +29,10 @@ public class DebugEntrySectionPosition implements DebugScreenEntry {
 
   public boolean isAllowed(final boolean reducedDebugInfo) {
     return true;
+  }
+
+  @Override
+  public boolean enabled() {
+    return F3BackportClient.getPlayerSectionPosition();
   }
 }

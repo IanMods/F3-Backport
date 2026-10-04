@@ -1,4 +1,4 @@
-package club.iananderson.f3backport.client.gui.components.debug.entries;
+package club.iananderson.f3backport.client.gui.components.debug;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

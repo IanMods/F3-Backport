@@ -3,6 +3,7 @@ package club.iananderson.f3backport.client.gui.components.debug.entries;
 import club.iananderson.f3backport.client.gui.components.debug.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
+import club.iananderson.f3backport.config.F3BackportClient;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerChunkCache;
@@ -45,5 +46,10 @@ public class DebugEntrySpawnCounts implements DebugScreenEntry {
       }
 
     }
+  }
+
+  @Override
+  public boolean enabled() {
+    return F3BackportClient.getSpawnCounts();
   }
 }

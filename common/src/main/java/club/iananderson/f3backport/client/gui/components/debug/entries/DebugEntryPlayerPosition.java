@@ -3,6 +3,7 @@ package club.iananderson.f3backport.client.gui.components.debug.entries;
 import club.iananderson.f3backport.client.gui.components.debug.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
+import club.iananderson.f3backport.config.F3BackportClient;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import it.unimi.dsi.fastutil.longs.LongSets;
 import net.minecraft.client.Minecraft;
@@ -17,8 +18,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.jspecify.annotations.Nullable;
 
-public class DebugEntryPosition implements DebugScreenEntry {
-  public DebugEntryPosition() {
+public class DebugEntryPlayerPosition implements DebugScreenEntry {
+  public DebugEntryPlayerPosition() {
   }
 
   public void display(final DebugScreenDisplayer displayer, final @Nullable Level serverOrClientLevel,
@@ -26,8 +27,7 @@ public class DebugEntryPosition implements DebugScreenEntry {
     Minecraft minecraft = Minecraft.getInstance();
     Entity entity = minecraft.getCameraEntity();
     if (entity != null) {
-      BlockPos feetPos = minecraft.getCameraEntity().blockPosition();
-      ChunkPos chunkPos = new ChunkPos(feetPos);
+
       Direction direction = entity.getDirection();
       String faceString;
       switch (direction) {
@@ -51,11 +51,15 @@ public class DebugEntryPosition implements DebugScreenEntry {
                                    .formattedValue("%.5f", minecraft.getCameraEntity().getY())
                                    .text(" / ")
                                    .formattedValue("%.3f", new Object[]{minecraft.getCameraEntity().getZ()}));
+
+      BlockPos feetPos = minecraft.getCameraEntity().blockPosition();
+      ChunkPos chunkPos = new ChunkPos(feetPos);
       displayer.addFactToGroup(DebugGroups.POSITION, "Block", (fact) -> fact.value(feetPos.getX())
           .text(" ")
           .value(feetPos.getY())
           .text(" ")
           .value(feetPos.getZ()));
+
       displayer.addFactToGroup(DebugGroups.POSITION, "Chunk", (fact) -> fact.value(chunkPos.x)
           .text(" ")
           .value(SectionPos.blockToSectionCoord(feetPos.getY()))
@@ -68,6 +72,7 @@ public class DebugEntryPosition implements DebugScreenEntry {
           .text(" in ")
           .formattedValue("r.%d.%d.mca", chunkPos.getRegionX(), chunkPos.getRegionZ())
           .text("]"));
+
       displayer.addFactToGroup(DebugGroups.POSITION, "Facing", (fact) -> fact.value(direction.toString())
           .text(" (")
           .value(faceString)
@@ -76,12 +81,19 @@ public class DebugEntryPosition implements DebugScreenEntry {
           .text(" / ")
           .formattedValue("%.1f", Mth.wrapDegrees(entity.getXRot()))
           .text(")"));
+
       displayer.addFactToGroup(DebugGroups.POSITION, "Dimension",
                                (fact) -> fact.value(minecraft.level.dimension().location().toString()));
+
       if (!forceLoadedChunks.isEmpty()) {
         displayer.addFactToGroup(DebugGroups.POSITION, "Forced Chunks", (fact) -> fact.value(forceLoadedChunks.size()));
       }
 
     }
+  }
+
+  @Override
+  public boolean enabled() {
+    return F3BackportClient.getPlayerPosition();
   }
 }
