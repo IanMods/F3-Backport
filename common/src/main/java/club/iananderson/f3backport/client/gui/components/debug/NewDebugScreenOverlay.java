@@ -74,6 +74,8 @@ public class NewDebugScreenOverlay {
       boolean renderNetworkCharts, LocalSampleLogger frameTimeLogger, LocalSampleLogger bandwidthLogger,
       LocalSampleLogger pingLogger) {
     if (this.minecraft.isGameLoadFinished() && (!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
+      DebugScreenEntries.allEntriesStatus().forEach(this.debugEntries::setStatus);
+
       Collection<ResourceLocation> visibleEntries = this.debugEntries.getCurrentlyEnabled();
       if (visibleEntries.isEmpty()) {
         this.clearColumnCache();

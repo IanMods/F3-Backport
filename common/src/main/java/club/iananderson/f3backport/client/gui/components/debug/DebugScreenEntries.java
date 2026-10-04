@@ -88,22 +88,22 @@ public class DebugScreenEntries {
                                                                            new DebugEntryNoop());
 
   static {
-    Map<ResourceLocation, DebugScreenEntryStatus> defaultProfile = Map.of(THREE_DIMENSIONAL_CROSSHAIR,
-                                                                          DebugScreenEntryStatus.IN_OVERLAY,
-                                                                          GAME_VERSION,
-                                                                          DebugScreenEntryStatus.IN_OVERLAY, TPS,
-                                                                          DebugScreenEntryStatus.IN_OVERLAY, FPS,
-                                                                          DebugScreenEntryStatus.IN_OVERLAY, MEMORY,
-                                                                          DebugScreenEntryStatus.IN_OVERLAY, BIOME,
-                                                                          DebugScreenEntryStatus.IN_OVERLAY,
-                                                                          SYSTEM_SPECS,
-                                                                          DebugScreenEntryStatus.IN_OVERLAY,
-                                                                          PLAYER_POSITION,
-                                                                          DebugScreenEntryStatus.IN_OVERLAY,
-                                                                          PLAYER_SECTION_POSITION,
-                                                                          DebugScreenEntryStatus.IN_OVERLAY,
-                                                                          SIMPLE_PERFORMANCE_IMPACTORS,
-                                                                          DebugScreenEntryStatus.IN_OVERLAY);
+    // Map<ResourceLocation, DebugScreenEntryStatus> defaultProfile = Map.of(THREE_DIMENSIONAL_CROSSHAIR,
+    //                                                                       DebugScreenEntryStatus.IN_OVERLAY,
+    //                                                                       GAME_VERSION,
+    //                                                                       DebugScreenEntryStatus.IN_OVERLAY, TPS,
+    //                                                                       DebugScreenEntryStatus.IN_OVERLAY, FPS,
+    //                                                                       DebugScreenEntryStatus.IN_OVERLAY, MEMORY,
+    //                                                                       DebugScreenEntryStatus.IN_OVERLAY, BIOME,
+    //                                                                       DebugScreenEntryStatus.IN_OVERLAY,
+    //                                                                       SYSTEM_SPECS,
+    //                                                                       DebugScreenEntryStatus.IN_OVERLAY,
+    //                                                                       PLAYER_POSITION,
+    //                                                                       DebugScreenEntryStatus.IN_OVERLAY,
+    //                                                                       PLAYER_SECTION_POSITION,
+    //                                                                       DebugScreenEntryStatus.IN_OVERLAY,
+    //                                                                       SIMPLE_PERFORMANCE_IMPACTORS,
+    //                                                                       DebugScreenEntryStatus.IN_OVERLAY);
     Map<ResourceLocation, DebugScreenEntryStatus> performance = Map.of(TPS, DebugScreenEntryStatus.IN_OVERLAY, FPS,
                                                                        DebugScreenEntryStatus.ALWAYS_ON,
                                                                        GPU_UTILIZATION,
@@ -111,7 +111,7 @@ public class DebugScreenEntries {
                                                                        DebugScreenEntryStatus.IN_OVERLAY,
                                                                        SIMPLE_PERFORMANCE_IMPACTORS,
                                                                        DebugScreenEntryStatus.IN_OVERLAY);
-    PROFILES = Map.of(DebugScreenProfile.DEFAULT, defaultProfile, DebugScreenProfile.PERFORMANCE, performance);
+    PROFILES = Map.of(DebugScreenProfile.DEFAULT, enabledEntries(), DebugScreenProfile.PERFORMANCE, performance);
   }
 
   public DebugScreenEntries() {
@@ -128,6 +128,32 @@ public class DebugScreenEntries {
 
   public static Map<ResourceLocation, DebugScreenEntry> allEntries() {
     return Map.copyOf(ENTRIES_BY_ID);
+  }
+
+  public static Map<ResourceLocation, DebugScreenEntryStatus> enabledEntries() {
+    Map<ResourceLocation, DebugScreenEntryStatus> enabledEntries = new HashMap<>();
+
+    allEntries().forEach(((resourceLocation, debugScreenEntry) -> {
+      if (debugScreenEntry.enabled()) {
+        enabledEntries.put(resourceLocation, DebugScreenEntryStatus.IN_OVERLAY);
+      }
+    }));
+
+    return enabledEntries;
+  }
+
+  public static Map<ResourceLocation, DebugScreenEntryStatus> allEntriesStatus() {
+    Map<ResourceLocation, DebugScreenEntryStatus> allEntries = new HashMap<>();
+
+    allEntries().forEach(((resourceLocation, debugScreenEntry) -> {
+      if (debugScreenEntry.enabled()) {
+        allEntries.put(resourceLocation, DebugScreenEntryStatus.IN_OVERLAY);
+      } else {
+        allEntries.put(resourceLocation, DebugScreenEntryStatus.NEVER);
+      }
+    }));
+
+    return allEntries;
   }
 
   public static @Nullable DebugScreenEntry getEntry(final ResourceLocation id) {
