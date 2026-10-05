@@ -9,10 +9,11 @@ import club.iananderson.f3backport.client.gui.components.debug.entries.memory.De
 import club.iananderson.f3backport.client.gui.components.debug.entries.memory.DebugEntryMemory;
 import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntryDayCount;
 import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntryEntityRenderStats;
+import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntryGpuUtilization;
 import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntryLocalDifficulty;
 import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntrySoundMood;
 import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntryTps;
-import club.iananderson.f3backport.client.gui.components.debug.entries.performanceimpactors.DebugEntrySimplePerformanceImpactors;
+import club.iananderson.f3backport.client.gui.components.debug.entries.perfimpactors.DebugEntrySimplePerfImpactors;
 import club.iananderson.f3backport.client.gui.components.debug.entries.position.DebugEntryBiome;
 import club.iananderson.f3backport.client.gui.components.debug.entries.position.DebugEntryPlayerPosition;
 import club.iananderson.f3backport.client.gui.components.debug.entries.position.DebugEntryPlayerSectionPosition;
@@ -21,7 +22,6 @@ import club.iananderson.f3backport.client.gui.components.debug.entries.priority.
 import club.iananderson.f3backport.client.gui.components.debug.entries.priority.DebugEntryGameVersion;
 import club.iananderson.f3backport.client.gui.components.debug.entries.priority.DebugEntryNoop;
 import club.iananderson.f3backport.client.gui.components.debug.entries.spawncounts.DebugEntrySpawnCounts;
-import club.iananderson.f3backport.client.gui.components.debug.entries.systemspecs.DebugEntryGpuUtilization;
 import club.iananderson.f3backport.client.gui.components.debug.entries.systemspecs.DebugEntrySystemSpecs;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,7 +68,7 @@ public class DebugScreenEntries {
   public static final ResourceLocation THREE_DIMENSIONAL_CROSSHAIR = register("3d_crosshair", new DebugEntryNoop());
   public static final ResourceLocation GPU_UTILIZATION = register("gpu_utilization", new DebugEntryGpuUtilization());
   public static final ResourceLocation SIMPLE_PERFORMANCE_IMPACTORS = register("simple_performance_impactors",
-                                                                               new DebugEntrySimplePerformanceImpactors());
+                                                                               new DebugEntrySimplePerfImpactors());
   public static final ResourceLocation CHUNK_SECTION_OCTREE = register("chunk_section_octree", new DebugEntryNoop());
   public static final ResourceLocation VISUALIZE_WATER_LEVELS = register("visualize_water_levels",
                                                                          new DebugEntryNoop());

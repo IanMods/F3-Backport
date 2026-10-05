@@ -1,4 +1,4 @@
-package club.iananderson.f3backport.client.gui.components.debug.entries.performanceimpactors;
+package club.iananderson.f3backport.client.gui.components.debug.entries.perfimpactors;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroups;
@@ -11,8 +11,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.jspecify.annotations.Nullable;
 
-public class DebugEntrySimplePerformanceImpactors implements DebugScreenEntry {
-  public DebugEntrySimplePerformanceImpactors() {
+public class DebugEntrySimplePerfImpactors implements DebugScreenEntry {
+  public DebugEntrySimplePerfImpactors() {
   }
 
   public void display(final DebugScreenDisplayer displayer, final @Nullable Level serverOrClientLevel,

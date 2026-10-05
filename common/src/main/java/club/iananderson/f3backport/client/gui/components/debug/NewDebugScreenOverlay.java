@@ -132,6 +132,7 @@ public class NewDebugScreenOverlay {
           boolean hasServer = this.minecraft.getSingleplayerServer() != null;
           KeyMapping keyDebugModifier = DebugKeyBinds.keyDebugOverlay;
           DebugGroup debugHelp = DebugGroups.HELP;
+          // TODO: Move these to language file instead of hardcoding them
           String debugCharts = "Debug charts:";
           String profilerChart = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugProfilingChart, "Profiler",
                                                    renderProfilerChart);
