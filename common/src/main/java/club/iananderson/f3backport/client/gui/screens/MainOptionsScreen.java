@@ -1,9 +1,11 @@
 package club.iananderson.f3backport.client.gui.screens;
 
 import club.iananderson.f3backport.Common;
+import club.iananderson.f3backport.config.F3BackportClient;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
@@ -12,6 +14,7 @@ import org.jspecify.annotations.NonNull;
 public class MainOptionsScreen extends F3BackportScreen {
   private static final Component SCREEN_TITLE = Common.translatedText("menu.f3backport.main.title");
   private static Map<ConfigValue<Boolean>, Boolean> configBooleans = new HashMap<>();
+  private static Map<ConfigValue<Integer>, Integer> configIntegers = new HashMap<>();
 
   public MainOptionsScreen(Screen parentScreen) {
     super(parentScreen, SCREEN_TITLE);
@@ -24,10 +27,17 @@ public class MainOptionsScreen extends F3BackportScreen {
   }
 
   public void loadConfig() {
-    configBooleans
+    F3BackportClient.booleanConfigs.forEach(booleanConfig -> {
+      configBooleans.put(booleanConfig, booleanConfig.get());
+    });
+    F3BackportClient.integerConfigs.forEach(integerConfig -> {
+      configIntegers.put(integerConfig, integerConfig.get());
+    });
   }
 
   public void saveConfig() {
+    configBooleans.forEach(ConfigValue::set);
+    configIntegers.forEach(ConfigValue::set);
   }
 
   @Override
@@ -71,16 +81,19 @@ public class MainOptionsScreen extends F3BackportScreen {
   public void init() {
     super.init();
 
-    // int enableModWidth = font.width(Common.translatedText("menu.seasonhud.main.enableMod.button").append(": OFF")) + 8;
-    //
-    // CycleButton<Boolean> enableModButton = CycleButton.onOffBuilder(enableMod)
-    //     .withTooltip(t -> Common.newTooltip("menu.seasonhud.main.enableMod.tooltip"))
-    //     .create(this.width - enableModWidth - TITLE_PADDING / 2, TITLE_PADDING / 2, enableModWidth, buttonHeight,
-    //             Common.translatedText("menu.seasonhud.main.enableMod.button"), (b, val) -> enableMod = val);
-    // widgets.add(enableModButton);
+    int enableModWidth = font.width(Common.translatedText("menu.seasonhud.main.enableMod.button").append(": OFF")) + 8;
+
+    boolean enableMod = configBooleans.get(F3BackportClient.enableMod);
+
+    CycleButton<Boolean> enableModButton = CycleButton.onOffBuilder(enableMod)
+        .withTooltip(t -> Common.newTooltip("menu.seasonhud.main.enableMod.tooltip"))
+        .create(this.width - enableModWidth - TITLE_PADDING / 2, TITLE_PADDING / 2, enableModWidth, buttonHeight,
+                Common.translatedText("menu.seasonhud.main.enableMod.button"),
+                (b, val) -> configBooleans.replace(F3BackportClient.enableMod, val));
+    widgets.add(enableModButton);
+
     //
     // row = -1;
-    // seasonHudOptionsButtons();
     // minimapOptionsButtons();
     //
     // widgets.forEach(this::addRenderableWidget);
