@@ -1,4 +1,4 @@
-package club.iananderson.f3backport.client.gui.components.debug;
+package club.iananderson.f3backport.client.gui.components.debug.entries;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugColumn.Side;
 import java.util.Optional;
@@ -11,7 +11,7 @@ public class DebugGroup {
   private final Optional<Side> preferredColumn;
 
   protected DebugGroup(final Component title, final OptionalInt accentColor,
-      final Optional<DebugColumn.Side> preferredColumn) {
+      final Optional<Side> preferredColumn) {
     this.title = title;
     this.accentColor = accentColor;
     this.preferredColumn = preferredColumn;
@@ -25,14 +25,14 @@ public class DebugGroup {
     return this.accentColor;
   }
 
-  public Optional<DebugColumn.Side> preferredColumn() {
+  public Optional<Side> preferredColumn() {
     return this.preferredColumn;
   }
 
   public static class Builder {
     private final Component title;
     private OptionalInt accentColor = OptionalInt.empty();
-    private Optional<DebugColumn.Side> preferredColumn = Optional.empty();
+    private Optional<Side> preferredColumn = Optional.empty();
 
     protected Builder(final Component title) {
       this.title = title;
@@ -55,7 +55,7 @@ public class DebugGroup {
       return this;
     }
 
-    public Builder withPreferredColumn(final DebugColumn.Side column) {
+    public Builder withPreferredColumn(final Side column) {
       this.preferredColumn = Optional.of(column);
       return this;
     }

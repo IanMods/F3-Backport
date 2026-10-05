@@ -1,8 +1,8 @@
-package club.iananderson.f3backport.client.gui.components.debug.entries;
+package club.iananderson.f3backport.client.gui.components.debug.entries.spawnCounts;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
-import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScreenEntry;
 import club.iananderson.f3backport.config.F3BackportClient;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.client.Minecraft;

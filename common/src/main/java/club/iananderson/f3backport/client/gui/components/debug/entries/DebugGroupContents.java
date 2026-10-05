@@ -1,6 +1,7 @@
-package club.iananderson.f3backport.client.gui.components.debug;
+package club.iananderson.f3backport.client.gui.components.debug.entries;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugColumn.Side;
+import club.iananderson.f3backport.client.gui.components.debug.DebugCustomRenderer;
 import com.google.common.base.Strings;
 import com.mojang.datafixers.util.Pair;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
     this.customRenderers.add(renderer);
   }
 
-  public Rect2i extract(final GuiGraphics graphics, final int top, final Font font, final DebugColumn.Side side,
+  public Rect2i extract(final GuiGraphics graphics, final int top, final Font font, final Side side,
       final int scaledScreenWidth) {
     Objects.requireNonNull(font);
     int fullWidth = this.lines.stream().mapToInt(font::width).max().orElse(0);

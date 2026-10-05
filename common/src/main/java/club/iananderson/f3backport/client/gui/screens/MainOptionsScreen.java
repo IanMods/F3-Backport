@@ -1,13 +1,17 @@
 package club.iananderson.f3backport.client.gui.screens;
 
 import club.iananderson.f3backport.Common;
+import java.util.HashMap;
+import java.util.Map;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
 import org.jspecify.annotations.NonNull;
 
 public class MainOptionsScreen extends F3BackportScreen {
-  private static final Component SCREEN_TITLE = Common.translatedText("menu.seasonhud.main.title");
+  private static final Component SCREEN_TITLE = Common.translatedText("menu.f3backport.main.title");
+  private static Map<ConfigValue<Boolean>, Boolean> configBooleans = new HashMap<>();
 
   public MainOptionsScreen(Screen parentScreen) {
     super(parentScreen, SCREEN_TITLE);
@@ -20,6 +24,7 @@ public class MainOptionsScreen extends F3BackportScreen {
   }
 
   public void loadConfig() {
+    configBooleans
   }
 
   public void saveConfig() {

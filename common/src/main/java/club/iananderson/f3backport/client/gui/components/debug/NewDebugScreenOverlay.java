@@ -1,6 +1,10 @@
 package club.iananderson.f3backport.client.gui.components.debug;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugColumn.Side;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroup;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroupContents;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScreenEntries;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScreenEntry;
 import club.iananderson.f3backport.client.keybinds.DebugKeyBinds;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.datafixers.DataFixUtils;

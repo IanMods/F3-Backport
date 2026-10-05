@@ -1,23 +1,17 @@
 package club.iananderson.f3backport.client.gui.components.debug;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugColumn.Side;
-import club.iananderson.f3backport.client.gui.components.debug.DebugGroup.Builder;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroup;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroup.Builder;
 
 public class DebugGroups {
-  public static final DebugGroup HELP = Builder.titled("Help")
-      .build();
-  public static final DebugGroup MISC = Builder.titleless()
-      .build();
-  public static final DebugGroup PRIORITY = Builder.titleless()
-      .build();
-  public static final DebugGroup LIGHT = Builder.titled("Light").withAccentColor(16776960)
-      .build();
-  public static final DebugGroup LOOKING_AT_BLOCK = Builder.titled("Looking At Block").withAccentColor(13369599)
-      .build();
-  public static final DebugGroup LOOKING_AT_FLUID = Builder.titled("Looking At Fluid").withAccentColor(16763904)
-      .build();
-  public static final DebugGroup LOOKING_AT_ENTITY = Builder.titled("Looking At Entity").withAccentColor(65484)
-      .build();
+  public static final DebugGroup HELP;
+  public static final DebugGroup MISC;
+  public static final DebugGroup PRIORITY;
+  public static final DebugGroup LIGHT;
+  public static final DebugGroup LOOKING_AT_BLOCK;
+  public static final DebugGroup LOOKING_AT_FLUID;
+  public static final DebugGroup LOOKING_AT_ENTITY;
   public static final DebugGroup MEMORY;
   public static final DebugGroup POSITION;
   public static final DebugGroup CHUNK_RENDERING;
@@ -45,6 +39,20 @@ public class DebugGroups {
     CHUNK_GENERATION = Builder.titled("Chunk Generation").withAccentColor(10092458)
         .build();
     SPAWN_COUNTS = Builder.titled("Entity Spawn Counts").withAccentColor(16729156)
+        .build();
+    MISC = Builder.titleless()
+        .build();
+    HELP = Builder.titled("Help")
+        .build();
+    PRIORITY = Builder.titleless()
+        .build();
+    LIGHT = Builder.titled("Light").withAccentColor(16776960)
+        .build();
+    LOOKING_AT_BLOCK = Builder.titled("Looking At Block").withAccentColor(13369599)
+        .build();
+    LOOKING_AT_FLUID = Builder.titled("Looking At Fluid").withAccentColor(16763904)
+        .build();
+    LOOKING_AT_ENTITY = Builder.titled("Looking At Entity").withAccentColor(65484)
         .build();
   }
 

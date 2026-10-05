@@ -1,8 +1,8 @@
-package club.iananderson.f3backport.client.gui.components.debug.entries;
+package club.iananderson.f3backport.client.gui.components.debug.entries.priority;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugEntryCategory;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
-import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScreenEntry;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.jspecify.annotations.Nullable;

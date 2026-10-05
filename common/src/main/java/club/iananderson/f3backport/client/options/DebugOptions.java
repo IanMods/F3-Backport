@@ -6,7 +6,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
 public class DebugOptions {
-  private static final Component DEBUG_GUI_SCALE_TOOLTIP = Component.translatable("options.debugGuiScale.tooltip");
+  private static final Component DEBUG_GUI_SCALE_TOOLTIP = Component.translatable(
+      "options.f3backport.debugGuiScale.tooltip");
   private final OptionInstance<Integer> debugGuiScale;
 
   public DebugOptions() {
@@ -16,7 +17,7 @@ public class DebugOptions {
                                                 MutableComponent var10000;
                                                 switch (value) {
                                                   case -1 -> var10000 = Component.translatable(
-                                                      "options.debugGuiScale.unchanged");
+                                                      "options.f3backport.debugGuiScale.unchanged");
                                                   case 0 -> var10000 = Component.translatable("options.guiScale.auto");
                                                   default -> var10000 = Component.literal(Integer.toString(value));
                                                 }

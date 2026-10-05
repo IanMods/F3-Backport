@@ -1,5 +1,7 @@
 package club.iananderson.f3backport.client.gui.components.debug;
 
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroup;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroupContents;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

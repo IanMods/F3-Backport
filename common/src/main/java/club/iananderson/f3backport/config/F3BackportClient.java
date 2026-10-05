@@ -2,11 +2,15 @@ package club.iananderson.f3backport.config;
 
 import club.iananderson.f3backport.config.DefaultValues.Client;
 import club.iananderson.f3backport.util.StringLine;
+import java.util.ArrayList;
+import java.util.List;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
 
 public class F3BackportClient {
   public static final ModConfigSpec CLIENT_SPEC;
+  public static List<ConfigValue<Boolean>> booleanConfigs = new ArrayList<>();
+  public static List<ConfigValue<Integer>> integerConfigs = new ArrayList<>();
   private static ConfigValue<Boolean> enableMod;
   private static ConfigValue<Boolean> enableGameVersion;
   private static ConfigValue<Boolean> enableFps;
@@ -41,30 +45,35 @@ public class F3BackportClient {
                                     .addLine("(true/false)")
                                     .lastLine("Default is " + Client.DEFAULT_ENABLE_MOD + "."))
         .define("enable_mod", Client.DEFAULT_ENABLE_MOD);
+    booleanConfigs.add(enableMod);
 
     enableGameVersion = builder.comment(StringLine.builder()
                                             .addLine("Enable the Game Version entry?")
                                             .addLine("(true/false)")
                                             .lastLine("Default is " + Client.DEFAULT_ENABLE_GAME_VERSION + "."))
         .define("enable_game_version", Client.DEFAULT_ENABLE_GAME_VERSION);
+    booleanConfigs.add(enableGameVersion);
 
     enableFps = builder.comment(StringLine.builder()
                                     .addLine("Enable the FPS entry")
                                     .addLine("(true/false)")
                                     .lastLine("Default is " + Client.DEFAULT_ENABLE_FPS + "."))
         .define("enable_fps", Client.DEFAULT_ENABLE_FPS);
+    booleanConfigs.add(enableFps);
 
     enableTps = builder.comment(StringLine.builder()
                                     .addLine("Enable the TPS entry?")
                                     .addLine("(true/false)")
                                     .lastLine("Default is " + Client.DEFAULT_ENABLE_TPS + "."))
         .define("enable_tps", Client.DEFAULT_ENABLE_TPS);
+    booleanConfigs.add(enableTps);
 
     enableMemory = builder.comment(StringLine.builder()
                                        .addLine("Enable the Memory entry?")
                                        .addLine("(true/false)")
                                        .lastLine("Default is " + Client.DEFAULT_ENABLE_MEMORY + "."))
         .define("enable_memory", Client.DEFAULT_ENABLE_MEMORY);
+    booleanConfigs.add(enableMemory);
 
     enableSystemSpecs = builder.comment(StringLine.builder()
                                             .addLine("Enable the System Specs entry?")
@@ -77,18 +86,21 @@ public class F3BackportClient {
                                                .addLine("(true/false)")
                                                .lastLine("Default is " + Client.DEFAULT_ENABLE_PLAYER_POSITION + "."))
         .define("enable_player_position", Client.DEFAULT_ENABLE_PLAYER_POSITION);
+    booleanConfigs.add(enablePlayerPosition);
 
     enableBiome = builder.comment(StringLine.builder()
                                       .addLine("Enable the Biome entry?")
                                       .addLine("(true/false)")
                                       .lastLine("Default is " + Client.DEFAULT_ENABLE_BIOME + "."))
         .define("enable_biome", Client.DEFAULT_ENABLE_BIOME);
+    booleanConfigs.add(enableBiome);
 
     enableGpuUtilization = builder.comment(StringLine.builder()
                                                .addLine("Enable the Gpu Utilization entry?")
                                                .addLine("(true/false)")
                                                .lastLine("Default is " + Client.DEFAULT_ENABLE_GPU_UTILIZATION + "."))
         .define("enable_gpu_utilization", Client.DEFAULT_ENABLE_GPU_UTILIZATION);
+    booleanConfigs.add(enableGpuUtilization);
 
     enableSimplePerformanceImpactors = builder.comment(StringLine.builder()
                                                            .addLine("Enable the Simple Performance Impactors entry?")
@@ -97,18 +109,21 @@ public class F3BackportClient {
                                                                          + Client.DEFAULT_ENABLE_SIMPLE_PERF_IMPACTORS
                                                                          + "."))
         .define("enable_simple_performance_impactors", Client.DEFAULT_ENABLE_SIMPLE_PERF_IMPACTORS);
+    booleanConfigs.add(enableSimplePerformanceImpactors);
 
     enableDayCount = builder.comment(StringLine.builder()
                                          .addLine("Enable the Day Count entry?")
                                          .addLine("(true/false)")
                                          .lastLine("Default is " + Client.DEFAULT_ENABLE_DAY_COUNT + "."))
         .define("enable_day_count", Client.DEFAULT_ENABLE_DAY_COUNT);
+    booleanConfigs.add(enableDayCount);
 
     enableDetailedMemory = builder.comment(StringLine.builder()
                                                .addLine("Enable the Detailed Memory entry?")
                                                .addLine("(true/false)")
                                                .lastLine("Default is " + Client.DEFAULT_ENABLE_DETAILED_MEMORY + "."))
         .define("enable_detailed_memory", Client.DEFAULT_ENABLE_DETAILED_MEMORY);
+    booleanConfigs.add(enableDetailedMemory);
 
     enableEntityRenderStats = builder.comment(StringLine.builder()
                                                   .addLine("Enable the Entity Render Stats entry?")
@@ -116,30 +131,35 @@ public class F3BackportClient {
                                                   .lastLine(
                                                       "Default is " + Client.DEFAULT_ENABLE_ENTITY_RENDER_STATS + "."))
         .define("enable_entity_render_stats", Client.DEFAULT_ENABLE_ENTITY_RENDER_STATS);
+    booleanConfigs.add(enableEntityRenderStats);
 
     enableHeightmap = builder.comment(StringLine.builder()
                                           .addLine("Enable the Heightmap entry?")
                                           .addLine("(true/false)")
                                           .lastLine("Default is " + Client.DEFAULT_ENABLE_HEIGHTMAP + "."))
         .define("enable_heightmap", Client.DEFAULT_ENABLE_HEIGHTMAP);
+    booleanConfigs.add(enableHeightmap);
 
     enableLight = builder.comment(StringLine.builder()
                                       .addLine("Enable the Light entry?")
                                       .addLine("(true/false)")
                                       .lastLine("Default is " + Client.DEFAULT_ENABLE_LIGHT + "."))
         .define("enable_light", Client.DEFAULT_ENABLE_LIGHT);
+    booleanConfigs.add(enableLight);
 
     enableLocalDifficulty = builder.comment(StringLine.builder()
                                                 .addLine("Enable the Local Difficulty entry?")
                                                 .addLine("(true/false)")
                                                 .lastLine("Default is " + Client.DEFAULT_ENABLE_LOCAL_DIFFICULTY + "."))
         .define("enable_local_difficulty", Client.DEFAULT_ENABLE_LOCAL_DIFFICULTY);
+    booleanConfigs.add(enableLocalDifficulty);
 
     enablePlayerSpeed = builder.comment(StringLine.builder()
                                             .addLine("Enable the Player Speed entry?")
                                             .addLine("(true/false)")
                                             .lastLine("Default is " + Client.DEFAULT_ENABLE_PLAYER_SPEED + "."))
         .define("enable_player_speed", Client.DEFAULT_ENABLE_PLAYER_SPEED);
+    booleanConfigs.add(enablePlayerSpeed);
 
     enablePlayerSectionPosition = builder.comment(StringLine.builder()
                                                       .addLine("Enable the Player Section Position entry?")
@@ -148,18 +168,21 @@ public class F3BackportClient {
                                                           "Default is " + Client.DEFAULT_ENABLE_PLAYER_SECTION_POSITION
                                                               + "."))
         .define("enable_player_section_position", Client.DEFAULT_ENABLE_PLAYER_SECTION_POSITION);
+    booleanConfigs.add(enablePlayerSectionPosition);
 
     enableSoundMood = builder.comment(StringLine.builder()
                                           .addLine("Enable the Sound Mood entry?")
                                           .addLine("(true/false)")
                                           .lastLine("Default is " + Client.DEFAULT_ENABLE_SOUND_MOOD + "."))
         .define("enable_sound_mood", Client.DEFAULT_ENABLE_SOUND_MOOD);
+    booleanConfigs.add(enableSoundMood);
 
     enableSpawnCounts = builder.comment(StringLine.builder()
                                             .addLine("Enable the Spawn Counts entry?")
                                             .addLine("(true/false)")
                                             .lastLine("Default is " + Client.DEFAULT_ENABLE_SPAWN_COUNTS + "."))
         .define("enable_spawn_counts", Client.DEFAULT_ENABLE_SPAWN_COUNTS);
+    booleanConfigs.add(enableSpawnCounts);
 
     builder.pop();
   }

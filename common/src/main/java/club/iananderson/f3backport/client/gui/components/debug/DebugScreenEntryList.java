@@ -1,5 +1,7 @@
 package club.iananderson.f3backport.client.gui.components.debug;
 
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScreenEntries;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScreenEntry;
 import club.iananderson.f3backport.util.DataFixTypes;
 import com.mojang.logging.LogUtils;
 import com.mojang.serialization.Codec;
@@ -145,14 +147,6 @@ public class DebugScreenEntryList {
                                                                                                    ? Optional.of(
         this.allStatuses)
                                                                                                    : Optional.empty());
-
-    // try {
-    //   FileUtils.writeStringToFile(this.debugProfileFile,
-    //                               ((JsonElement) this.codec.encodeStart(JsonOps.INSTANCE, serializedOptions)
-    //                                   .getOrThrow()).toString(), StandardCharsets.UTF_8);
-    // } catch (IOException e) {
-    //   LOGGER.error("Failed to save debug profile file {}", this.debugProfileFile, e);
-    // }
 
   }
 

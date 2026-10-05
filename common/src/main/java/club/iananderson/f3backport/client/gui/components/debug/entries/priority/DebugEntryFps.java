@@ -1,7 +1,7 @@
-package club.iananderson.f3backport.client.gui.components.debug.entries;
+package club.iananderson.f3backport.client.gui.components.debug.entries.priority;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
-import club.iananderson.f3backport.client.gui.components.debug.DebugScreenEntry;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScreenEntry;
 import club.iananderson.f3backport.config.F3BackportClient;
 import com.mojang.blaze3d.platform.Monitor;
 import com.mojang.blaze3d.platform.VideoMode;
@@ -43,7 +43,6 @@ public class DebugEntryFps implements DebugScreenEntry {
         String.format(Locale.ROOT, "%d fps T: %s%s @%sHz", mc.getFps(), frameRateLimitString, vsyncString,
                       refreshRateString));
 
-    // displayer.addPriorityLine(mc.fpsString);
   }
 
   public String refreshRateLabel(float refreshRate) {
