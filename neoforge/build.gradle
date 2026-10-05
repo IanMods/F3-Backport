@@ -118,10 +118,6 @@ publishMods {
         projectId = curseforge_id
         client = true
         server = false
-
-        optional("serene-seasons", "terrafirmacraft", "ecliptic-seasons")
-        optional("ftb-chunks-forge", "journeymap", "xaeros-minimap", "xaeros-minimap-fair-play-edition", "map-atlases-forge")
-        optional("curios", "accessories")
     }
 
     modrinth("modrinthNeoForge") {
