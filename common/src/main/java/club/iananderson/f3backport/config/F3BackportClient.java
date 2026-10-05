@@ -236,167 +236,83 @@ public class F3BackportClient {
     return getOrDefault(enableMod);
   }
 
-  public static void setEnableMod(boolean enable) {
-    F3BackportClient.enableMod.set(enable);
-  }
-
   public static int getDebugGuiScale() {
     return getOrDefault(debugGuiScale);
-  }
-
-  public static void setDebugGuiScale(int scale) {
-    F3BackportClient.debugGuiScale.set(scale);
   }
 
   public static boolean getEnableGameVersion() {
     return getOrDefault(enableGameVersion);
   }
 
-  public static void setEnableGameVersion(boolean enable) {
-    F3BackportClient.enableGameVersion.set(enable);
-  }
-
   public static boolean getEnableFps() {
     return getOrDefault(enableFps);
-  }
-
-  public static void setEnableFps(boolean enable) {
-    F3BackportClient.enableFps.set(enable);
   }
 
   public static boolean getEnableTps() {
     return getOrDefault(enableTps);
   }
 
-  public static void setEnableTps(boolean enable) {
-    F3BackportClient.enableTps.set(enable);
-  }
-
   public static boolean getEnableMemory() {
     return getOrDefault(enableMemory);
-  }
-
-  public static void setEnableMemory(boolean enable) {
-    F3BackportClient.enableMemory.set(enable);
   }
 
   public static boolean getEnableSystemSpecs() {
     return getOrDefault(enableSystemSpecs);
   }
 
-  public static void setEnableSystemSpecs(boolean enable) {
-    F3BackportClient.enableSystemSpecs.set(enable);
-  }
-
   public static boolean getPlayerPosition() {
     return getOrDefault(enablePlayerPosition);
-  }
-
-  public static void setEnablePlayerPosition(boolean enable) {
-    F3BackportClient.enablePlayerPosition.set(enable);
   }
 
   public static boolean getEnableBiome() {
     return getOrDefault(enableBiome);
   }
 
-  public static void setEnableBiome(boolean enable) {
-    F3BackportClient.enableBiome.set(enable);
-  }
-
   public static boolean getEnableGpuUtilization() {
     return getOrDefault(enableGpuUtilization);
-  }
-
-  public static void setEnableGpuUtilization(boolean enable) {
-    F3BackportClient.enableGpuUtilization.set(enable);
   }
 
   public static boolean getEnableSimplePerformanceImpactors() {
     return getOrDefault(enableSimplePerformanceImpactors);
   }
 
-  public static void setEnableSimplePerformanceImpactors(boolean enable) {
-    F3BackportClient.enableSimplePerformanceImpactors.set(enable);
-  }
-
   public static boolean getEnableDayCount() {
     return getOrDefault(enableDayCount);
-  }
-
-  public static void setEnableDayCount(boolean enable) {
-    F3BackportClient.enableDayCount.set(enable);
   }
 
   public static boolean getEnableDetailedMemory() {
     return getOrDefault(enableDetailedMemory);
   }
 
-  public static void setEnableDetailedMemory(boolean enable) {
-    F3BackportClient.enableDetailedMemory.set(enable);
-  }
-
   public static boolean getEnableEntityRenderStats() {
     return getOrDefault(enableEntityRenderStats);
-  }
-
-  public static void setEnableEntityRenderStats(boolean enable) {
-    F3BackportClient.enableEntityRenderStats.set(enable);
   }
 
   public static boolean getEnableHeightmap() {
     return getOrDefault(enableHeightmap);
   }
 
-  public static void setEnableHeightmap(boolean enable) {
-    F3BackportClient.enableHeightmap.set(enable);
-  }
-
   public static boolean getLight() {
     return getOrDefault(enableLight);
-  }
-
-  public static void setLight(boolean enable) {
-    F3BackportClient.enableLight.set(enable);
   }
 
   public static boolean getLocalDifficulty() {
     return getOrDefault(enableLocalDifficulty);
   }
 
-  public static void setLocalDifficulty(boolean enable) {
-    F3BackportClient.enableLocalDifficulty.set(enable);
-  }
-
   public static boolean getPlayerSpeed() {
     return getOrDefault(enablePlayerSpeed);
-  }
-
-  public static void setPlayerSpeed(boolean enable) {
-    F3BackportClient.enablePlayerSpeed.set(enable);
   }
 
   public static boolean getPlayerSectionPosition() {
     return getOrDefault(enablePlayerSectionPosition);
   }
 
-  public static void setPlayerSectionPosition(boolean enable) {
-    F3BackportClient.enablePlayerSectionPosition.set(enable);
-  }
-
   public static boolean getSoundMood() {
     return getOrDefault(enableSoundMood);
   }
 
-  public static void setSoundMood(boolean enable) {
-    F3BackportClient.enableSoundMood.set(enable);
-  }
-
   public static boolean getSpawnCounts() {
     return getOrDefault(enableSpawnCounts);
-  }
-
-  public static void setSpawnCounts(boolean enable) {
-    F3BackportClient.enableSpawnCounts.set(enable);
   }
 }
