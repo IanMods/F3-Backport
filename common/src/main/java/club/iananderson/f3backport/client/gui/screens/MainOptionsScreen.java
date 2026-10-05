@@ -33,12 +33,8 @@ public class MainOptionsScreen extends F3BackportScreen {
   }
 
   public void loadConfig() {
-    F3BackportClient.booleanConfigs.forEach(booleanConfig -> {
-      configBooleans.put(booleanConfig, booleanConfig.get());
-    });
-    F3BackportClient.integerConfigs.forEach(integerConfig -> {
-      configIntegers.put(integerConfig, integerConfig.get());
-    });
+    F3BackportClient.booleanConfigs.forEach(booleanConfig -> configBooleans.put(booleanConfig, booleanConfig.get()));
+    F3BackportClient.integerConfigs.forEach(integerConfig -> configIntegers.put(integerConfig, integerConfig.get()));
   }
 
   public void saveConfig() {

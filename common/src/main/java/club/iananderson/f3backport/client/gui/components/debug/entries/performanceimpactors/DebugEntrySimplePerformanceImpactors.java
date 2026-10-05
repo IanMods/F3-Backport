@@ -19,7 +19,6 @@ public class DebugEntrySimplePerformanceImpactors implements DebugScreenEntry {
       final @Nullable LevelChunk clientChunk, final @Nullable LevelChunk serverChunk) {
     Minecraft minecraft = Minecraft.getInstance();
     Options options = minecraft.options;
-    // displayer.addFactToGroup(DebugGroups.PERFORMANCE_IMPACTORS, "OIT", (fact) -> fact.value((Boolean)options.improvedTransparency().get() ? "On" : "Off"));
     displayer.addFactToGroup(DebugGroups.PERFORMANCE_IMPACTORS, "Clouds", (fact) -> fact.value(
         options.cloudStatus().get() == CloudStatus.OFF
         ? "Off"
@@ -28,15 +27,6 @@ public class DebugEntrySimplePerformanceImpactors implements DebugScreenEntry {
            : "Fancy")));
     displayer.addFactToGroup(DebugGroups.PERFORMANCE_IMPACTORS, "Biome Blend",
                              (fact) -> fact.value(options.biomeBlendRadius().get()));
-    // TextureFilteringMethod filteringMethod = (TextureFilteringMethod)options.textureFiltering().get();
-    // if (filteringMethod == TextureFilteringMethod.ANISOTROPIC) {
-    //   displayer.addFactToGroup(DebugGroups.PERFORMANCE_IMPACTORS, "Filtering", (fact) -> fact.value(filteringMethod.caption().getString()).text(" ").value(options.maxAnisotropyValue()).text("x"));
-    // } else {
-    //   displayer.addFactToGroup(DebugGroups.PERFORMANCE_IMPACTORS, "Filtering", (fact) -> fact.value(filteringMethod.caption().getString()));
-    // }
-
-    // boolean isMultiDrawIndirect = minecraft.levelRenderer.isChunkRenderingUsingMultiDrawIndirect();
-    // displayer.addFactToGroup(DebugGroups.PERFORMANCE_IMPACTORS, "Multi-draw", (fact) -> fact.value(isMultiDrawIndirect ? "On" : "Off"));
   }
 
   public boolean isAllowed(final boolean reducedDebugInfo) {

@@ -14,9 +14,7 @@ public class ClientEvents {
   }
 
   private static void registerKeyInputs() {
-    ClientTickEvents.END_CLIENT_TICK.register(client -> {
-      DebugKeyBinds.optionsKeyInput();
-    });
+    ClientTickEvents.END_CLIENT_TICK.register(client -> DebugKeyBinds.optionsKeyInput());
   }
 
   public static void register() {
