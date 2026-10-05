@@ -23,5 +23,7 @@ public class DefaultValues {
     public static final boolean DEFAULT_ENABLE_SOUND_MOOD = false;
     public static final boolean DEFAULT_ENABLE_SPAWN_COUNTS = false;
     public static final int DEFAULT_DEBUG_GUI_SCALE = 2;
+    public static final int DEFAULT_DEBUG_GUI_SCALE_MIN = -1;
+    public static final int DEFAULT_DEBUG_GUI_SCALE_MAX = 5;
   }
 }

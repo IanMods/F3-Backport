@@ -1,8 +1,8 @@
 package club.iananderson.f3backport.client.gui.components.debug.entries.light;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugFact;
-import club.iananderson.f3backport.client.gui.components.debug.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScreenEntry;
 import club.iananderson.f3backport.config.F3BackportClient;
 import net.minecraft.SharedConstants;

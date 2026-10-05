@@ -10,8 +10,7 @@ public class ClientEvents {
 
   // Key Bindings
   private static void registerKeyMappings() {
-    DebugKeyBinds.keyDebugOptions = KeyBindingHelper.registerKeyBinding(
-        DebugKeyBinds.keyDebugOptions);
+    DebugKeyBinds.keyDebugOptions = KeyBindingHelper.registerKeyBinding(DebugKeyBinds.keyDebugOptions);
   }
 
   private static void registerKeyInputs() {

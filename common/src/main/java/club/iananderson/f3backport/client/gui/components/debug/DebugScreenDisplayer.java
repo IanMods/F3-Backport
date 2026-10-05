@@ -2,6 +2,7 @@ package club.iananderson.f3backport.client.gui.components.debug;
 
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroup;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroupContents;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroups;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -29,14 +30,14 @@ public class DebugScreenDisplayer {
     groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group)).lines().add(lines);
   }
 
+  public void addToGroup(final DebugGroup group, final DebugCustomRenderer customRenderer) {
+    groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group)).addCustomRenderer(customRenderer);
+  }
+
   public void addFactToGroup(final DebugGroup group, final String name, final Consumer<DebugFact> builder) {
     DebugFact fact = new DebugFact();
     builder.accept(fact);
     groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group)).addFact(name, fact.result());
-  }
-
-  public void addToGroup(final DebugGroup group, final DebugCustomRenderer customRenderer) {
-    groups.computeIfAbsent(group, (k) -> new DebugGroupContents(group)).addCustomRenderer(customRenderer);
   }
 }
 

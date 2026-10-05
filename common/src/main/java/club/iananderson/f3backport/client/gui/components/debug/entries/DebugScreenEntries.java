@@ -9,11 +9,10 @@ import club.iananderson.f3backport.client.gui.components.debug.entries.memory.De
 import club.iananderson.f3backport.client.gui.components.debug.entries.memory.DebugEntryMemory;
 import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntryDayCount;
 import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntryEntityRenderStats;
-import club.iananderson.f3backport.client.gui.components.debug.entries.systemSpecs.DebugEntryGpuUtilization;
 import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntryLocalDifficulty;
 import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntrySoundMood;
 import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntryTps;
-import club.iananderson.f3backport.client.gui.components.debug.entries.performanceImpactors.DebugEntrySimplePerformanceImpactors;
+import club.iananderson.f3backport.client.gui.components.debug.entries.performanceimpactors.DebugEntrySimplePerformanceImpactors;
 import club.iananderson.f3backport.client.gui.components.debug.entries.position.DebugEntryBiome;
 import club.iananderson.f3backport.client.gui.components.debug.entries.position.DebugEntryPlayerPosition;
 import club.iananderson.f3backport.client.gui.components.debug.entries.position.DebugEntryPlayerSectionPosition;
@@ -21,8 +20,9 @@ import club.iananderson.f3backport.client.gui.components.debug.entries.position.
 import club.iananderson.f3backport.client.gui.components.debug.entries.priority.DebugEntryFps;
 import club.iananderson.f3backport.client.gui.components.debug.entries.priority.DebugEntryGameVersion;
 import club.iananderson.f3backport.client.gui.components.debug.entries.priority.DebugEntryNoop;
-import club.iananderson.f3backport.client.gui.components.debug.entries.spawnCounts.DebugEntrySpawnCounts;
-import club.iananderson.f3backport.client.gui.components.debug.entries.systemSpecs.DebugEntrySystemSpecs;
+import club.iananderson.f3backport.client.gui.components.debug.entries.spawncounts.DebugEntrySpawnCounts;
+import club.iananderson.f3backport.client.gui.components.debug.entries.systemspecs.DebugEntryGpuUtilization;
+import club.iananderson.f3backport.client.gui.components.debug.entries.systemspecs.DebugEntrySystemSpecs;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.resources.ResourceLocation;

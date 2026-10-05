@@ -7,6 +7,13 @@
   "key.f3backport.debug.profilingChart": "Profiling Chart",
   "key.f3backport.debug.debugOptions": "Debug Options",
   "menu.f3backport.main.title": "F3-Backport Options",
-  "options.f3backport.debugGuiScale.tooltip": "Overrides the debug overlay with a different GUI scale than the rest of the game.",
-  "options.f3backport.debugGuiScale.unchanged": "Unchanged"
+  "menu.f3backport.main.enableMod.button": "Enable Mod",
+  "menu.f3backport.main.enableMod.tooltip": "Enable the mod",
+  "menu.f3backport.main.priority.options": "Priority",
+  "menu.f3backport.main.enableGameVersion.tooltip": "Enable the Game Version entry",
+  "menu.f3backport.main.enableGameVersion.button": "Enable Game Version",
+  "menu.f3backport.main.enableFps.tooltip": "Enable the FPS entry",
+  "menu.f3backport.main.enableFps.button": "Enable FPS",
+  "menu.f3backport.main.debugGuiScale.slider": "Debug Gui Scale: ",
+  "menu.f3backport.main.debugGuiScale.tooltip": "Overrides the debug overlay with a different GUI scale than the rest of the game.\n\nSet to -1 to follow the current Minecraft Gui Scale setting\nSet to 0 for the Minecraft 'auto' setting"
 }

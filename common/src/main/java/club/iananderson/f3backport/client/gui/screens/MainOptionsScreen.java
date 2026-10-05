@@ -1,7 +1,10 @@
 package club.iananderson.f3backport.client.gui.screens;
 
 import club.iananderson.f3backport.Common;
+import club.iananderson.f3backport.client.gui.components.buttons.sliders.HudScaleSlider;
+import club.iananderson.f3backport.config.DefaultValues.Client;
 import club.iananderson.f3backport.config.F3BackportClient;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.client.gui.GuiGraphics;
@@ -13,8 +16,11 @@ import org.jspecify.annotations.NonNull;
 
 public class MainOptionsScreen extends F3BackportScreen {
   private static final Component SCREEN_TITLE = Common.translatedText("menu.f3backport.main.title");
-  private static Map<ConfigValue<Boolean>, Boolean> configBooleans = new HashMap<>();
-  private static Map<ConfigValue<Integer>, Integer> configIntegers = new HashMap<>();
+  private static final Component PRIORITY_SETTINGS = Common.translatedText("menu.f3backport.main.priority.options");
+  private static final Map<ConfigValue<Boolean>, Boolean> configBooleans = new HashMap<>();
+  private static final Map<ConfigValue<Integer>, Integer> configIntegers = new HashMap<>();
+  private int priorityRow;
+  private HudScaleSlider debugGuiScaleSlider;
 
   public MainOptionsScreen(Screen parentScreen) {
     super(parentScreen, SCREEN_TITLE);
@@ -37,6 +43,8 @@ public class MainOptionsScreen extends F3BackportScreen {
 
   public void saveConfig() {
     configBooleans.forEach(ConfigValue::set);
+
+    configIntegers.replace(F3BackportClient.debugGuiScale, debugGuiScaleSlider.getValueInt());
     configIntegers.forEach(ConfigValue::set);
   }
 
@@ -55,47 +63,62 @@ public class MainOptionsScreen extends F3BackportScreen {
   public void render(@NonNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
     super.render(graphics, mouseX, mouseY, partialTicks);
 
-    // drawHeading(graphics, MINIMAP_SETTINGS, minimapRow);
+    drawHeading(graphics, PRIORITY_SETTINGS, priorityRow);
   }
 
-  public void minimapOptionsButtons() {
-    // row += 2;
-    // minimapRow = row;
-    //
-    // enableMinimapIntegrationButton = CycleButton.onOffBuilder(enableMinimapIntegration)
-    //     .withTooltip(t -> Common.newTooltip("menu.seasonhud.main.minimapIntegration.tooltip"))
-    //     .create(leftButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
-    //             Common.translatedText("menu.seasonhud.main.enableMinimapIntegration.button"),
-    //             (b, val) -> enableMinimapIntegration = val);
-    //
-    // showMinimapHiddenButton = CycleButton.onOffBuilder(showMinimapHidden)
-    //     .withTooltip(t -> Common.newTooltip("menu.seasonhud.main.showMinimapHidden.tooltip"))
-    //     .create(rightButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
-    //             Common.translatedText("menu.seasonhud.main.showMinimapHidden.button"),
-    //             (b, val) -> showMinimapHidden = val);
-    //
-    // widgets.addAll(Arrays.asList(enableMinimapIntegrationButton, showMinimapHiddenButton));
+  public void priorityOptionsButtons() {
+    row += 2;
+    priorityRow = row;
+
+    boolean enableFps = configBooleans.get(F3BackportClient.enableFps);
+    boolean enableGameVersion = configBooleans.get(F3BackportClient.enableGameVersion);
+
+    CycleButton<Boolean> enableFpsButton = CycleButton.onOffBuilder(enableFps)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.enableFps.tooltip"))
+        .create(leftButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
+                Common.translatedText("menu.f3backport.main.enableFps.button"),
+                (b, val) -> configBooleans.replace(F3BackportClient.enableFps, val));
+
+    CycleButton<Boolean> enableGameVersionButton = CycleButton.onOffBuilder(enableGameVersion)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.enableGameVersion.tooltip"))
+        .create(rightButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
+                Common.translatedText("menu.f3backport.main.enableGameVersion.button"),
+                (b, val) -> configBooleans.replace(F3BackportClient.enableGameVersion, val));
+
+    widgets.addAll(Arrays.asList(enableGameVersionButton, enableFpsButton));
   }
 
   @Override
   public void init() {
     super.init();
 
-    int enableModWidth = font.width(Common.translatedText("menu.seasonhud.main.enableMod.button").append(": OFF")) + 8;
+    int enableModWidth = font.width(Common.translatedText("menu.f3backport.main.enableMod.button").append(": OFF")) + 8;
+    int debugGuiScaleWidth =
+        font.width(Common.translatedText("menu.f3backport.main.debugGuiScale.slider").append("-1")) + 8;
 
     boolean enableMod = configBooleans.get(F3BackportClient.enableMod);
+    int debugGuiScale = configIntegers.get(F3BackportClient.debugGuiScale);
 
     CycleButton<Boolean> enableModButton = CycleButton.onOffBuilder(enableMod)
-        .withTooltip(t -> Common.newTooltip("menu.seasonhud.main.enableMod.tooltip"))
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.enableMod.tooltip"))
         .create(this.width - enableModWidth - TITLE_PADDING / 2, TITLE_PADDING / 2, enableModWidth, buttonHeight,
-                Common.translatedText("menu.seasonhud.main.enableMod.button"),
+                Common.translatedText("menu.f3backport.main.enableMod.button"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableMod, val));
     widgets.add(enableModButton);
 
-    //
-    // row = -1;
-    // minimapOptionsButtons();
-    //
-    // widgets.forEach(this::addRenderableWidget);
+    debugGuiScaleSlider = HudScaleSlider.builder(Common.translatedText("menu.f3backport.main.debugGuiScale.slider"))
+        .withValueRange(Client.DEFAULT_DEBUG_GUI_SCALE_MIN, Client.DEFAULT_DEBUG_GUI_SCALE_MAX)
+        .withTooltip(Common.newTooltip("menu.f3backport.main.debugGuiScale.tooltip"))
+        .withInitialValue(debugGuiScale)
+        .withDefaultValue(Client.DEFAULT_DEBUG_GUI_SCALE)
+        .withBounds(this.width - debugGuiScaleWidth - TITLE_PADDING / 2, TITLE_PADDING + buttonHeight,
+                    debugGuiScaleWidth, buttonHeight).withStepSize(1)
+        .build();
+    widgets.add(debugGuiScaleSlider);
+
+    row = -1;
+    priorityOptionsButtons();
+
+    widgets.forEach(this::addRenderableWidget);
   }
 }

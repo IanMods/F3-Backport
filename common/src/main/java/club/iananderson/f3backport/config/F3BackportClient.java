@@ -53,7 +53,8 @@ public class F3BackportClient {
                                         .addLine("Set to -1 to follow the current Minecraft Gui Scale setting")
                                         .addLine("Set to 0 for the Minecraft 'auto' setting")
                                         .lastLine("Default is " + Client.DEFAULT_DEBUG_GUI_SCALE + "."))
-        .defineInRange("debug_gui_scale", Client.DEFAULT_DEBUG_GUI_SCALE, -1, 5);
+        .defineInRange("debug_gui_scale", Client.DEFAULT_DEBUG_GUI_SCALE, Client.DEFAULT_DEBUG_GUI_SCALE_MIN,
+                       Client.DEFAULT_DEBUG_GUI_SCALE_MAX);
     integerConfigs.add(debugGuiScale);
 
     // F3-Backport.Priority

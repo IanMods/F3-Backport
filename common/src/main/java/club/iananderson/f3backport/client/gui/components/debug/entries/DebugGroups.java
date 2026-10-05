@@ -1,7 +1,6 @@
-package club.iananderson.f3backport.client.gui.components.debug;
+package club.iananderson.f3backport.client.gui.components.debug.entries;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugColumn.Side;
-import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroup;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroup.Builder;
 
 public class DebugGroups {
@@ -22,17 +21,17 @@ public class DebugGroups {
   public static final DebugGroup SPAWN_COUNTS;
 
   static {
-    MEMORY = Builder.titled("Memory").withAccentColor(16751360).withPreferredColumn(Side.RIGHT)
+    MEMORY = Builder.titled("Memory").withAccentColor(255, 155, 0).withPreferredColumn(Side.RIGHT)
         .build();
-    POSITION = Builder.titled("Position").withAccentColor(16777215).withPreferredColumn(Side.LEFT)
+    POSITION = Builder.titled("Position").withAccentColor(255, 255, 255).withPreferredColumn(Side.LEFT)
         .build();
     CHUNK_RENDERING = Builder.titled("Chunk Rendering").withAccentColor(15773856)
         .build();
     PERFORMANCE_IMPACTORS = Builder.titled("Performance Impactors")
-        .withAccentColor(65280)
+        .withAccentColor(0, 255, 0)
         .withPreferredColumn(Side.RIGHT)
         .build();
-    SYSTEM_SPECS = Builder.titled("System Specs").withAccentColor(16711680).withPreferredColumn(Side.RIGHT)
+    SYSTEM_SPECS = Builder.titled("System Specs").withAccentColor(255, 0, 0).withPreferredColumn(Side.RIGHT)
         .build();
     HEIGHTMAP = Builder.titled("Heightmap").withAccentColor(43775)
         .build();
@@ -42,7 +41,7 @@ public class DebugGroups {
         .build();
     MISC = Builder.titleless()
         .build();
-    HELP = Builder.titled("Help")
+    HELP = Builder.titled("Help").withAccentColor(200, 200, 200)
         .build();
     PRIORITY = Builder.titleless()
         .build();
