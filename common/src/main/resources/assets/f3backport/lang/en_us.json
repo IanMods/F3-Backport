@@ -1,10 +1,11 @@
 {
-  "key.category.f3backport.debug": "Debug",
+  "key.category.f3backport.debug": "F3-Backport",
   "key.f3backport.debug.fpsCharts": "Fps Charts",
   "key.f3backport.debug.modifier": "Debug Modifier Key",
   "key.f3backport.debug.networkCharts": "Network Charts",
   "key.f3backport.debug.overlay": "Toggle Overlay",
   "key.f3backport.debug.profilingChart": "Profiling Chart",
+  "key.f3backport.debug.debugOptions": "Debug Options",
   "menu.f3backport.main.title": "F3-Backport Options",
   "options.f3backport.debugGuiScale.tooltip": "Overrides the debug overlay with a different GUI scale than the rest of the game.",
   "options.f3backport.debugGuiScale.unchanged": "Unchanged"

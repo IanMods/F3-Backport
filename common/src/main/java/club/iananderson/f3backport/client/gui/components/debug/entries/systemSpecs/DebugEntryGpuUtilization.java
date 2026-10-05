@@ -1,4 +1,4 @@
-package club.iananderson.f3backport.client.gui.components.debug.entries.misc;
+package club.iananderson.f3backport.client.gui.components.debug.entries.systemSpecs;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
@@ -17,7 +17,7 @@ public class DebugEntryGpuUtilization implements DebugScreenEntry {
   public void display(final DebugScreenDisplayer displayer, final @Nullable Level serverOrClientLevel,
       final @Nullable LevelChunk clientChunk, final @Nullable LevelChunk serverChunk) {
     Minecraft minecraft = Minecraft.getInstance();
-    displayer.addFactToGroup(DebugGroups.MISC, "GPU Utilization", (fact) -> {
+    displayer.addFactToGroup(DebugGroups.SYSTEM_SPECS, "GPU Utilization", (fact) -> {
       if (minecraft.getGpuUtilization() > (double) 100.0F) {
         fact.text(Component.literal("100%").withColor(-65536));
       } else {

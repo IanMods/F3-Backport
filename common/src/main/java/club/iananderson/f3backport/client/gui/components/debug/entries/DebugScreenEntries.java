@@ -9,7 +9,7 @@ import club.iananderson.f3backport.client.gui.components.debug.entries.memory.De
 import club.iananderson.f3backport.client.gui.components.debug.entries.memory.DebugEntryMemory;
 import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntryDayCount;
 import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntryEntityRenderStats;
-import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntryGpuUtilization;
+import club.iananderson.f3backport.client.gui.components.debug.entries.systemSpecs.DebugEntryGpuUtilization;
 import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntryLocalDifficulty;
 import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntrySoundMood;
 import club.iananderson.f3backport.client.gui.components.debug.entries.misc.DebugEntryTps;
@@ -90,22 +90,6 @@ public class DebugScreenEntries {
                                                                            new DebugEntryNoop());
 
   static {
-    // Map<ResourceLocation, DebugScreenEntryStatus> defaultProfile = Map.of(THREE_DIMENSIONAL_CROSSHAIR,
-    //                                                                       DebugScreenEntryStatus.IN_OVERLAY,
-    //                                                                       GAME_VERSION,
-    //                                                                       DebugScreenEntryStatus.IN_OVERLAY, TPS,
-    //                                                                       DebugScreenEntryStatus.IN_OVERLAY, FPS,
-    //                                                                       DebugScreenEntryStatus.IN_OVERLAY, MEMORY,
-    //                                                                       DebugScreenEntryStatus.IN_OVERLAY, BIOME,
-    //                                                                       DebugScreenEntryStatus.IN_OVERLAY,
-    //                                                                       SYSTEM_SPECS,
-    //                                                                       DebugScreenEntryStatus.IN_OVERLAY,
-    //                                                                       PLAYER_POSITION,
-    //                                                                       DebugScreenEntryStatus.IN_OVERLAY,
-    //                                                                       PLAYER_SECTION_POSITION,
-    //                                                                       DebugScreenEntryStatus.IN_OVERLAY,
-    //                                                                       SIMPLE_PERFORMANCE_IMPACTORS,
-    //                                                                       DebugScreenEntryStatus.IN_OVERLAY);
     Map<ResourceLocation, DebugScreenEntryStatus> performance = Map.of(TPS, DebugScreenEntryStatus.IN_OVERLAY, FPS,
                                                                        DebugScreenEntryStatus.ALWAYS_ON,
                                                                        GPU_UTILIZATION,

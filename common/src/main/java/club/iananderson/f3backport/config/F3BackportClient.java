@@ -130,6 +130,13 @@ public class F3BackportClient {
                                             .addLine("(true/false)")
                                             .lastLine("Default is " + Client.DEFAULT_ENABLE_SYSTEM_SPECS + "."))
         .define("enable_system_specs", Client.DEFAULT_ENABLE_SYSTEM_SPECS);
+
+    enableGpuUtilization = builder.comment(StringLine.builder()
+                                               .addLine("Enable the Gpu Utilization entry?")
+                                               .addLine("(true/false)")
+                                               .lastLine("Default is " + Client.DEFAULT_ENABLE_GPU_UTILIZATION + "."))
+        .define("enable_gpu_utilization", Client.DEFAULT_ENABLE_GPU_UTILIZATION);
+    booleanConfigs.add(enableGpuUtilization);
     builder.pop();
 
     // F3-Backport.Performance_Impactors
@@ -190,13 +197,6 @@ public class F3BackportClient {
                                                       "Default is " + Client.DEFAULT_ENABLE_ENTITY_RENDER_STATS + "."))
         .define("enable_entity_render_stats", Client.DEFAULT_ENABLE_ENTITY_RENDER_STATS);
     booleanConfigs.add(enableEntityRenderStats);
-
-    enableGpuUtilization = builder.comment(StringLine.builder()
-                                               .addLine("Enable the Gpu Utilization entry?")
-                                               .addLine("(true/false)")
-                                               .lastLine("Default is " + Client.DEFAULT_ENABLE_GPU_UTILIZATION + "."))
-        .define("enable_gpu_utilization", Client.DEFAULT_ENABLE_GPU_UTILIZATION);
-    booleanConfigs.add(enableGpuUtilization);
 
     enableLocalDifficulty = builder.comment(StringLine.builder()
                                                 .addLine("Enable the Local Difficulty entry?")
