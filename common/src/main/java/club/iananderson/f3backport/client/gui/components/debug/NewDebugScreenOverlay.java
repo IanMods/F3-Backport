@@ -6,6 +6,7 @@ import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGrou
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScreenEntries;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScreenEntry;
 import club.iananderson.f3backport.client.keybinds.DebugKeyBinds;
+import club.iananderson.f3backport.config.F3BackportClient;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.datafixers.DataFixUtils;
 import java.util.Collection;
@@ -106,8 +107,7 @@ public class NewDebugScreenOverlay {
 
         DebugScreenDisplayer displayer = new DebugScreenDisplayer();
         Map<DebugGroup, DebugGroupContents> groups = displayer.groups;
-        DebugGroupContents leftPriority = displayer.leftPriority;
-        DebugGroupContents rightPriority = displayer.rightPriority;
+
         Level level = this.getLevel();
 
         for (ResourceLocation id : visibleEntries) {
@@ -144,7 +144,7 @@ public class NewDebugScreenOverlay {
 
         Window window = this.minecraft.getWindow();
         int standardGuiScale = (int) window.getGuiScale();
-        int newScale = standardGuiScale;
+        int newScale = F3BackportClient.getDebugGuiScale();
         if (newScale == -1) {
           newScale = standardGuiScale;
         } else if (newScale == 0) {
@@ -167,12 +167,14 @@ public class NewDebugScreenOverlay {
           scaledScreenHeight = graphics.guiHeight();
         }
 
+        DebugGroupContents leftPriority = displayer.leftPriority;
         this.leftColumn.newFrame();
         this.rightColumn.newFrame();
         if (!leftPriority.lines().isEmpty()) {
           this.leftColumn.add(leftPriority, graphics, this.font, scaledScreenWidth);
         }
 
+        DebugGroupContents rightPriority = displayer.rightPriority;
         if (!rightPriority.lines().isEmpty()) {
           this.rightColumn.add(rightPriority, graphics, this.font, scaledScreenWidth);
         }

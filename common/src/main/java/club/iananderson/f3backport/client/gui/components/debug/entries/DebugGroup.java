@@ -10,8 +10,7 @@ public class DebugGroup {
   private final OptionalInt accentColor;
   private final Optional<Side> preferredColumn;
 
-  protected DebugGroup(final Component title, final OptionalInt accentColor,
-      final Optional<Side> preferredColumn) {
+  protected DebugGroup(final Component title, final OptionalInt accentColor, final Optional<Side> preferredColumn) {
     this.title = title;
     this.accentColor = accentColor;
     this.preferredColumn = preferredColumn;
