@@ -1,10 +1,10 @@
 package club.iananderson.f3backport.platform;
 
-import club.iananderson.f3backport.platform.services.IPlatformHelper;
+import club.iananderson.f3backport.platform.services.PlatformHelper;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 
-public class NeoForgePlatformHelper implements IPlatformHelper {
+public class NeoForgePlatformHelper implements PlatformHelper {
 
   @Override
   public String getPlatformName() {

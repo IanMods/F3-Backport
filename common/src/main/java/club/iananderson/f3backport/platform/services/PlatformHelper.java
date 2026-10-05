@@ -1,9 +1,9 @@
 package club.iananderson.f3backport.platform.services;
 
-public interface IPlatformHelper {
+public interface PlatformHelper {
 
   /**
-   * Gets the name of the current platform
+   * Gets the name of the current platform.
    *
    * @return The name of the current platform.
    */
