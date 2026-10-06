@@ -1,6 +1,7 @@
 package club.iananderson.f3backport.client.gui.screens;
 
 import club.iananderson.f3backport.Common;
+import club.iananderson.f3backport.client.gui.components.buttons.BoolButton;
 import club.iananderson.f3backport.client.gui.components.buttons.sliders.HudScaleSlider;
 import club.iananderson.f3backport.config.DefaultValues.Client;
 import club.iananderson.f3backport.config.F3BackportClient;
@@ -8,7 +9,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
@@ -17,15 +17,34 @@ import org.jspecify.annotations.NonNull;
 public class MainOptionsScreen extends F3BackportScreen {
   private static final Component SCREEN_TITLE = Common.translatedText("menu.f3backport.main.title");
   private static final Component PRIORITY_SETTINGS = Common.translatedText("menu.f3backport.main.priority.options");
+  private static final Component POSITION_SETTINGS = Common.translatedText("menu.f3backport.main.position.options");
+  private static final Component MEMORY_SETTINGS = Common.translatedText("menu.f3backport.main.memory.options");
+  private static final Component SYSTEM_SPECS_SETTINGS = Common.translatedText(
+      "menu.f3backport.main.systemSpecs.options");
+  private static final Component PERF_IMPACTORS_SETTINGS = Common.translatedText(
+      "menu.f3backport.main.perfImpactors.options");
+  private static final Component LIGHT_SETTINGS = Common.translatedText("menu.f3backport.main.light.options");
+  private static final Component HEIGHT_MAP_SETTINGS = Common.translatedText("menu.f3backport.main.heightMap.options");
+  private static final Component SPAWN_COUNT_SETTINGS = Common.translatedText(
+      "menu.f3backport.main.spawnCount.options");
+  private static final Component MISC_SETTINGS = Common.translatedText("menu.f3backport.main.misc.options");
   private static final Map<ConfigValue<Boolean>, Boolean> configBooleans = new HashMap<>();
   private static final Map<ConfigValue<Integer>, Integer> configIntegers = new HashMap<>();
   private int priorityRow;
+  private int positionRow;
+  private int memoryRow;
+  private int systemSpecsRow;
+  private int perfImpactorsRow;
+  private int lightRow;
+  private int heightMapRow;
+  private int spawnCountsRow;
+  private int miscRow;
   private HudScaleSlider debugGuiScaleSlider;
 
   public MainOptionsScreen(Screen parentScreen) {
     super(parentScreen, SCREEN_TITLE);
     loadConfig();
-    this.buttonWidth = 170;
+    this.buttonWidth = 150;
   }
 
   public static MainOptionsScreen getInstance(Screen parentScreen) {
@@ -60,28 +79,91 @@ public class MainOptionsScreen extends F3BackportScreen {
     super.render(graphics, mouseX, mouseY, partialTicks);
 
     drawHeading(graphics, PRIORITY_SETTINGS, priorityRow);
+    drawHeading(graphics, POSITION_SETTINGS, positionRow);
+    drawHeading(graphics, MEMORY_SETTINGS, memoryRow);
   }
 
   public void priorityOptionsButtons() {
-    row += 2;
+    row += 1;
     priorityRow = row;
 
     boolean enableFps = configBooleans.get(F3BackportClient.enableFps);
     boolean enableGameVersion = configBooleans.get(F3BackportClient.enableGameVersion);
 
-    CycleButton<Boolean> enableFpsButton = CycleButton.onOffBuilder(enableFps)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.enableFps.tooltip"))
+    BoolButton enableFpsButton = BoolButton.builder(enableFps)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.priority.enableFps.tooltip"))
         .create(leftButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.enableFps.button"),
+                Common.translatedText("menu.f3backport.main.priority.enableFps.button"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableFps, val));
 
-    CycleButton<Boolean> enableGameVersionButton = CycleButton.onOffBuilder(enableGameVersion)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.enableGameVersion.tooltip"))
+    BoolButton enableGameVersionButton = BoolButton.builder(enableGameVersion)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.priority.enableGameVersion.tooltip"))
         .create(rightButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.enableGameVersion.button"),
+                Common.translatedText("menu.f3backport.main.priority.enableGameVersion.button"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableGameVersion, val));
 
-    widgets.addAll(Arrays.asList(enableGameVersionButton, enableFpsButton));
+    widgets.addAll(Arrays.asList(enableFpsButton, enableGameVersionButton));
+  }
+
+  public void positionOptionsButtons() {
+    row += 2;
+    positionRow = row;
+
+    boolean enablePlayerPosition = configBooleans.get(F3BackportClient.enablePlayerPosition);
+    boolean enablePlayerSpeed = configBooleans.get(F3BackportClient.enablePlayerSpeed);
+    boolean enablePlayerSectionPosition = configBooleans.get(F3BackportClient.enablePlayerSectionPosition);
+    boolean enableBiome = configBooleans.get(F3BackportClient.enableBiome);
+
+    BoolButton enablePlayerPositionButton = BoolButton.builder(enablePlayerPosition)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.position.enablePlayerPosition.tooltip"))
+        .create(leftButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
+                Common.translatedText("menu.f3backport.main.position.enablePlayerPosition.button"),
+                (b, val) -> configBooleans.replace(F3BackportClient.enablePlayerPosition, val));
+
+    BoolButton enablePlayerSpeedButton = BoolButton.builder(enablePlayerSpeed)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.position.enablePlayerSpeed.tooltip"))
+        .create(rightButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
+                Common.translatedText("menu.f3backport.main.position.enablePlayerSpeed.button"),
+                (b, val) -> configBooleans.replace(F3BackportClient.enablePlayerSpeed, val));
+
+    row += 1;
+
+    BoolButton enablePlayerSectionPositionButton = BoolButton.builder(enablePlayerSectionPosition)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.position.enablePlayerSectionPosition.tooltip"))
+        .create(leftButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
+                Common.translatedText("menu.f3backport.main.position.enablePlayerSectionPosition.button"),
+                (b, val) -> configBooleans.replace(F3BackportClient.enablePlayerSectionPosition, val));
+
+    BoolButton enableBiomeButton = BoolButton.builder(enableBiome)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.position.enableBiome.tooltip"))
+        .create(rightButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
+                Common.translatedText("menu.f3backport.main.position.enableBiome.button"),
+                (b, val) -> configBooleans.replace(F3BackportClient.enableBiome, val));
+
+    widgets.addAll(Arrays.asList(enablePlayerPositionButton, enablePlayerSpeedButton, enablePlayerSectionPositionButton,
+                                 enableBiomeButton));
+  }
+
+  public void memoryOptionsButtons() {
+    row += 2;
+    memoryRow = row;
+
+    boolean enableMemory = configBooleans.get(F3BackportClient.enableMemory);
+    boolean enableDetailedMemory =  configBooleans.get(F3BackportClient.enableDetailedMemory);
+
+    BoolButton enableMemoryButton = BoolButton.builder(enableMemory)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.memory.enableMemory.tooltip"))
+        .create(leftButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
+                Common.translatedText("menu.f3backport.main.memory.enableMemory.button"),
+                (b, val) -> configBooleans.replace(F3BackportClient.enableMemory, val));
+
+    BoolButton enableDetailedMemoryButton = BoolButton.builder(enableDetailedMemory)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.memory.enableDetailedMemory.tooltip"))
+        .create(rightButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
+                Common.translatedText("menu.f3backport.main.memory.enableDetailedMemory.button"),
+                (b, val) -> configBooleans.replace(F3BackportClient.enableDetailedMemory, val));
+
+    widgets.addAll(Arrays.asList(enableMemoryButton, enableDetailedMemoryButton));
   }
 
   @Override
@@ -95,7 +177,7 @@ public class MainOptionsScreen extends F3BackportScreen {
     boolean enableMod = configBooleans.get(F3BackportClient.enableMod);
     int debugGuiScale = configIntegers.get(F3BackportClient.debugGuiScale);
 
-    CycleButton<Boolean> enableModButton = CycleButton.onOffBuilder(enableMod)
+    BoolButton enableModButton = BoolButton.builder(enableMod)
         .withTooltip(t -> Common.newTooltip("menu.f3backport.main.enableMod.tooltip"))
         .create(this.width - enableModWidth - TITLE_PADDING / 2, TITLE_PADDING / 2, enableModWidth, buttonHeight,
                 Common.translatedText("menu.f3backport.main.enableMod.button"),
@@ -112,8 +194,10 @@ public class MainOptionsScreen extends F3BackportScreen {
         .build();
     widgets.add(debugGuiScaleSlider);
 
-    row = -1;
+    row = 0;
     priorityOptionsButtons();
+    positionOptionsButtons();
+    memoryOptionsButtons();
 
     widgets.forEach(this::addRenderableWidget);
   }

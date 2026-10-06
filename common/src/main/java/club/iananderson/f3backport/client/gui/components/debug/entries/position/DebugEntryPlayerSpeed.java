@@ -19,6 +19,7 @@ public class DebugEntryPlayerSpeed implements DebugScreenEntry {
     this.lastKnownSpeed = Vec3.ZERO;
   }
 
+  // TODO: Doesn't seem to work, look into speed calculations
   public void display(final DebugScreenDisplayer displayer, final @Nullable Level serverOrClientLevel,
       final @Nullable LevelChunk clientChunk, final @Nullable LevelChunk serverChunk) {
     Entity player = Minecraft.getInstance().getCameraEntity();

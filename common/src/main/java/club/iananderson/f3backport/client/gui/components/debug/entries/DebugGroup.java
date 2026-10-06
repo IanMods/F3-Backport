@@ -1,7 +1,7 @@
 package club.iananderson.f3backport.client.gui.components.debug.entries;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugColumn.Side;
-import club.iananderson.f3backport.util.Rgb;
+import java.awt.Color;
 import java.util.Optional;
 import java.util.OptionalInt;
 import net.minecraft.network.chat.Component;
@@ -55,9 +55,9 @@ public class DebugGroup {
       return this;
     }
 
-    public Builder withAccentColor(final int r, final int g, final int b) {
-      int rgb = Rgb.rgbInt(r, g, b);
-      this.accentColor = OptionalInt.of(rgb);
+    public Builder withAccentColor(Color color) {
+      int rgbInt = color.getRGB();
+      this.accentColor = OptionalInt.of(rgbInt);
       return this;
     }
 

@@ -83,13 +83,6 @@ public class F3BackportClient {
         .define("enable_player_position", Client.DEFAULT_ENABLE_PLAYER_POSITION);
     booleanConfigs.add(enablePlayerPosition);
 
-    enableBiome = builder.comment(StringLine.builder()
-                                      .addLine("Enable the Biome entry?")
-                                      .addLine("(true/false)")
-                                      .lastLine("Default is " + Client.DEFAULT_ENABLE_BIOME + "."))
-        .define("enable_biome", Client.DEFAULT_ENABLE_BIOME);
-    booleanConfigs.add(enableBiome);
-
     enablePlayerSpeed = builder.comment(StringLine.builder()
                                             .addLine("Enable the Player Speed entry?")
                                             .addLine("(true/false)")
@@ -105,6 +98,13 @@ public class F3BackportClient {
                                                               + "."))
         .define("enable_player_section_position", Client.DEFAULT_ENABLE_PLAYER_SECTION_POSITION);
     booleanConfigs.add(enablePlayerSectionPosition);
+
+    enableBiome = builder.comment(StringLine.builder()
+                                      .addLine("Enable the Biome entry?")
+                                      .addLine("(true/false)")
+                                      .lastLine("Default is " + Client.DEFAULT_ENABLE_BIOME + "."))
+        .define("enable_biome", Client.DEFAULT_ENABLE_BIOME);
+    booleanConfigs.add(enableBiome);
     builder.pop();
 
     // F3-Backport.Memory

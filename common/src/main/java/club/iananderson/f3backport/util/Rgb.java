@@ -1,17 +1,14 @@
 package club.iananderson.f3backport.util;
 
 import java.awt.Color;
+import oshi.util.tuples.Triplet;
 
 public class Rgb {
   private Rgb() {
   }
 
   public static int rgbInt(int r, int g, int b) {
-    return (256 * 256 * r) + (256 * g) + b;
-  }
-
-  public static Color rgbColor(int rgb) {
-    return new Color(rgb);
+    return new Color(r, g, b).getRGB();
   }
 
   public static int red(int rgb) {
