@@ -1,4 +1,4 @@
-package club.iananderson.f3backport.client.gui.components.buttons.sliders;
+package club.iananderson.f3backport.client.gui.components.sliders;
 
 import club.iananderson.f3backport.Common;
 import java.text.DecimalFormat;

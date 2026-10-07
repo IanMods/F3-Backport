@@ -2,7 +2,7 @@ package club.iananderson.f3backport.client.gui.screens;
 
 import club.iananderson.f3backport.Common;
 import club.iananderson.f3backport.client.gui.components.buttons.BoolButton;
-import club.iananderson.f3backport.client.gui.components.buttons.sliders.HudScaleSlider;
+import club.iananderson.f3backport.client.gui.components.sliders.HudScaleSlider;
 import club.iananderson.f3backport.client.gui.components.debug.NewDebugScreenOverlay;
 import club.iananderson.f3backport.config.DefaultValues.Client;
 import club.iananderson.f3backport.config.F3BackportClient;
