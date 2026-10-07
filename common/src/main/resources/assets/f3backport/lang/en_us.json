@@ -35,5 +35,11 @@
   "menu.f3backport.main.title": "F3-Backport Options",
   "menu.f3backport.main.memory.enableMemory.button": "Memory",
   "menu.f3backport.main.memory.enableDetailedMemory.tooltip": "Enable the Detailed Memory entry",
-  "menu.f3backport.main.memory.enableDetailedMemory.button": "Detailed Memory"
+  "menu.f3backport.main.memory.enableDetailedMemory.button": "Detailed Memory",
+  "menu.f3backport.main.systemSpecs.enableSystemSpecs.tooltip": "Enable the System Specs entry",
+  "menu.f3backport.main.systemSpecs.enableSystemSpecs.button": "System Specs",
+  "menu.f3backport.main.perfImpactors.enableSimplePerfImpactors.tooltip": "Enable the Simple Performance Impactors entry",
+  "menu.f3backport.main.perfImpactors.enableSimplePerfImpactors.button": "Simple Performance Impactors",
+  "menu.f3backport.main.light.enableLight.tooltip": "Enable the Light entry",
+  "menu.f3backport.main.light.enableLight.button": "Light"
 }

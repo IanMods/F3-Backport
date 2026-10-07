@@ -35,6 +35,6 @@ public class DebugEntrySimplePerfImpactors implements DebugScreenEntry {
 
   @Override
   public boolean enabled() {
-    return F3BackportClient.getEnableSimplePerformanceImpactors();
+    return F3BackportClient.getEnableSimplePerfImpactors();
   }
 }

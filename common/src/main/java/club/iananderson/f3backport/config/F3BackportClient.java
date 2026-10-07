@@ -1,9 +1,13 @@
 package club.iananderson.f3backport.config;
 
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScreenEntries;
 import club.iananderson.f3backport.config.DefaultValues.Client;
 import club.iananderson.f3backport.util.StringLine;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
 
@@ -11,6 +15,7 @@ public class F3BackportClient {
   public static final ModConfigSpec CLIENT_SPEC;
   public static List<ConfigValue<Boolean>> booleanConfigs = new ArrayList<>();
   public static List<ConfigValue<Integer>> integerConfigs = new ArrayList<>();
+  private static final Map<ConfigValue<?>, ResourceLocation> configValueMap = new HashMap<>();
   public static ConfigValue<Boolean> enableMod;
   public static ConfigValue<Boolean> enableGameVersion;
   public static ConfigValue<Boolean> enableFps;
@@ -20,7 +25,7 @@ public class F3BackportClient {
   public static ConfigValue<Boolean> enablePlayerPosition;
   public static ConfigValue<Boolean> enableBiome;
   public static ConfigValue<Boolean> enableGpuUtilization;
-  public static ConfigValue<Boolean> enableSimplePerformanceImpactors;
+  public static ConfigValue<Boolean> enableSimplePerfImpactors;
   public static ConfigValue<Boolean> enableDayCount;
   public static ConfigValue<Boolean> enableDetailedMemory;
   public static ConfigValue<Boolean> enableEntityRenderStats;
@@ -131,25 +136,19 @@ public class F3BackportClient {
                                             .addLine("(true/false)")
                                             .lastLine("Default is " + Client.DEFAULT_ENABLE_SYSTEM_SPECS + "."))
         .define("enable_system_specs", Client.DEFAULT_ENABLE_SYSTEM_SPECS);
-
-    enableGpuUtilization = builder.comment(StringLine.builder()
-                                               .addLine("Enable the Gpu Utilization entry?")
-                                               .addLine("(true/false)")
-                                               .lastLine("Default is " + Client.DEFAULT_ENABLE_GPU_UTILIZATION + "."))
-        .define("enable_gpu_utilization", Client.DEFAULT_ENABLE_GPU_UTILIZATION);
-    booleanConfigs.add(enableGpuUtilization);
+    booleanConfigs.add(enableSystemSpecs);
     builder.pop();
 
     // F3-Backport.Performance_Impactors
     builder.push("Performance_Impactors");
-    enableSimplePerformanceImpactors = builder.comment(StringLine.builder()
-                                                           .addLine("Enable the Simple Performance Impactors entry?")
-                                                           .addLine("(true/false)")
-                                                           .lastLine("Default is "
-                                                                         + Client.DEFAULT_ENABLE_SIMPLE_PERF_IMPACTORS
-                                                                         + "."))
+    enableSimplePerfImpactors = builder.comment(StringLine.builder()
+                                                    .addLine("Enable the Simple Performance Impactors entry?")
+                                                    .addLine("(true/false)")
+                                                    .lastLine(
+                                                        "Default is " + Client.DEFAULT_ENABLE_SIMPLE_PERF_IMPACTORS
+                                                            + "."))
         .define("enable_simple_performance_impactors", Client.DEFAULT_ENABLE_SIMPLE_PERF_IMPACTORS);
-    booleanConfigs.add(enableSimplePerformanceImpactors);
+    booleanConfigs.add(enableSimplePerfImpactors);
     builder.pop();
 
     // F3-Backport.Light
@@ -184,6 +183,13 @@ public class F3BackportClient {
 
     // F3-Backport.Misc
     builder.push("Misc");
+    enableGpuUtilization = builder.comment(StringLine.builder()
+                                               .addLine("Enable the Gpu Utilization entry?")
+                                               .addLine("(true/false)")
+                                               .lastLine("Default is " + Client.DEFAULT_ENABLE_GPU_UTILIZATION + "."))
+        .define("enable_gpu_utilization", Client.DEFAULT_ENABLE_GPU_UTILIZATION);
+    booleanConfigs.add(enableGpuUtilization);
+
     enableDayCount = builder.comment(StringLine.builder()
                                          .addLine("Enable the Day Count entry?")
                                          .addLine("(true/false)")
@@ -231,6 +237,30 @@ public class F3BackportClient {
     }
   }
 
+  public static Map<ConfigValue<?>, ResourceLocation> getConfigValueMap(){
+    configValueMap.put(enableGameVersion, DebugScreenEntries.GAME_VERSION);
+    configValueMap.put(enableFps, DebugScreenEntries.FPS);
+    configValueMap.put(enablePlayerPosition, DebugScreenEntries.PLAYER_POSITION);
+    configValueMap.put(enablePlayerSpeed, DebugScreenEntries.PLAYER_SPEED);
+    configValueMap.put(enablePlayerSectionPosition, DebugScreenEntries.PLAYER_SECTION_POSITION);
+    configValueMap.put(enableBiome, DebugScreenEntries.BIOME);
+    configValueMap.put(enableMemory, DebugScreenEntries.MEMORY);
+    configValueMap.put(enableDetailedMemory, DebugScreenEntries.DETAILED_MEMORY);
+    configValueMap.put(enableSystemSpecs, DebugScreenEntries.SYSTEM_SPECS);
+    configValueMap.put(enableSimplePerfImpactors, DebugScreenEntries.SIMPLE_PERFORMANCE_IMPACTORS);
+    configValueMap.put(enableLight, DebugScreenEntries.LIGHT_LEVELS);
+    configValueMap.put(enableHeightmap, DebugScreenEntries.HEIGHTMAP);
+    configValueMap.put(enableSpawnCounts, DebugScreenEntries.ENTITY_SPAWN_COUNTS);
+    configValueMap.put(enableGpuUtilization, DebugScreenEntries.GPU_UTILIZATION);
+    configValueMap.put(enableDayCount, DebugScreenEntries.DAY_COUNT);
+    configValueMap.put(enableEntityRenderStats, DebugScreenEntries.ENTITY_RENDER_STATS);
+    configValueMap.put(enableLocalDifficulty, DebugScreenEntries.LOCAL_DIFFICULTY);
+    configValueMap.put(enableSoundMood, DebugScreenEntries.SOUND_MOOD);
+    configValueMap.put(enableTps, DebugScreenEntries.TPS);
+
+    return configValueMap;
+  }
+
   // F3-Backport
   public static boolean getEnableMod() {
     return getOrDefault(enableMod);
@@ -272,8 +302,8 @@ public class F3BackportClient {
     return getOrDefault(enableGpuUtilization);
   }
 
-  public static boolean getEnableSimplePerformanceImpactors() {
-    return getOrDefault(enableSimplePerformanceImpactors);
+  public static boolean getEnableSimplePerfImpactors() {
+    return getOrDefault(enableSimplePerfImpactors);
   }
 
   public static boolean getEnableDayCount() {

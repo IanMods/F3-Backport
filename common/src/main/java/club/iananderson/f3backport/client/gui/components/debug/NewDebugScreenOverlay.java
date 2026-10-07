@@ -35,6 +35,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
+import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -62,6 +63,10 @@ public class NewDebugScreenOverlay {
     return formatKeybind(keyDebugModifier, keybind) + " " + name + " " + (status
                                                                           ? "visible"
                                                                           : "hidden");
+  }
+
+  private static String formatChart(final KeyMapping keyDebugModifier, final KeyMapping keybind, final String name) {
+    return formatKeybind(keyDebugModifier, keybind) + " " + name;
   }
 
   private static String formatKeybind(final KeyMapping keyDebugModifier, final KeyMapping keybind) {
@@ -273,6 +278,164 @@ public class NewDebugScreenOverlay {
 
         graphics.pose().popPose();
         profiler.pop();
+      }
+    } else {
+      this.clearColumnCache();
+    }
+  }
+
+  public void renderMenu(final @NonNull GuiGraphics graphics, Collection<ResourceLocation> visibleEntries,
+      int debugGuiScale) {
+    if (this.minecraft.isGameLoadFinished() && (!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
+      DebugScreenEntries.allEntriesStatus().forEach(this.debugEntries::setStatus);
+
+      if (visibleEntries.isEmpty()) {
+        this.clearColumnCache();
+      } else {
+        if (this.lastDebugEntriesVersion != this.debugEntries.getCurrentlyEnabledVersion()) {
+          this.lastDebugEntriesVersion = this.debugEntries.getCurrentlyEnabledVersion();
+          this.clearColumnCache();
+        }
+
+        ChunkPos chunkPos;
+        if (this.minecraft.getCameraEntity() != null && this.getLevel() != null) {
+          BlockPos feetPos = this.minecraft.getCameraEntity().blockPosition();
+          chunkPos = new ChunkPos(feetPos);
+        } else {
+          chunkPos = null;
+        }
+
+        if (!Objects.equals(this.lastPos, chunkPos)) {
+          this.lastPos = chunkPos;
+          this.clearChunkCache();
+        }
+
+        DebugScreenDisplayer displayer = new DebugScreenDisplayer();
+        Map<DebugGroup, DebugGroupContents> groups = displayer.groups;
+
+        Level level = this.getLevel();
+
+        for (ResourceLocation id : visibleEntries) {
+          DebugScreenEntry entry = DebugScreenEntries.getEntry(id);
+          if (entry != null) {
+            entry.display(displayer, level, this.getClientChunk(), this.getServerChunk());
+          }
+        }
+
+        DebugGroupContents miscContents = groups.get(DebugGroups.MISC);
+        if (miscContents != null) {
+          groups.remove(DebugGroups.MISC);
+          groups.put(DebugGroups.MISC, miscContents);
+        }
+
+        if (this.debugEntries.isOverlayVisible()) {
+          boolean hasServer = this.minecraft.getSingleplayerServer() != null;
+          KeyMapping keyDebugModifier = DebugKeyBinds.keyDebugOverlay;
+          DebugGroup debugHelp = DebugGroups.HELP;
+          // TODO: Move these to language file instead of hardcoding them
+          String debugCharts = "Debug charts:";
+          String profilerChart = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugProfilingChart, "Profiler");
+          String fpsChart = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugFpsCharts, hasServer
+                                                                                                 ? "fps + tps"
+                                                                                                 : "fps");
+          String networkChartText = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugNetworkCharts,
+                                                      !this.minecraft.isLocalServer()
+                                                      ? "Bandwidth + Ping"
+                                                      : "Ping");
+          String helpText = "For help: press [F3 + Q]";
+          String optionsKeyText = "To edit: press " + formatKeybind(DebugKeyBinds.keyDebugOptions);
+
+          displayer.addToGroup(debugHelp, debugCharts);
+          displayer.addToGroup(debugHelp, List.of(profilerChart, fpsChart, networkChartText));
+          displayer.addToGroup(debugHelp, "");
+          displayer.addToGroup(debugHelp, List.of(helpText, optionsKeyText));
+        }
+
+        Window window = this.minecraft.getWindow();
+        int standardGuiScale = (int) window.getGuiScale();
+        int newScale = debugGuiScale;
+        if (newScale == -1) {
+          newScale = standardGuiScale;
+        } else if (newScale == 0) {
+          newScale = this.minecraft.getWindow().calculateScale(0, this.minecraft.isEnforceUnicode());
+        } else {
+          newScale = window.calculateScale(newScale, this.minecraft.isEnforceUnicode());
+        }
+
+        graphics.pose().pushPose();
+        int scaledScreenHeight;
+        int scaledScreenWidth;
+        if (newScale != standardGuiScale && newScale > 0) {
+          graphics.pose()
+              .scale((float) newScale / (float) standardGuiScale, (float) newScale / (float) standardGuiScale, 1);
+          scaledScreenWidth = window.getWidth() / newScale;
+          scaledScreenHeight = window.getHeight() / newScale;
+        } else {
+          scaledScreenWidth = graphics.guiWidth();
+          scaledScreenHeight = graphics.guiHeight();
+        }
+
+        DebugGroupContents leftPriority = displayer.leftPriority;
+        this.leftColumn.newFrame();
+        this.rightColumn.newFrame();
+        if (!leftPriority.lines().isEmpty()) {
+          this.leftColumn.add(leftPriority, graphics, this.font, scaledScreenWidth);
+        }
+
+        DebugGroupContents rightPriority = displayer.rightPriority;
+        if (!rightPriority.lines().isEmpty()) {
+          this.rightColumn.add(rightPriority, graphics, this.font, scaledScreenWidth);
+        }
+
+        groups.values()
+            .removeIf(
+                (contentsx) -> contentsx.lines().isEmpty() && contentsx.facts().isEmpty() && contentsx.customRenderers()
+                    .isEmpty());
+
+        for (DebugGroup group : this.leftColumn.getPreviousGroups()) {
+          if (!this.leftColumn.isFull(scaledScreenHeight)) {
+            DebugGroupContents contents = groups.remove(group);
+            if (contents != null) {
+              this.leftColumn.add(contents, graphics, this.font, scaledScreenWidth);
+            }
+          }
+        }
+
+        for (DebugGroup group : this.rightColumn.getPreviousGroups()) {
+          if (!this.rightColumn.isFull(scaledScreenHeight)) {
+            DebugGroupContents contents = groups.remove(group);
+            if (contents != null) {
+              this.rightColumn.add(contents, graphics, this.font, scaledScreenWidth);
+            }
+          }
+        }
+
+        Iterator<DebugGroupContents> iterator = groups.values().iterator();
+
+        while (iterator.hasNext()) {
+          DebugGroupContents contents = iterator.next();
+          Optional<DebugColumn.Side> preferredSide = contents.group().preferredColumn();
+          if (preferredSide.isPresent()) {
+            if (preferredSide.get() == Side.LEFT && !this.leftColumn.isFull(scaledScreenHeight)) {
+              this.leftColumn.add(contents, graphics, this.font, scaledScreenWidth);
+              iterator.remove();
+            } else if (preferredSide.get() == Side.RIGHT && !this.rightColumn.isFull(scaledScreenHeight)) {
+              this.rightColumn.add(contents, graphics, this.font, scaledScreenWidth);
+              iterator.remove();
+            }
+          }
+        }
+
+        for (DebugGroupContents contents : groups.values()) {
+          if (this.leftColumn.getHeightSoFar() < this.rightColumn.getHeightSoFar() && !this.leftColumn.isFull(
+              scaledScreenHeight)) {
+            this.leftColumn.add(contents, graphics, this.font, scaledScreenWidth);
+          } else if (!this.rightColumn.isFull(scaledScreenHeight)) {
+            this.rightColumn.add(contents, graphics, this.font, scaledScreenWidth);
+          }
+        }
+
+        graphics.pose().popPose();
       }
     } else {
       this.clearColumnCache();

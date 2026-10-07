@@ -3,14 +3,18 @@ package club.iananderson.f3backport.client.gui.screens;
 import club.iananderson.f3backport.Common;
 import club.iananderson.f3backport.client.gui.components.buttons.BoolButton;
 import club.iananderson.f3backport.client.gui.components.buttons.sliders.HudScaleSlider;
+import club.iananderson.f3backport.client.gui.components.debug.NewDebugScreenOverlay;
 import club.iananderson.f3backport.config.DefaultValues.Client;
 import club.iananderson.f3backport.config.F3BackportClient;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
 import org.jspecify.annotations.NonNull;
 
@@ -44,7 +48,7 @@ public class MainOptionsScreen extends F3BackportScreen {
   public MainOptionsScreen(Screen parentScreen) {
     super(parentScreen, SCREEN_TITLE);
     loadConfig();
-    this.buttonWidth = 150;
+    this.buttonWidth = 100;
   }
 
   public static MainOptionsScreen getInstance(Screen parentScreen) {
@@ -81,6 +85,31 @@ public class MainOptionsScreen extends F3BackportScreen {
     drawHeading(graphics, PRIORITY_SETTINGS, priorityRow);
     drawHeading(graphics, POSITION_SETTINGS, positionRow);
     drawHeading(graphics, MEMORY_SETTINGS, memoryRow);
+    drawHeading(graphics, SYSTEM_SPECS_SETTINGS, systemSpecsRow);
+    drawHeading(graphics, PERF_IMPACTORS_SETTINGS, perfImpactorsRow);
+    drawHeading(graphics, LIGHT_SETTINGS, lightRow);
+
+    if (this.minecraft == null) {
+      return;
+    }
+
+    NewDebugScreenOverlay debugScreenOverlay = new NewDebugScreenOverlay(this.minecraft);
+    Map<ConfigValue<?>, ResourceLocation> configValueMap = F3BackportClient.getConfigValueMap();
+    List<ConfigValue<Boolean>> enabledConfigs = new ArrayList<>();
+
+    configBooleans.forEach((booleanConfigValue, bool) -> {
+      if (bool) {
+        enabledConfigs.add(booleanConfigValue);
+      }
+    });
+
+    int debugGuiScale = debugGuiScaleSlider.getValueInt();
+
+    List<ResourceLocation> enabledResources = new ArrayList<>();
+
+    enabledConfigs.forEach(configValue -> enabledResources.add(configValueMap.get(configValue)));
+
+    debugScreenOverlay.renderMenu(graphics, enabledResources, debugGuiScale);
   }
 
   public void priorityOptionsButtons() {
@@ -166,6 +195,48 @@ public class MainOptionsScreen extends F3BackportScreen {
     widgets.addAll(Arrays.asList(enableMemoryButton, enableDetailedMemoryButton));
   }
 
+  public void systemSpecOptionsButtons() {
+    row += 2;
+    systemSpecsRow = row;
+
+    boolean enableSystemSpecs = configBooleans.get(F3BackportClient.enableSystemSpecs);
+
+    BoolButton enableSystemSpecsButton = BoolButton.builder(enableSystemSpecs)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.systemSpecs.enableSystemSpecs.tooltip"))
+        .create(leftButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
+                Common.translatedText("menu.f3backport.main.systemSpecs.enableSystemSpecs.button"),
+                (b, val) -> configBooleans.replace(F3BackportClient.enableSystemSpecs, val));
+    widgets.add(enableSystemSpecsButton);
+  }
+
+  public void perfImpactorsOptionsButtons() {
+    row += 2;
+    perfImpactorsRow = row;
+
+    boolean enableSimplePerfImpactors = configBooleans.get(F3BackportClient.enableSimplePerfImpactors);
+
+    BoolButton enableSimplePerfImpactorsButton = BoolButton.builder(enableSimplePerfImpactors)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.perfImpactors.enableSimplePerfImpactors.tooltip"))
+        .create(leftButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
+                Common.translatedText("menu.f3backport.main.perfImpactors.enableSimplePerfImpactors.button"),
+                (b, val) -> configBooleans.replace(F3BackportClient.enableSimplePerfImpactors, val));
+    widgets.add(enableSimplePerfImpactorsButton);
+  }
+
+  public void lightOptionsButtons() {
+    row += 2;
+    lightRow = row;
+
+    boolean enableLight = configBooleans.get(F3BackportClient.enableLight);
+
+    BoolButton enableLightButton = BoolButton.builder(enableLight)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.light.enableLight.tooltip"))
+        .create(leftButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
+                Common.translatedText("menu.f3backport.main.light.enableLight.button"),
+                (b, val) -> configBooleans.replace(F3BackportClient.enableLight, val));
+    widgets.add(enableLightButton);
+  }
+
   @Override
   public void init() {
     super.init();
@@ -177,9 +248,11 @@ public class MainOptionsScreen extends F3BackportScreen {
     boolean enableMod = configBooleans.get(F3BackportClient.enableMod);
     int debugGuiScale = configIntegers.get(F3BackportClient.debugGuiScale);
 
+    row = -1;
+
     BoolButton enableModButton = BoolButton.builder(enableMod)
         .withTooltip(t -> Common.newTooltip("menu.f3backport.main.enableMod.tooltip"))
-        .create(this.width - enableModWidth - TITLE_PADDING / 2, TITLE_PADDING / 2, enableModWidth, buttonHeight,
+        .create(leftButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
                 Common.translatedText("menu.f3backport.main.enableMod.button"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableMod, val));
     widgets.add(enableModButton);
@@ -189,15 +262,18 @@ public class MainOptionsScreen extends F3BackportScreen {
         .withTooltip(Common.newTooltip("menu.f3backport.main.debugGuiScale.tooltip"))
         .withInitialValue(debugGuiScale)
         .withDefaultValue(Client.DEFAULT_DEBUG_GUI_SCALE)
-        .withBounds(this.width - debugGuiScaleWidth - TITLE_PADDING / 2, TITLE_PADDING + buttonHeight,
-                    debugGuiScaleWidth, buttonHeight).withStepSize(1)
+        .withBounds(rightButtonX, (buttonStartY + (row * offsetY)),
+                    buttonWidth, buttonHeight).withStepSize(1)
         .build();
     widgets.add(debugGuiScaleSlider);
 
-    row = 0;
+    row += 1;
     priorityOptionsButtons();
     positionOptionsButtons();
     memoryOptionsButtons();
+    systemSpecOptionsButtons();
+    perfImpactorsOptionsButtons();
+    lightOptionsButtons();
 
     widgets.forEach(this::addRenderableWidget);
   }
