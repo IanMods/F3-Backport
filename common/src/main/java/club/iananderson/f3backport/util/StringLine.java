@@ -1,6 +1,5 @@
 package club.iananderson.f3backport.util;
 
-import java.awt.Component;
 import java.util.ArrayList;
 
 public class StringLine {
@@ -23,15 +22,6 @@ public class StringLine {
   }
 
   /**
-   * Adds the component as a string with a newline character at the end.
-   **/
-  public StringLine addLine(Component component) {
-    this.stringList.add(component.toString() + "\n");
-
-    return this;
-  }
-
-  /**
    * Adds the string without a newline character at the end.
    *
    * @return The final combined string
@@ -48,20 +38,7 @@ public class StringLine {
     return lineBuilder.toString();
   }
 
-  /**
-   * Adds the component as a string without a newline character at the end.
-   *
-   * @return The final combined string
-   **/
-  public String lastLine(Component lastComponent) {
-    this.stringList.add(lastComponent.toString());
-
-    StringBuilder lineBuilder = new StringBuilder();
-
-    for (String stringLine : stringList) {
-      lineBuilder.append(stringLine);
-    }
-
-    return lineBuilder.toString();
+  public String boolDesc(String description, Boolean configDefault) {
+    return this.addLine(description).addLine("(true/false)").lastLine("Default is " + configDefault + ".");
   }
 }

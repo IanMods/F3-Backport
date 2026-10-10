@@ -13,7 +13,6 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.minecraft.client.gui.GuiGraphics;
@@ -25,23 +24,19 @@ import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
 import org.jspecify.annotations.NonNull;
 
 public class MainOptionsScreen extends F3BackportScreen {
-  private static final Component SCREEN_TITLE = Common.translatedText("menu.f3backport.main.title");
-  private static final Component PRIORITY_SETTINGS = Common.translatedText("menu.f3backport.main.priority.options");
-  private static final Component POSITION_SETTINGS = Common.translatedText("menu.f3backport.main.position.options");
-  private static final Component MEMORY_SETTINGS = Common.translatedText("menu.f3backport.main.memory.options");
+  private static final Component SCREEN_TITLE = Common.translatedText("menu.f3backport.config.title");
+  private static final Component PRIORITY_SETTINGS = Common.translatedText("menu.f3backport.config.priority.name");
+  private static final Component POSITION_SETTINGS = Common.translatedText("menu.f3backport.config.position.name");
+  private static final Component MEMORY_SETTINGS = Common.translatedText("menu.f3backport.config.memory.name");
   private static final Component SYSTEM_SPECS_SETTINGS = Common.translatedText(
-      "menu.f3backport.main.systemSpecs.options");
+      "menu.f3backport.config.systemSpecs.name");
   private static final Component PERF_IMPACTORS_SETTINGS = Common.translatedText(
-      "menu.f3backport.main.perfImpactors.options");
-  private static final Component LIGHT_SETTINGS = Common.translatedText("menu.f3backport.main.light.options");
-  private static final Component HEIGHT_MAP_SETTINGS = Common.translatedText("menu.f3backport.main.heightMap.options");
+      "menu.f3backport.config.perfImpactors.name");
+  private static final Component LIGHT_SETTINGS = Common.translatedText("menu.f3backport.config.light.name");
+  private static final Component HEIGHT_MAP_SETTINGS = Common.translatedText("menu.f3backport.config.heightMap.name");
   private static final Component SPAWN_COUNT_SETTINGS = Common.translatedText(
-      "menu.f3backport.main.spawnCount.options");
-  private static final Component MISC_SETTINGS = Common.translatedText("menu.f3backport.main.misc.options");
-  private static final Map<ConfigValue<Boolean>, Boolean> configBooleans = new HashMap<>();
-  private static final Map<ConfigValue<Boolean>, Boolean> defaultBooleans = new HashMap<>();
-  private static final Map<ConfigValue<Integer>, Integer> configIntegers = new HashMap<>();
-  private static final Map<ConfigValue<Integer>, Integer> defaultIntegers = new HashMap<>();
+      "menu.f3backport.config.spawnCounts.name");
+  private static final Component MISC_SETTINGS = Common.translatedText("menu.f3backport.config.misc.name");
   private final HeaderAndFooterLayout layout = new HeaderAndFooterLayout(this);
   private final Rectangle positionOptionsRect = new Rectangle();
   private final float scale = 1F;
@@ -69,6 +64,7 @@ public class MainOptionsScreen extends F3BackportScreen {
     return new MainOptionsScreen(parentScreen);
   }
 
+  @Override
   public void loadConfig() {
     F3BackportClient.booleanConfigs.forEach(
         booleanConfig -> defaultBooleans.put(booleanConfig, booleanConfig.getDefault()));
@@ -162,9 +158,9 @@ public class MainOptionsScreen extends F3BackportScreen {
       case LEFT -> {
         boolean enableMod = configBooleans.get(F3BackportClient.enableMod);
         BoolButton enableModButton = BoolButton.builder(enableMod)
-            .withTooltip(t -> Common.newTooltip("menu.f3backport.main.enableMod.tooltip")).withScale(scale)
+            .withTooltip(t -> Common.newTooltip("menu.f3backport.config.enableMod.desc")).withScale(scale)
             .create(centerButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                    Common.translatedText("menu.f3backport.main.enableMod.button"),
+                    Common.translatedText("menu.f3backport.config.enableMod.name"),
                     (b, val) -> configBooleans.replace(F3BackportClient.enableMod, val));
         widgets.add(enableModButton);
 
@@ -172,9 +168,10 @@ public class MainOptionsScreen extends F3BackportScreen {
       }
       case RIGHT -> {
         int debugGuiScale = configIntegers.get(F3BackportClient.debugGuiScale);
-        debugGuiScaleSlider = HudScaleSlider.builder(Common.translatedText("menu.f3backport.main.debugGuiScale.slider"))
+        debugGuiScaleSlider = HudScaleSlider.builder(
+                Common.translatedText("menu.f3backport.config.debugGuiScale" + ".name").append(": "))
             .withValueRange(Client.DEFAULT_DEBUG_GUI_SCALE_MIN, Client.DEFAULT_DEBUG_GUI_SCALE_MAX)
-            .withTooltip(Common.newTooltip("menu.f3backport.main.debugGuiScale.tooltip")).withScale(scale)
+            .withTooltip(Common.newTooltip("menu.f3backport.config.debugGuiScale.desc")).withScale(scale)
             .withInitialValue(debugGuiScale)
             .withDefaultValue(Client.DEFAULT_DEBUG_GUI_SCALE)
             .withBounds(centerButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight).withStepSize(1)
@@ -193,9 +190,9 @@ public class MainOptionsScreen extends F3BackportScreen {
       case LEFT -> {
         boolean enableFps = configBooleans.get(F3BackportClient.enableFps);
         BoolButton enableFpsButton = BoolButton.builder(enableFps)
-            .withTooltip(t -> Common.newTooltip("menu.f3backport.main.priority.enableFps.tooltip")).withScale(scale)
+            .withTooltip(t -> Common.newTooltip("menu.f3backport.config.priority.enableFps.desc")).withScale(scale)
             .create(centerButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                    Common.translatedText("menu.f3backport.main.priority.enableFps.button"),
+                    Common.translatedText("menu.f3backport.config.priority.enableFps.name"),
                     (b, val) -> configBooleans.replace(F3BackportClient.enableFps, val));
         widgets.add(enableFpsButton);
 
@@ -204,10 +201,10 @@ public class MainOptionsScreen extends F3BackportScreen {
       case RIGHT -> {
         boolean enableGameVersion = configBooleans.get(F3BackportClient.enableGameVersion);
         BoolButton enableGameVersionButton = BoolButton.builder(enableGameVersion)
-            .withTooltip(t -> Common.newTooltip("menu.f3backport.main.priority.enableGameVersion.tooltip"))
+            .withTooltip(t -> Common.newTooltip("menu.f3backport.config.priority.enableGameVersion.desc"))
             .withScale(scale)
             .create(centerButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                    Common.translatedText("menu.f3backport.main.priority.enableGameVersion.button"),
+                    Common.translatedText("menu.f3backport.config.priority.enableGameVersion.name"),
                     (b, val) -> configBooleans.replace(F3BackportClient.enableGameVersion, val));
         widgets.add(enableGameVersionButton);
 
@@ -223,32 +220,32 @@ public class MainOptionsScreen extends F3BackportScreen {
 
     boolean enablePlayerPosition = configBooleans.get(F3BackportClient.enablePlayerPosition);
     BoolButton enablePlayerPositionButton = BoolButton.builder(enablePlayerPosition)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.position.enablePlayerPosition.tooltip"))
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.position.enablePlayerPosition.desc"))
         .withScale(scale)
         .create(leftButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.position.enablePlayerPosition.button"),
+                Common.translatedText("menu.f3backport.config.position.enablePlayerPosition.name"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enablePlayerPosition, val));
 
     boolean enablePlayerSpeed = configBooleans.get(F3BackportClient.enablePlayerSpeed);
     BoolButton enablePlayerSpeedButton = BoolButton.builder(enablePlayerSpeed)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.position.enablePlayerSpeed.tooltip")).withScale(scale)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.position.enablePlayerSpeed.desc")).withScale(scale)
         .create(rightButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.position.enablePlayerSpeed.button"),
+                Common.translatedText("menu.f3backport.config.position.enablePlayerSpeed.name"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enablePlayerSpeed, val));
 
     startRow += 1;
     boolean enablePlayerSectionPosition = configBooleans.get(F3BackportClient.enablePlayerSectionPosition);
     BoolButton enablePlayerSectionPositionButton = BoolButton.builder(enablePlayerSectionPosition)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.position.enablePlayerSectionPosition.tooltip"))
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.position.enablePlayerSectionPosition.desc"))
         .withScale(scale)
         .create(leftButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.position.enablePlayerSectionPosition.button"),
+                Common.translatedText("menu.f3backport.config.position.enablePlayerSectionPosition.name"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enablePlayerSectionPosition, val));
     boolean enableBiome = configBooleans.get(F3BackportClient.enableBiome);
     BoolButton enableBiomeButton = BoolButton.builder(enableBiome)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.position.enableBiome.tooltip")).withScale(scale)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.position.enableBiome.desc")).withScale(scale)
         .create(rightButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.position.enableBiome.button"),
+                Common.translatedText("menu.f3backport.config.position.enableBiome.name"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableBiome, val));
 
     widgets.addAll(Arrays.asList(enablePlayerPositionButton, enablePlayerSpeedButton, enablePlayerSectionPositionButton,
@@ -270,61 +267,61 @@ public class MainOptionsScreen extends F3BackportScreen {
 
     boolean enableLight = configBooleans.get(F3BackportClient.enableLight);
     BoolButton enableLightButton = BoolButton.builder(enableLight)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.light.enableLight.tooltip")).withScale(scale)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.light.enableLight.desc")).withScale(scale)
         .create(leftButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.light.enableLight.button"),
+                Common.translatedText("menu.f3backport.config.light.enableLight.name"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableLight, val));
     widgets.add(enableLightButton);
 
     boolean enableGpuUtilization = configBooleans.get(F3BackportClient.enableGpuUtilization);
     BoolButton enableGpuUtilizationButton = BoolButton.builder(enableGpuUtilization)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.misc.enableGpuUtilization.tooltip")).withScale(scale)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.misc.enableGpuUtilization.desc")).withScale(scale)
         .create(rightButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.misc.enableGpuUtilization.button"),
+                Common.translatedText("menu.f3backport.config.misc.enableGpuUtilization.name"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableGpuUtilization, val));
     widgets.add(enableGpuUtilizationButton);
 
     startRow += 1;
     boolean enableDayCount = configBooleans.get(F3BackportClient.enableDayCount);
     BoolButton enableDayCountButton = BoolButton.builder(enableDayCount)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.misc.enableDayCount.tooltip")).withScale(scale)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.misc.enableDayCount.desc")).withScale(scale)
         .create(leftButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.misc.enableDayCount.button"),
+                Common.translatedText("menu.f3backport.config.misc.enableDayCount.name"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableDayCount, val));
     widgets.add(enableDayCountButton);
 
     boolean enableEntityRenderStats = configBooleans.get(F3BackportClient.enableEntityRenderStats);
     BoolButton enableEntityRenderStatsButton = BoolButton.builder(enableEntityRenderStats)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.misc.enableEntityRenderStats.tooltip"))
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.misc.enableEntityRenderStats.desc"))
         .withScale(scale)
         .create(rightButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.misc.enableEntityRenderStats.button"),
+                Common.translatedText("menu.f3backport.config.misc.enableEntityRenderStats.name"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableEntityRenderStats, val));
     widgets.add(enableEntityRenderStatsButton);
 
     startRow += 1;
     boolean enableLocalDifficulty = configBooleans.get(F3BackportClient.enableLocalDifficulty);
     BoolButton enableLocalDifficultyButton = BoolButton.builder(enableLocalDifficulty)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.misc.enableLocalDifficulty.tooltip")).withScale(scale)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.misc.enableLocalDifficulty.desc")).withScale(scale)
         .create(leftButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.misc.enableLocalDifficulty.button"),
+                Common.translatedText("menu.f3backport.config.misc.enableLocalDifficulty.name"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableLocalDifficulty, val));
     widgets.add(enableLocalDifficultyButton);
 
     boolean enableSoundMood = configBooleans.get(F3BackportClient.enableSoundMood);
     BoolButton enableSoundMoodButton = BoolButton.builder(enableSoundMood)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.misc.enableSoundMood.tooltip")).withScale(scale)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.misc.enableSoundMood.desc")).withScale(scale)
         .create(rightButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.misc.enableSoundMood.button"),
+                Common.translatedText("menu.f3backport.config.misc.enableSoundMood.name"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableSoundMood, val));
     widgets.add(enableSoundMoodButton);
 
     startRow += 1;
     boolean enableTps = configBooleans.get(F3BackportClient.enableTps);
     BoolButton enableTpsButton = BoolButton.builder(enableTps)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.misc.enableTps.tooltip")).withScale(scale)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.misc.enableTps.desc")).withScale(scale)
         .create(centerButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.misc.enableTps.button"),
+                Common.translatedText("menu.f3backport.config.misc.enableTps.name"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableTps, val));
     widgets.add(enableTpsButton);
 
@@ -341,17 +338,16 @@ public class MainOptionsScreen extends F3BackportScreen {
 
     boolean enableMemory = configBooleans.get(F3BackportClient.enableMemory);
     BoolButton enableMemoryButton = BoolButton.builder(enableMemory)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.memory.enableMemory.tooltip")).withScale(scale)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.memory.enableMemory.desc")).withScale(scale)
         .create(leftButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.memory.enableMemory.button"),
+                Common.translatedText("menu.f3backport.config.memory.enableMemory.name"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableMemory, val));
 
     boolean enableDetailedMemory = configBooleans.get(F3BackportClient.enableDetailedMemory);
     BoolButton enableDetailedMemoryButton = BoolButton.builder(enableDetailedMemory)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.memory.enableDetailedMemory.tooltip"))
-        .withScale(scale)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.memory.enableDetailedMemory.desc")).withScale(scale)
         .create(rightButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.memory.enableDetailedMemory.button"),
+                Common.translatedText("menu.f3backport.config.memory.enableDetailedMemory.name"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableDetailedMemory, val));
 
     widgets.addAll(Arrays.asList(enableMemoryButton, enableDetailedMemoryButton));
@@ -369,10 +365,10 @@ public class MainOptionsScreen extends F3BackportScreen {
 
     boolean enableSystemSpecs = configBooleans.get(F3BackportClient.enableSystemSpecs);
     BoolButton enableSystemSpecsButton = BoolButton.builder(enableSystemSpecs)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.systemSpecs.enableSystemSpecs.tooltip"))
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.systemSpecs.enableSystemSpecs.desc"))
         .withScale(scale)
         .create(centerButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.systemSpecs.enableSystemSpecs.button"),
+                Common.translatedText("menu.f3backport.config.systemSpecs.enableSystemSpecs.name"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableSystemSpecs, val));
     widgets.add(enableSystemSpecsButton);
 
@@ -389,10 +385,10 @@ public class MainOptionsScreen extends F3BackportScreen {
 
     boolean enableSimplePerfImpactors = configBooleans.get(F3BackportClient.enableSimplePerfImpactors);
     BoolButton enableSimplePerfImpactorsButton = BoolButton.builder(enableSimplePerfImpactors)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.perfImpactors.enablePerfImpactors.tooltip"))
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.perfImpactors.enablePerfImpactors.desc"))
         .withScale(scale)
         .create(leftButtonX, (buttonStartY + (startRow * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.main.perfImpactors.enablePerfImpactors.button"),
+                Common.translatedText("menu.f3backport.config.perfImpactors.enablePerfImpactors.name"),
                 (b, val) -> configBooleans.replace(F3BackportClient.enableSimplePerfImpactors, val));
     widgets.add(enableSimplePerfImpactorsButton);
 
@@ -423,7 +419,7 @@ public class MainOptionsScreen extends F3BackportScreen {
     int previewButtonX = width - previewButtonWidth - BUTTON_PADDING - font.width(previewMessage);
 
     BoolCheckButton previewButton = BoolCheckButton.builder(this.preview)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.preview.tooltip")).withScale(1F)
+        .withTooltip(t -> Common.newTooltip("menu.f3backport.main.preview.desc")).withScale(1F)
         .create(previewButtonX, buttonStartY + buttonHeight / 4, previewButtonWidth, previewMessage,
                 (b, val) -> this.preview = val);
     widgets.add(previewButton);
