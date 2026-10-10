@@ -37,22 +37,22 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
     Objects.requireNonNull(font);
     int fullWidth = this.lines.stream().mapToInt(font::width).max().orElse(0);
     int titleWidth = font.width(this.group.title());
-    if (titleWidth + 3 > fullWidth) {
-      fullWidth = titleWidth + 3;
+    if (titleWidth + TITLE_LEFT_PADDING > fullWidth) {
+      fullWidth = titleWidth + TITLE_LEFT_PADDING;
     }
 
-    int var25 = this.lines.size() + this.facts.size();
+    int rows = this.lines.size() + this.facts.size();
     Objects.requireNonNull(font);
-    int fullHeight = var25 * 9;
+    int fullHeight = rows * font.lineHeight;
     if (titleWidth > 0) {
       Objects.requireNonNull(font);
-      fullHeight += 9;
+      fullHeight += font.lineHeight;
     }
 
     int factNameWidth = this.facts.stream().mapToInt((f) -> font.width(f.getFirst())).max().orElse(0);
 
     for (Pair<String, Component> fact : this.facts) {
-      int width = factNameWidth + 5 + font.width(fact.getSecond());
+      int width = factNameWidth + FACT_NAME_VALUE_PADDING + font.width(fact.getSecond());
       if (width > fullWidth) {
         fullWidth = width;
       }
@@ -64,18 +64,19 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
     }
 
     int left = side == Side.LEFT
-               ? 3
-               : scaledScreenWidth - 3 - fullWidth;
+               ? MARGIN_LEFT
+               : scaledScreenWidth - MARGIN_RIGHT - fullWidth;
     int y = top;
     if (titleWidth > 0) {
-      int var10001 = left - 1;
-      int var10002 = top - 1;
-      int var10003 = left + fullWidth + 1;
+      int titleLeft = left - 1;
+      int titleTop = top - 1;
+      int titleRight = left + fullWidth + 1;
+      int titleBottom = top + font.lineHeight - 1;
       Objects.requireNonNull(font);
-      graphics.fill(var10001, var10002, var10003, top + 9 - 1, -1875890128);
-      graphics.drawString(font, this.group.title(), left + 3, top, -1, false);
+      graphics.fill(titleLeft, titleTop, titleRight, titleBottom, -1875890128);
+      graphics.drawString(font, this.group.title(), left + TITLE_LEFT_PADDING, top, -1, false);
       Objects.requireNonNull(font);
-      y = top + 9;
+      y = top + font.lineHeight;
     }
 
     graphics.fill(left - 1, y - 1, left + fullWidth + 1, top + fullHeight + 1, -1873784752);
@@ -83,9 +84,9 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
     for (Pair<String, Component> fact : this.facts) {
       String name = fact.getFirst() + ":";
       graphics.drawString(font, name, left + (factNameWidth - font.width(fact.getFirst())), y, -2039584, false);
-      graphics.drawString(font, fact.getSecond(), left + factNameWidth + 5, y, -3092272, false);
+      graphics.drawString(font, fact.getSecond(), left + factNameWidth + FACT_NAME_VALUE_PADDING, y, -3092272, false);
       Objects.requireNonNull(font);
-      y += 9;
+      y += font.lineHeight;
     }
 
     if (!this.facts.isEmpty() && !this.lines.isEmpty()) {
@@ -98,7 +99,7 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
       }
 
       Objects.requireNonNull(font);
-      y += 9;
+      y += font.lineHeight;
     }
 
     for (DebugCustomRenderer customRenderer : this.customRenderers) {

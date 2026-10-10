@@ -1,9 +1,12 @@
 package club.iananderson.f3backport.client.gui.components.sliders;
 
 import club.iananderson.f3backport.Common;
+import com.mojang.blaze3d.systems.RenderSystem;
+import java.awt.Color;
 import java.text.DecimalFormat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.network.chat.Component;
@@ -14,7 +17,14 @@ import org.lwjgl.glfw.GLFW;
 
 public class BasicSlider extends AbstractSliderButton {
   public static final int SLIDER_PADDING = 2;
-  protected static final ResourceLocation SLIDER_LOCATION = Common.location("textures/gui/slider.png");
+  private static final ResourceLocation SLIDER_SPRITE = ResourceLocation.withDefaultNamespace("widget/slider");
+  private static final ResourceLocation HIGHLIGHTED_SPRITE = ResourceLocation.withDefaultNamespace(
+      "widget/slider_highlighted");
+  private static final ResourceLocation SLIDER_HANDLE_SPRITE = ResourceLocation.withDefaultNamespace(
+      "widget/slider_handle");
+  private static final ResourceLocation SLIDER_HANDLE_HIGHLIGHTED_SPRITE = ResourceLocation.withDefaultNamespace(
+      "widget/slider_handle_highlighted");
+  public float buttonScale;
   protected boolean drawString;
   protected boolean canChangeValue;
   protected double minValue;
@@ -24,15 +34,17 @@ public class BasicSlider extends AbstractSliderButton {
   protected ChatFormatting textColor;
   private DecimalFormat format;
 
-  private BasicSlider(int x, int y, int width, int height, boolean drawString, double initial) {
+  private BasicSlider(int x, int y, int width, int height, boolean drawString, double initial, float buttonScale) {
     super(x, y, width, height, Component.empty(), 0D);
     this.drawString = drawString;
     this.value = snapToNearest(initial);
+    this.buttonScale = buttonScale;
   }
 
   protected BasicSlider(int x, int y, int width, int height, boolean drawString, double initial, double minValue,
-      double maxValue, double defaultValue, double stepSize, int precision, ChatFormatting textColor) {
-    this(x, y, width, height, drawString, initial);
+      double maxValue, double defaultValue, double stepSize, int precision, ChatFormatting textColor,
+      float buttonScale) {
+    this(x, y, width, height, drawString, initial, buttonScale);
     this.minValue = minValue;
     this.maxValue = maxValue;
     this.defaultValue = defaultValue;
@@ -65,19 +77,20 @@ public class BasicSlider extends AbstractSliderButton {
   }
 
   protected BasicSlider(int x, int y, int width, int height, boolean drawString, double initial, double minValue,
-      double maxValue, double defaultValue, ChatFormatting textColor) {
-    this(x, y, width, height, drawString, initial, minValue, maxValue, defaultValue, 1D, 0, textColor);
+      double maxValue, double defaultValue, ChatFormatting textColor, float buttonScale) {
+    this(x, y, width, height, drawString, initial, minValue, maxValue, defaultValue, 1D, 0, textColor, buttonScale);
   }
 
   protected BasicSlider(int x, int y, int width, int height, boolean drawString, double initial, double minValue,
-      double maxValue, double defaultValue, double stepSize, int precision) {
+      double maxValue, double defaultValue, double stepSize, int precision, float buttonScale) {
     this(x, y, width, height, drawString, initial, minValue, maxValue, defaultValue, stepSize, precision,
-         ChatFormatting.WHITE);
+         ChatFormatting.WHITE, buttonScale);
   }
 
   protected BasicSlider(int x, int y, int width, int height, boolean drawString, double initial, double minValue,
-      double maxValue, double defaultValue) {
-    this(x, y, width, height, drawString, initial, minValue, maxValue, defaultValue, 1D, 0, ChatFormatting.WHITE);
+      double maxValue, double defaultValue, float buttonScale) {
+    this(x, y, width, height, drawString, initial, minValue, maxValue, defaultValue, 1D, 0, ChatFormatting.WHITE,
+         buttonScale);
   }
 
   public void onRightClick() {
@@ -216,8 +229,64 @@ public class BasicSlider extends AbstractSliderButton {
     }
   }
 
+  public ResourceLocation getSprite() {
+    return this.isFocused() && !this.canChangeValue
+           ? HIGHLIGHTED_SPRITE
+           : SLIDER_SPRITE;
+  }
+
+  public ResourceLocation getHandleSprite() {
+    return !this.isHovered && !this.canChangeValue
+           ? SLIDER_HANDLE_SPRITE
+           : SLIDER_HANDLE_HIGHLIGHTED_SPRITE;
+  }
+
   @Override
-  public void renderWidget(@NonNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-    super.renderWidget(graphics, mouseX, mouseY, partialTick);
+  public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    guiGraphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
+    RenderSystem.enableBlend();
+    RenderSystem.defaultBlendFunc();
+    RenderSystem.enableDepthTest();
+    guiGraphics.pose().pushPose();
+    guiGraphics.pose().scale(buttonScale, buttonScale, buttonScale);
+    guiGraphics.blitSprite(this.getSprite(), this.getX(), this.getY(), (int) (this.getWidth()),
+                           (int) (this.getHeight()));
+    guiGraphics.blitSprite(this.getHandleSprite(), this.getX() + (int) (this.value * (double) (this.width - 8)),
+                           this.getY(), (int) (8 * buttonScale), (int) (this.getHeight()));
+    guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+    Color color = this.active
+                  ? new Color(255, 255, 255)
+                  : new Color(160, 160, 160);
+
+    Minecraft mc = Minecraft.getInstance();
+    this.renderString(guiGraphics, mc.font, color.getRGB() | Mth.ceil(this.alpha * 255.0F) << 24);
+    guiGraphics.pose().popPose();
+  }
+
+  public void renderString(@NonNull GuiGraphics guiGraphics, @NonNull Font font, int color) {
+    int stringWidth = font.width(this.getMessage());
+
+    int minX = this.getX() + width;
+    int maxX = this.getX() + this.getWidth() - width;
+    int centerX = (minX + maxX) / 2;
+
+    int minY = this.getY();
+    int maxY = this.getY() + this.getHeight();
+    int centerY = (int) ((float) (minY + maxY - font.lineHeight) / 2 + (1 * buttonScale));
+
+    // int clampedCenterX = Mth.clamp(centerX, minX + stringWidth / 2, maxX - stringWidth / 2);
+
+    if (stringWidth > this.getWidth()) {
+      int padding = 4;
+      int avgWidth = (int) ((float) (stringWidth + this.getWidth() + padding) / 2);
+      float scale = 1 - (float) (stringWidth + padding - this.getWidth()) / avgWidth;
+
+      guiGraphics.pose().pushPose();
+      guiGraphics.pose().scale(scale, scale, scale);
+      guiGraphics.drawCenteredString(font, this.getMessage(), (int) (centerX / scale), (int) (centerY / scale), color);
+      guiGraphics.pose().popPose();
+    } else {
+      guiGraphics.drawCenteredString(font, this.getMessage(), centerX, centerY, color);
+    }
   }
 }

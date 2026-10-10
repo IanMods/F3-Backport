@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.function.Function;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.WidgetSprites;
@@ -20,22 +21,23 @@ import net.minecraft.util.Mth;
 import org.jspecify.annotations.NonNull;
 
 public class BoolButton extends AbstractButton {
-  private static final List<Boolean> BOOLEAN_OPTIONS;
-  private final Component name;
-  private int index;
-  private Boolean value;
-  private final List<Boolean> values;
-  private final Function<BoolButton, MutableComponent> narrationProvider;
-  private final BoolButton.OnValueChange onValueChange;
-  private final OptionInstance.TooltipSupplier<Boolean> tooltipSupplier;
-  private static final WidgetSprites SPRITES = new WidgetSprites(Common.location("widget/button"),
-                                                                 Common.location("widget/button_disabled"),
-                                                                 Common.location("widget/button_highlighted"),
-                                                                 Common.location("widget/button_highlighted_disabled"));
+  public static final WidgetSprites SPRITES = new WidgetSprites(Common.location("widget/button"),
+                                                                Common.location("widget/button_disabled"),
+                                                                Common.location("widget/button_highlighted"),
+                                                                Common.location("widget/button_highlighted_disabled"));
+  public final Component name;
+  public final List<Boolean> values;
+  public final Function<BoolButton, MutableComponent> narrationProvider;
+  public final BoolButton.OnValueChange onValueChange;
+  public final OptionInstance.TooltipSupplier<Boolean> tooltipSupplier;
+  public int index;
+  public Boolean value;
+  public float buttonScale;
 
   BoolButton(int x, int y, int width, int height, Component message, Component name, int index, Boolean value,
       List<Boolean> values, Function<BoolButton, MutableComponent> narrationProvider,
-      BoolButton.OnValueChange onValueChange, OptionInstance.TooltipSupplier<Boolean> tooltipSupplier) {
+      BoolButton.OnValueChange onValueChange, OptionInstance.TooltipSupplier<Boolean> tooltipSupplier,
+      float buttonScale) {
     super(x, y, width, height, message);
     this.name = name;
     this.index = index;
@@ -45,12 +47,19 @@ public class BoolButton extends AbstractButton {
     this.onValueChange = onValueChange;
     this.tooltipSupplier = tooltipSupplier;
     this.updateTooltip();
+    this.buttonScale = buttonScale;
+  }
+
+  public static BoolButton.Builder builder(boolean initialValue) {
+    return new Builder().withInitialValue(initialValue);
   }
 
   protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
     guiGraphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
     RenderSystem.enableBlend();
     RenderSystem.enableDepthTest();
+    guiGraphics.pose().pushPose();
+    guiGraphics.pose().scale(buttonScale, buttonScale, buttonScale);
     guiGraphics.blitSprite(SPRITES.get(this.value, this.isHoveredOrFocused()), this.getX(), this.getY(),
                            this.getWidth(), this.getHeight());
     guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -61,6 +70,35 @@ public class BoolButton extends AbstractButton {
 
     Minecraft mc = Minecraft.getInstance();
     this.renderString(guiGraphics, mc.font, color.getRGB() | Mth.ceil(this.alpha * 255.0F) << 24);
+    guiGraphics.pose().popPose();
+  }
+
+  @Override
+  public void renderString(@NonNull GuiGraphics guiGraphics, @NonNull Font font, int color) {
+    int stringWidth = font.width(this.getMessage());
+
+    int minX = this.getX();
+    int maxX = this.getX() + this.getWidth();
+    int centerX = (minX + maxX) / 2;
+
+    int minY = this.getY();
+    int maxY = this.getY() + this.getHeight();
+    int centerY = (int) ((float) (minY + maxY) / 2);
+
+    // int clampedCenterX = Mth.clamp(centerX, minX + stringWidth / 2, maxX - stringWidth / 2);
+    guiGraphics.pose().pushPose();
+
+    if (stringWidth >= this.getWidth() - 8) {
+      float scale = (float) (this.getWidth() - 8) / stringWidth;
+
+      guiGraphics.pose().scale(scale, scale, scale);
+      guiGraphics.pose().translate(0, 1 - (float) font.lineHeight / 2, 0);
+      guiGraphics.drawCenteredString(font, this.getMessage(), (int) (centerX / scale), (int) (centerY / scale), color);
+    } else {
+      guiGraphics.pose().translate(0, 1 - (float) font.lineHeight / 2, 0);
+      guiGraphics.drawCenteredString(font, this.getMessage(), centerX, centerY, color);
+    }
+    guiGraphics.pose().popPose();
   }
 
   private void updateTooltip() {
@@ -87,7 +125,6 @@ public class BoolButton extends AbstractButton {
   }
 
   private void cycleValue(int delta) {
-    ;
     this.index = Mth.positiveModulo(this.index + delta, this.values.size());
     Boolean bool = this.values.get(this.index);
     this.updateValue(bool);
@@ -108,6 +145,10 @@ public class BoolButton extends AbstractButton {
     return true;
   }
 
+  public Boolean getValue() {
+    return this.value;
+  }
+
   public void setValue(Boolean value) {
     int i = this.values.indexOf(value);
     if (i != -1) {
@@ -115,10 +156,6 @@ public class BoolButton extends AbstractButton {
     }
 
     this.updateValue(value);
-  }
-
-  public Boolean getValue() {
-    return this.value;
   }
 
   protected @NonNull MutableComponent createNarrationMessage() {
@@ -132,12 +169,10 @@ public class BoolButton extends AbstractButton {
       Component component = this.createLabelForValue(bool);
       if (this.isFocused()) {
         narrationElementOutput.add(NarratedElementType.USAGE,
-                                   Component.translatable("narration.cycle_button.usage.focused",
-                                                          new Object[]{component}));
+                                   Component.translatable("narration.cycle_button.usage.focused", component));
       } else {
         narrationElementOutput.add(NarratedElementType.USAGE,
-                                   Component.translatable("narration.cycle_button.usage.hovered",
-                                                          new Object[]{component}));
+                                   Component.translatable("narration.cycle_button.usage.hovered", component));
       }
     }
 
@@ -147,20 +182,22 @@ public class BoolButton extends AbstractButton {
     return wrapDefaultNarrationMessage(this.getMessage());
   }
 
-  public static BoolButton.Builder builder(boolean initialValue) {
-    return new Builder().withInitialValue(initialValue);
+  public boolean isMouseOver(double mouseX, double mouseY) {
+    return this.active && this.visible && mouseX >= (double) this.getX() && mouseY >= (double) this.getY()
+        && mouseX < (double) (this.getX() + this.width) && mouseY < (double) (this.getY() + this.height);
   }
 
-  static {
-    BOOLEAN_OPTIONS = ImmutableList.of(Boolean.TRUE, Boolean.FALSE);
+  public interface OnValueChange {
+    void onValueChange(BoolButton var1, Boolean var2);
   }
 
   public static class Builder {
+    private final Function<BoolButton, MutableComponent> narrationProvider = BoolButton::createDefaultNarrationMessage;
+    private final List<Boolean> values = ImmutableList.of(Boolean.TRUE, Boolean.FALSE);
     private int initialIndex;
     private Boolean initialValue;
     private OptionInstance.TooltipSupplier<Boolean> tooltipSupplier = (bool) -> null;
-    private final Function<BoolButton, MutableComponent> narrationProvider = BoolButton::createDefaultNarrationMessage;
-    private final List<Boolean> values = BOOLEAN_OPTIONS;
+    private float buttonScale = 1;
 
     public BoolButton.Builder withTooltip(OptionInstance.TooltipSupplier<Boolean> tooltipSupplier) {
       this.tooltipSupplier = tooltipSupplier;
@@ -177,6 +214,11 @@ public class BoolButton extends AbstractButton {
       return this;
     }
 
+    public BoolButton.Builder withScale(float buttonScale) {
+      this.buttonScale = buttonScale;
+      return this;
+    }
+
     public BoolButton create(int x, int y, int width, int height, Component name,
         BoolButton.OnValueChange onValueChange) {
 
@@ -184,12 +226,8 @@ public class BoolButton extends AbstractButton {
                      ? this.initialValue
                      : this.values.get(this.initialIndex);
       return new BoolButton(x, y, width, height, name, name, this.initialIndex, bool, this.values,
-                            this.narrationProvider, onValueChange, this.tooltipSupplier);
+                            this.narrationProvider, onValueChange, this.tooltipSupplier, buttonScale);
 
     }
-  }
-
-  public interface OnValueChange {
-    void onValueChange(BoolButton var1, Boolean var2);
   }
 }

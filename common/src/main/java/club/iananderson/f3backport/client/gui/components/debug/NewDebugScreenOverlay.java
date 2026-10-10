@@ -35,7 +35,6 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.status.ChunkStatus;
-import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 

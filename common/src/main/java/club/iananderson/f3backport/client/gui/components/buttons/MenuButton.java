@@ -1,5 +1,6 @@
 package club.iananderson.f3backport.client.gui.components.buttons;
 
+import club.iananderson.f3backport.Common;
 import club.iananderson.f3backport.client.gui.screens.F3BackportScreen;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
@@ -26,7 +27,9 @@ public class MenuButton extends Button {
   public enum MenuButtons {
     DONE(CommonComponents.GUI_DONE),
 
-    CANCEL(CommonComponents.GUI_CANCEL);
+    CANCEL(CommonComponents.GUI_CANCEL),
+
+    RESET(Common.translatedText("menu.f3backport.main.reset.button"));
 
     private final Component buttonText;
 

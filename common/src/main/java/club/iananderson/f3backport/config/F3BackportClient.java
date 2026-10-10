@@ -13,9 +13,9 @@ import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
 
 public class F3BackportClient {
   public static final ModConfigSpec CLIENT_SPEC;
+  private static final Map<ConfigValue<?>, ResourceLocation> configValueMap = new HashMap<>();
   public static List<ConfigValue<Boolean>> booleanConfigs = new ArrayList<>();
   public static List<ConfigValue<Integer>> integerConfigs = new ArrayList<>();
-  private static final Map<ConfigValue<?>, ResourceLocation> configValueMap = new HashMap<>();
   public static ConfigValue<Boolean> enableMod;
   public static ConfigValue<Boolean> enableGameVersion;
   public static ConfigValue<Boolean> enableFps;
@@ -237,7 +237,7 @@ public class F3BackportClient {
     }
   }
 
-  public static Map<ConfigValue<?>, ResourceLocation> getConfigValueMap(){
+  public static Map<ConfigValue<?>, ResourceLocation> getConfigValueMap() {
     configValueMap.put(enableGameVersion, DebugScreenEntries.GAME_VERSION);
     configValueMap.put(enableFps, DebugScreenEntries.FPS);
     configValueMap.put(enablePlayerPosition, DebugScreenEntries.PLAYER_POSITION);

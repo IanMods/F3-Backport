@@ -1,7 +1,6 @@
 package club.iananderson.f3backport.util;
 
 import java.awt.Color;
-import oshi.util.tuples.Triplet;
 
 public class Rgb {
   private Rgb() {

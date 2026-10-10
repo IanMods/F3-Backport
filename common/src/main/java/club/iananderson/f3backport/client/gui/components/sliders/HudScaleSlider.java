@@ -11,8 +11,8 @@ public class HudScaleSlider extends BasicSlider {
   protected final Component prefix;
 
   protected HudScaleSlider(int x, int y, int width, int height, Component prefix, double initial, double minValue,
-      double maxValue, double defaultValue, double stepSize, int precision) {
-    super(x, y, width, height, true, initial, minValue, maxValue, defaultValue, stepSize, precision);
+      double maxValue, double defaultValue, double stepSize, int precision, float buttonScale) {
+    super(x, y, width, height, true, initial, minValue, maxValue, defaultValue, stepSize, precision, buttonScale);
     this.prefix = prefix;
     this.updateMessage();
   }
@@ -48,6 +48,7 @@ public class HudScaleSlider extends BasicSlider {
     protected Tooltip tooltip;
     protected double stepSize;
     protected int precision;
+    protected float buttonScale = 1;
 
     public Builder(Component prefix) {
       this.prefix = prefix;
@@ -98,10 +99,16 @@ public class HudScaleSlider extends BasicSlider {
       return this;
     }
 
+    public Builder withScale(float scale) {
+      this.buttonScale = scale;
+
+      return this;
+    }
+
     public HudScaleSlider build() {
       HudScaleSlider slider = new HudScaleSlider(this.posX, this.posY, this.width, this.height, this.prefix,
                                                  this.initial, this.minValue, this.maxValue, this.defaultValue,
-                                                 this.stepSize, this.precision);
+                                                 this.stepSize, this.precision, this.buttonScale);
       slider.setTooltip(this.tooltip);
       return slider;
     }

@@ -15,9 +15,11 @@ import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
 import org.jspecify.annotations.NonNull;
 
 public class F3BackportScreen extends Screen {
-  public static final int MENU_PADDING = 50;
+  public static final int MENU_PADDING = 30;
   public static final int TITLE_PADDING = 10;
   public static final int BUTTON_PADDING = 6;
+  private static final int MARGIN_RIGHT = 16;
+  private static final int MARGIN_LEFT = 16;
   public static MenuButton doneButton;
   public static MenuButton cancelButton;
   public final List<AbstractWidget> widgets = new ArrayList<>();
@@ -26,9 +28,12 @@ public class F3BackportScreen extends Screen {
   public int buttonHeight = 20;
   public int leftButtonX;
   public int rightButtonX;
+  public int centerButtonX;
   public int row;
+  public int rowLeft;
+  public int rowRight;
   public int buttonStartY = MENU_PADDING;
-  public int offsetY = buttonHeight + BUTTON_PADDING;
+  public int offsetY = this.buttonHeight + BUTTON_PADDING;
   protected boolean hasPendingChanges;
   protected List<ConfigValue<?>> configOptions = new ArrayList<>();
 
@@ -77,38 +82,59 @@ public class F3BackportScreen extends Screen {
     this.init();
   }
 
+  public void resetConfig() {
+  }
+
   @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
   public void rebuildUI() {
     this.rebuildWidgets();
   }
 
-  public void drawButtonRow() {
+  public void drawLeft() {
+    rightButtonX = (width / 2) - BUTTON_PADDING - buttonWidth;
+    leftButtonX = rightButtonX - buttonWidth - BUTTON_PADDING;
+    centerButtonX = (leftButtonX + rightButtonX) / 2;
 
+    buttonStartY = MENU_PADDING;
+
+    rowLeft = 0;
   }
 
-  public void drawColumnHeading(@NonNull GuiGraphics graphics, Component text, Side side, int row) {
-    int x;
+  public void drawRight() {
+    leftButtonX = (width / 2) + BUTTON_PADDING;
+    rightButtonX = leftButtonX + buttonWidth + BUTTON_PADDING;
+    centerButtonX = (leftButtonX + rightButtonX) / 2;
 
-    switch (side) {
-      case LEFT -> x = leftButtonX + (buttonWidth / 2);
-      case RIGHT -> x = rightButtonX + (buttonWidth / 2);
-      default -> throw new IllegalStateException("Unexpected value: " + side);
-    }
+    buttonStartY = MENU_PADDING;
 
-    int y = MENU_PADDING + (row * (buttonHeight + BUTTON_PADDING)) - (font.lineHeight + BUTTON_PADDING);
-
-    graphics.pose().pushPose();
-    graphics.drawCenteredString(font, text, x, y, 16777215);
-    graphics.pose().popPose();
+    rowRight = 0;
   }
 
-  public void drawHeading(@NonNull GuiGraphics graphics, Component text, int row) {
-    int x = this.width / 2;
-    int y = MENU_PADDING + (row * (buttonHeight + BUTTON_PADDING)) - (font.lineHeight + BUTTON_PADDING);
+  public void drawHeader() {
+    int centerX = this.width / 2;
+    int halfTitleWidth = font.width(this.getTitle()) / 2;
 
-    graphics.pose().pushPose();
-    graphics.drawCenteredString(font, text, x, y, 16777215);
-    graphics.pose().popPose();
+    rightButtonX = centerX + halfTitleWidth + TITLE_PADDING;
+    leftButtonX = centerX - halfTitleWidth - TITLE_PADDING - buttonWidth;
+    buttonStartY = TITLE_PADDING + (font.lineHeight / 2) - (buttonHeight / 2);
+  }
+
+  public void drawFooter() {
+    leftButtonX = (this.width / 2) - (buttonWidth + BUTTON_PADDING);
+    rightButtonX = (this.width / 2) + BUTTON_PADDING;
+    centerButtonX = (leftButtonX + rightButtonX) / 2;
+
+    buttonStartY = this.height - MenuButton.DEFAULT_HEIGHT - BUTTON_PADDING;
+
+    cancelButton = MenuButton.builder(MenuButtons.CANCEL, press -> this.onClose())
+        .withPos(leftButtonX, buttonStartY).withWidth(buttonWidth)
+        .build();
+
+    doneButton = MenuButton.builder(MenuButtons.DONE, press -> this.onDone())
+        .withPos(rightButtonX, buttonStartY).withWidth(buttonWidth)
+        .build();
+
+    this.widgets.addAll(Arrays.asList(cancelButton, doneButton));
   }
 
   @Override
@@ -121,19 +147,13 @@ public class F3BackportScreen extends Screen {
   public void init() {
     super.init();
     this.widgets.clear();
-    leftButtonX = (this.width / 2) - (buttonWidth + BUTTON_PADDING);
-    rightButtonX = (this.width / 2) + BUTTON_PADDING;
 
-    cancelButton = MenuButton.builder(MenuButtons.CANCEL, press -> this.onClose())
-        .withPos((this.width / 2) - (MenuButton.DEFAULT_WIDTH + BUTTON_PADDING),
-                 (this.height - MenuButton.DEFAULT_HEIGHT - BUTTON_PADDING))
-        .build();
+    this.drawHeader();
+    this.drawLeft();
+    this.drawRight();
+    this.drawFooter();
 
-    doneButton = MenuButton.builder(MenuButtons.DONE, press -> this.onDone())
-        .withPos(rightButtonX, (this.height - MenuButton.DEFAULT_HEIGHT - BUTTON_PADDING))
-        .build();
-
-    this.widgets.addAll(Arrays.asList(cancelButton, doneButton));
+    this.widgets.forEach(this::addRenderableWidget);
   }
 
   public enum Side {
