@@ -11,7 +11,6 @@ import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractButton;
-import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
@@ -21,10 +20,10 @@ import net.minecraft.util.Mth;
 import org.jspecify.annotations.NonNull;
 
 public class BoolButton extends AbstractButton {
-  public static final WidgetSprites SPRITES = new WidgetSprites(Common.location("widget/button"),
-                                                                Common.location("widget/button_disabled"),
-                                                                Common.location("widget/button_highlighted"),
-                                                                Common.location("widget/button_highlighted_disabled"));
+  // public static final WidgetSprites SPRITES = new WidgetSprites(Common.location("widget/button"),
+  //                                                               Common.location("widget/button_disabled"),
+  //                                                               Common.location("widget/button_highlighted"),
+  //                                                               Common.location("widget/button_highlighted_disabled"));
   public final Component name;
   public final List<Boolean> values;
   public final Function<BoolButton, MutableComponent> narrationProvider;
@@ -60,8 +59,8 @@ public class BoolButton extends AbstractButton {
     RenderSystem.enableDepthTest();
     guiGraphics.pose().pushPose();
     guiGraphics.pose().scale(buttonScale, buttonScale, buttonScale);
-    guiGraphics.blitSprite(SPRITES.get(this.value, this.isHoveredOrFocused()), this.getX(), this.getY(),
-                           this.getWidth(), this.getHeight());
+    // guiGraphics.blitSprite(SPRITES.get(this.value, this.isHoveredOrFocused()), this.getX(), this.getY(),
+    //                        this.getWidth(), this.getHeight());
     guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 
     Color color = this.active

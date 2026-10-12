@@ -4,7 +4,7 @@ import club.iananderson.f3backport.Common;
 import java.util.EnumSet;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.MutableComponent;
-import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 
 public enum ConfigEntries {
   ENABLE_MOD("menu.f3backport.config.enableMod.name", "menu.f3backport.config.enableMod.desc",

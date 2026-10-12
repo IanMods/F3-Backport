@@ -8,11 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 
 public class F3BackportClient {
-  public static final ModConfigSpec CLIENT_SPEC;
+  public static final ForgeConfigSpec CLIENT_SPEC;
   private static final Map<ConfigValue<?>, ResourceLocation> configValueMap = new HashMap<>();
   public static List<ConfigValue<Boolean>> booleanConfigs = new ArrayList<>();
   public static List<ConfigValue<Integer>> integerConfigs = new ArrayList<>();
@@ -39,12 +39,12 @@ public class F3BackportClient {
   public static ConfigValue<Integer> debugGuiScale;
 
   static {
-    ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
+    ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
     setupConfig(builder);
     CLIENT_SPEC = builder.build();
   }
 
-  private static void setupConfig(ModConfigSpec.Builder builder) {
+  private static void setupConfig(ForgeConfigSpec.Builder builder) {
     builder.push("F3-Backport");
     enableMod = builder.comment(StringLine.builder().boolDesc("Enable the mod?", Client.DEFAULT_ENABLE_MOD))
         .define("enable_mod", Client.DEFAULT_ENABLE_MOD);

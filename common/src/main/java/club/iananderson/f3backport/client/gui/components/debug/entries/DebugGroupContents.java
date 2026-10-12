@@ -108,7 +108,8 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
     }
 
     if (this.group.accentColor().isPresent()) {
-      int accentColor = FastColor.ARGB32.opaque(this.group.accentColor().getAsInt());
+      // TODO: Check this
+      int accentColor = this.group.accentColor().getAsInt();
       if (side == Side.LEFT) {
         graphics.fill(0, top - 1, 1, top + fullHeight + 1, accentColor);
       } else {

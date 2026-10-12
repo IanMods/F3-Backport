@@ -15,7 +15,7 @@ public class Common {
   }
 
   public static ResourceLocation location(String path) {
-    return ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, path);
+    return new ResourceLocation(Constants.MOD_ID, path);
   }
 
   // Used to make porting new text to older versions easier

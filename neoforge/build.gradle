@@ -1,24 +1,32 @@
 plugins {
     id 'multiloader-loader'
-    id 'net.neoforged.moddev'
+    id 'net.neoforged.moddev.legacyforge'
 }
 
-neoForge {
-    version = neoforge_version
-    // Automatically enable neoforge AccessTransformers if the file exists
+mixin {
+    add(sourceSets.main, "${mod_id}.refmap.json")
+
+    config("${mod_id}.mixins.json")
+
+    if (project(":neoforge").file("src/main/resources/${mod_id}.forge.mixins.json").exists()) {
+        config("${mod_id}.forge.mixins.json")
+    }
+}
+
+legacyForge {
+    version = forge_version
+
+    validateAccessTransformers = true
+
     def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
     if (at.exists()) {
-        accessTransformers.from(at.absolutePath)
+        accessTransformers = ["src/main/resources/META-INF/accesstransformer.cfg"]
     }
     parchment {
         minecraftVersion = parchment_minecraft
         mappingsVersion = parchment_version
     }
     runs {
-        configureEach {
-            systemProperty('neoforge.enabledGameTestNamespaces', mod_id)
-            ideName = "NeoForge ${it.name.capitalize()} (${project.path})" // Unify the run config names with fabric
-        }
         client {
             client()
             var clientDir = "run/client"
@@ -29,31 +37,27 @@ neoForge {
         }
         data {
             data()
-
-            // DataGen can be run by - "./gradlew :neoforge:runData" in Terminal.
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-
         }
         server {
-            server {
-                server()
-                var serverDir = "run/server"
-                if (!file(serverDir).exists()) {
-                    mkdir(serverDir)
-                }
-                setGameDirectory(file(serverDir))
+            server()
+            var serverDir = "run/server"
+            if (!file(serverDir).exists()) {
+                mkdir(serverDir)
             }
+            setGameDirectory(file(serverDir))
         }
     }
+
     mods {
         "${mod_id}" {
             sourceSet sourceSets.main
+           // sourceSet project(":common").sourceSets.main
         }
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main.resources.srcDir 'src/generated/resources'
 
 repositories {
     mavenCentral()
@@ -83,22 +87,54 @@ repositories {
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+dependencies {
+    compileOnly project(":common")
+
+    annotationProcessor("org.spongepowered:mixin:${project.mixin_version}:processor")
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${project.mixin_extras_version}"))
+}
+
+jar {
+    finalizedBy('reobfJar')
+
+    if (project(":neoforge").file("src/main/resources/${mod_id}.forge.mixins.json").exists()) {
+        manifest.attributes([
+                "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
+        ])
+    } else {
+        manifest.attributes([
+                "MixinConfigs": "${mod_id}.mixins.json"
+        ])
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+        }
+    }
+}
+
+sourceSets.each {
+    def dir = layout.buildDirectory.dir("sourcesSets/$it.name")
+    it.output.resourcesDir = dir
+    it.java.destinationDirectory = dir
+}
 
 // Implement mcgradleconventions loader attribute
 def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
 ['apiElements', 'runtimeElements'].each { variant ->
     configurations.named("$variant") {
         attributes {
-            attribute(loaderAttribute, 'neoforge')
+            attribute(loaderAttribute, 'forge')
         }
     }
 }
 sourceSets.configureEach {
-    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName, it.getTaskName(null, 'jarJar')].each { variant ->
+    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant ->
         configurations.named("$variant") {
             attributes {
-                attribute(loaderAttribute, 'neoforge')
+                attribute(loaderAttribute, 'forge')
             }
         }
     }
@@ -109,6 +145,7 @@ publishMods {
     version = "${minecraft_version}-${mod_version}"
     file = tasks.jar.archiveFile
     modLoaders.add("neoforge")
+    modLoaders.add("forge")
 
     curseforge("curseforgeNeoForge") {
         accessToken = System.getenv("CURSEFORGE_TOKEN")

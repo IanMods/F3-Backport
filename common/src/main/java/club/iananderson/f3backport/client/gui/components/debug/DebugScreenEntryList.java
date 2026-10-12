@@ -89,7 +89,6 @@ public class DebugScreenEntryList {
         }
 
         return true;
-      case null:
       default:
         this.setStatus(location, DebugScreenEntryStatus.ALWAYS_ON);
         return true;

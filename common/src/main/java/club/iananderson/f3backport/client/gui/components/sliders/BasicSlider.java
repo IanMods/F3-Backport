@@ -17,13 +17,14 @@ import org.lwjgl.glfw.GLFW;
 
 public class BasicSlider extends AbstractSliderButton {
   public static final int SLIDER_PADDING = 2;
-  private static final ResourceLocation SLIDER_SPRITE = ResourceLocation.withDefaultNamespace("widget/slider");
-  private static final ResourceLocation HIGHLIGHTED_SPRITE = ResourceLocation.withDefaultNamespace(
-      "widget/slider_highlighted");
-  private static final ResourceLocation SLIDER_HANDLE_SPRITE = ResourceLocation.withDefaultNamespace(
-      "widget/slider_handle");
-  private static final ResourceLocation SLIDER_HANDLE_HIGHLIGHTED_SPRITE = ResourceLocation.withDefaultNamespace(
-      "widget/slider_handle_highlighted");
+  protected static final ResourceLocation SLIDER_LOCATION = new ResourceLocation("textures/gui/slider.png");
+  // private static final ResourceLocation SLIDER_SPRITE = ResourceLocation.withDefaultNamespace("widget/slider");
+  // private static final ResourceLocation HIGHLIGHTED_SPRITE = ResourceLocation.withDefaultNamespace(
+  //     "widget/slider_highlighted");
+  // private static final ResourceLocation SLIDER_HANDLE_SPRITE = ResourceLocation.withDefaultNamespace(
+  //     "widget/slider_handle");
+  // private static final ResourceLocation SLIDER_HANDLE_HIGHLIGHTED_SPRITE = ResourceLocation.withDefaultNamespace(
+  //     "widget/slider_handle_highlighted");
   public float buttonScale;
   protected boolean drawString;
   protected boolean canChangeValue;
@@ -229,17 +230,17 @@ public class BasicSlider extends AbstractSliderButton {
     }
   }
 
-  public ResourceLocation getSprite() {
-    return this.isFocused() && !this.canChangeValue
-           ? HIGHLIGHTED_SPRITE
-           : SLIDER_SPRITE;
-  }
-
-  public ResourceLocation getHandleSprite() {
-    return !this.isHovered && !this.canChangeValue
-           ? SLIDER_HANDLE_SPRITE
-           : SLIDER_HANDLE_HIGHLIGHTED_SPRITE;
-  }
+  // public ResourceLocation getSprite() {
+  //   return this.isFocused() && !this.canChangeValue
+  //          ? HIGHLIGHTED_SPRITE
+  //          : SLIDER_SPRITE;
+  // }
+  //
+  // public ResourceLocation getHandleSprite() {
+  //   return !this.isHovered && !this.canChangeValue
+  //          ? SLIDER_HANDLE_SPRITE
+  //          : SLIDER_HANDLE_HIGHLIGHTED_SPRITE;
+  // }
 
   @Override
   public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
@@ -249,10 +250,11 @@ public class BasicSlider extends AbstractSliderButton {
     RenderSystem.enableDepthTest();
     guiGraphics.pose().pushPose();
     guiGraphics.pose().scale(buttonScale, buttonScale, buttonScale);
-    guiGraphics.blitSprite(this.getSprite(), this.getX(), this.getY(), (int) (this.getWidth()),
-                           (int) (this.getHeight()));
-    guiGraphics.blitSprite(this.getHandleSprite(), this.getX() + (int) (this.value * (double) (this.width - 8)),
-                           this.getY(), (int) (8 * buttonScale), (int) (this.getHeight()));
+    guiGraphics.blitNineSliced(SLIDER_LOCATION, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200,
+                               20, 0, this.getTextureY());
+    guiGraphics.blitNineSliced(SLIDER_LOCATION, this.getX() + (int) (this.value * (double) (this.width - 8)),
+                               this.getY(), (int) (8 * buttonScale), this.getHeight(), 20, 4, 200, 20, 0,
+                               this.getHandleTextureY());
     guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
     Color color = this.active
                   ? new Color(255, 255, 255)

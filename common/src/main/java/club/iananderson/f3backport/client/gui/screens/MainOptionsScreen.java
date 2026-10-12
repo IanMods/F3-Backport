@@ -19,7 +19,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import org.jspecify.annotations.NonNull;
 
 public class MainOptionsScreen extends F3BackportScreen {
@@ -154,8 +154,8 @@ public class MainOptionsScreen extends F3BackportScreen {
   }
 
   @Override
-  public void renderBackground(@NonNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-    super.renderBackground(graphics, mouseX, mouseY, partialTick);
+  public void renderBackground(@NonNull GuiGraphics graphics) {
+    super.renderBackground(graphics);
 
     renderLeft(graphics);
     renderRight(graphics);
@@ -215,8 +215,6 @@ public class MainOptionsScreen extends F3BackportScreen {
         rowRight = startRow + 1;
         sectionRight += 1;
       }
-      case null, default -> {
-      }
     }
   }
 
@@ -233,8 +231,6 @@ public class MainOptionsScreen extends F3BackportScreen {
       case RIGHT -> {
         addBoolRow(side, section, F3BackportClient.enableGameVersion, null);
         sectionRight += 1;
-      }
-      case null, default -> {
       }
     }
 
@@ -265,7 +261,7 @@ public class MainOptionsScreen extends F3BackportScreen {
         endRow = this.rowRight;
         sectionRight += 1;
       }
-      case null, default -> endRow = 0;
+      default -> endRow = 0;
     }
 
     positionOptionsRect.setSize(sectionWidth, ((endRow - startRow) * offsetY) - BUTTON_PADDING);
@@ -290,7 +286,7 @@ public class MainOptionsScreen extends F3BackportScreen {
         endRow = this.rowRight;
         sectionRight += 1;
       }
-      case null, default -> endRow = 0;
+      default -> endRow = 0;
     }
 
     miscOptionsRect.setSize(sectionWidth, ((endRow - startRow) * offsetY) - BUTTON_PADDING);
@@ -312,7 +308,7 @@ public class MainOptionsScreen extends F3BackportScreen {
         endRow = this.rowRight;
         sectionRight += 1;
       }
-      case null, default -> endRow = 0;
+      default -> endRow = 0;
     }
 
     memoryOptionsRect.setSize(sectionWidth, ((endRow - startRow) * offsetY) - BUTTON_PADDING);
@@ -334,7 +330,7 @@ public class MainOptionsScreen extends F3BackportScreen {
         endRow = this.rowRight;
         sectionRight += 1;
       }
-      case null, default -> endRow = 0;
+      default -> endRow = 0;
     }
 
     systemSpecsOptionsRect.setSize(sectionWidth, ((endRow - startRow) * offsetY) - BUTTON_PADDING);
@@ -357,7 +353,7 @@ public class MainOptionsScreen extends F3BackportScreen {
         endRow = this.rowRight;
         sectionRight += 1;
       }
-      case null, default -> endRow = 0;
+      default -> endRow = 0;
     }
 
     perfImpactorsOptionsRect.setSize(sectionWidth, ((endRow - startRow) * offsetY) - (BUTTON_PADDING));
@@ -379,7 +375,7 @@ public class MainOptionsScreen extends F3BackportScreen {
         endRow = this.rowRight;
         sectionRight += 1;
       }
-      case null, default -> endRow = 0;
+      default -> endRow = 0;
     }
 
     spawnCountsOptionsRect.setSize(sectionWidth, ((endRow - startRow) * offsetY) - (BUTTON_PADDING));

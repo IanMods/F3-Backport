@@ -1,6 +1,7 @@
 package club.iananderson.f3backport.util;
 
 import com.mojang.datafixers.DSL;
+import com.mojang.datafixers.DSL.TypeReference;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
@@ -11,15 +12,23 @@ import java.util.Objects;
 import net.minecraft.SharedConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.util.datafix.fixes.References;
 
 public enum DataFixTypes {
-  DEBUG_PROFILE(References.reference("debug_profile"));
+  DEBUG_PROFILE("debug_profile");
 
   private final DSL.TypeReference type;
 
-  DataFixTypes(final DSL.TypeReference type) {
-    this.type = type;
+  DataFixTypes(final String name) {
+    this.type = new TypeReference() {
+      @Override
+      public String typeName() {
+        return name;
+      }
+
+      public String toString() {
+        return "@" + name;
+      }
+    };
   }
 
   private static int currentVersion() {

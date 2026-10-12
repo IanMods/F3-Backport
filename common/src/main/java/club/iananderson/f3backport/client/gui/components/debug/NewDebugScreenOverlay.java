@@ -21,20 +21,15 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.debugchart.BandwidthDebugChart;
-import net.minecraft.client.gui.components.debugchart.FpsDebugChart;
-import net.minecraft.client.gui.components.debugchart.PingDebugChart;
-import net.minecraft.client.gui.components.debugchart.TpsDebugChart;
 import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.debugchart.LocalSampleLogger;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.level.chunk.status.ChunkStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -84,10 +79,12 @@ public class NewDebugScreenOverlay {
     this.clientChunk = null;
   }
 
-  public void render(final @NonNull GuiGraphics graphics, boolean renderProfilerChart, boolean renderFpsCharts,
-      boolean renderNetworkCharts, LocalSampleLogger frameTimeLogger, LocalSampleLogger bandwidthLogger,
-      LocalSampleLogger pingLogger) {
-    if (this.minecraft.isGameLoadFinished() && (!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
+  public void render(final @NonNull GuiGraphics graphics) {
+    // boolean renderNetworkCharts, LocalSampleLogger frameTimeLogger, LocalSampleLogger bandwidthLogger,
+    // LocalSampleLogger pingLogger) {
+
+    // if (this.minecraft.isGameLoadFinished() && (!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
+    if ((!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
       DebugScreenEntries.allEntriesStatus().forEach(this.debugEntries::setStatus);
 
       Collection<ResourceLocation> visibleEntries = this.debugEntries.getCurrentlyEnabled();
@@ -137,22 +134,23 @@ public class NewDebugScreenOverlay {
           KeyMapping keyDebugModifier = DebugKeyBinds.keyDebugOverlay;
           DebugGroup debugHelp = DebugGroups.HELP;
           // TODO: Move these to language file instead of hardcoding them
+          // TODO: Fix this
           String debugCharts = "Debug charts:";
-          String profilerChart = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugProfilingChart, "Profiler",
-                                                   renderProfilerChart);
-          String fpsChart = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugFpsCharts, hasServer
-                                                                                                 ? "fps + tps"
-                                                                                                 : "fps",
-                                              renderFpsCharts);
-          String networkChartText = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugNetworkCharts,
-                                                      !this.minecraft.isLocalServer()
-                                                      ? "Bandwidth + Ping"
-                                                      : "Ping", renderNetworkCharts);
+          // String profilerChart = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugProfilingChart, "Profiler",
+          //                                          renderProfilerChart);
+          // String fpsChart = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugFpsCharts, hasServer
+          //                                                                                        ? "fps + tps"
+          //                                                                                        : "fps",
+          //                                     renderFpsCharts);
+          // String networkChartText = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugNetworkCharts,
+          //                                             !this.minecraft.isLocalServer()
+          //                                             ? "Bandwidth + Ping"
+          //                                             : "Ping", renderNetworkCharts);
           String helpText = "For help: press [F3 + Q]";
           String optionsKeyText = "To edit: press " + formatKeybind(DebugKeyBinds.keyDebugOptions);
 
           displayer.addToGroup(debugHelp, debugCharts);
-          displayer.addToGroup(debugHelp, List.of(profilerChart, fpsChart, networkChartText));
+          // displayer.addToGroup(debugHelp, List.of(profilerChart, fpsChart, networkChartText));
           displayer.addToGroup(debugHelp, "");
           displayer.addToGroup(debugHelp, List.of(helpText, optionsKeyText));
         }
@@ -241,49 +239,49 @@ public class NewDebugScreenOverlay {
           }
         }
 
-        if (renderFpsCharts) {
-          LocalSampleLogger tickTimeLogger = this.minecraft.gui.getDebugOverlay().getTickTimeLogger();
-
-          FpsDebugChart fpsChart = new FpsDebugChart(this.font, frameTimeLogger);
-
-          int maxWidth = graphics.guiWidth() / 2;
-          graphics.pose().pushPose();
-          graphics.pose()
-              .scale((float) standardGuiScale / newScale, (float) standardGuiScale / newScale,
-                     (float) standardGuiScale / newScale);
-          fpsChart.drawChart(graphics, 0, fpsChart.getWidth(maxWidth));
-          if (tickTimeLogger.size() > 0) {
-            TpsDebugChart tpsChart = new TpsDebugChart(this.font, tickTimeLogger, () -> this.getLevel() == null
-                                                                                        ? 0.0F
-                                                                                        : this.getLevel()
-                                                                                            .tickRateManager()
-                                                                                            .millisecondsPerTick());
-
-            int width = tpsChart.getWidth(maxWidth);
-            tpsChart.drawChart(graphics, graphics.guiWidth() - width, width);
-            graphics.pose().popPose();
-          }
-
-        }
-
-        if (renderNetworkCharts) {
-          PingDebugChart pingChart = new PingDebugChart(this.font, pingLogger);
-
-          int maxWidth = scaledScreenWidth / 2;
-          if (!this.minecraft.isLocalServer()) {
-            BandwidthDebugChart bandwidthChart = new BandwidthDebugChart(this.font, bandwidthLogger);
-            bandwidthChart.drawChart(graphics, 0, bandwidthChart.getWidth(maxWidth));
-          }
-
-          int width = pingChart.getWidth(maxWidth);
-
-          graphics.pose().pushPose();
-          graphics.pose()
-              .scale((float) standardGuiScale / newScale, (float) standardGuiScale / newScale,
-                     (float) standardGuiScale / newScale);
-          pingChart.drawChart(graphics, graphics.guiWidth() - width, width);
-          graphics.pose().popPose();
-        }
+        // if (renderFpsCharts) {
+        //   LocalSampleLogger tickTimeLogger = this.minecraft.gui.getDebugOverlay().getTickTimeLogger();
+        //
+        //   FpsDebugChart fpsChart = new FpsDebugChart(this.font, frameTimeLogger);
+        //
+        //   int maxWidth = graphics.guiWidth() / 2;
+        //   graphics.pose().pushPose();
+        //   graphics.pose()
+        //       .scale((float) standardGuiScale / newScale, (float) standardGuiScale / newScale,
+        //              (float) standardGuiScale / newScale);
+        //   fpsChart.drawChart(graphics, 0, fpsChart.getWidth(maxWidth));
+        //   if (tickTimeLogger.size() > 0) {
+        //     TpsDebugChart tpsChart = new TpsDebugChart(this.font, tickTimeLogger, () -> this.getLevel() == null
+        //                                                                                 ? 0.0F
+        //                                                                                 : this.getLevel()
+        //                                                                                     .tickRateManager()
+        //                                                                                     .millisecondsPerTick());
+        //
+        //     int width = tpsChart.getWidth(maxWidth);
+        //     tpsChart.drawChart(graphics, graphics.guiWidth() - width, width);
+        //     graphics.pose().popPose();
+        //   }
+        //
+        // }
+        //
+        // if (renderNetworkCharts) {
+        //   PingDebugChart pingChart = new PingDebugChart(this.font, pingLogger);
+        //
+        //   int maxWidth = scaledScreenWidth / 2;
+        //   if (!this.minecraft.isLocalServer()) {
+        //     BandwidthDebugChart bandwidthChart = new BandwidthDebugChart(this.font, bandwidthLogger);
+        //     bandwidthChart.drawChart(graphics, 0, bandwidthChart.getWidth(maxWidth));
+        //   }
+        //
+        //   int width = pingChart.getWidth(maxWidth);
+        //
+        //   graphics.pose().pushPose();
+        //   graphics.pose()
+        //       .scale((float) standardGuiScale / newScale, (float) standardGuiScale / newScale,
+        //              (float) standardGuiScale / newScale);
+        //   pingChart.drawChart(graphics, graphics.guiWidth() - width, width);
+        //   graphics.pose().popPose();
+        // }
 
         graphics.pose().popPose();
         profiler.pop();
@@ -295,7 +293,8 @@ public class NewDebugScreenOverlay {
 
   public void renderMenu(final @NonNull GuiGraphics graphics, Collection<ResourceLocation> visibleEntries,
       int debugGuiScale) {
-    if (this.minecraft.isGameLoadFinished() && (!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
+    // if (this.minecraft.isGameLoadFinished() && (!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
+    if ((!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
       DebugScreenEntries.allEntriesStatus().forEach(this.debugEntries::setStatus);
 
       if (visibleEntries.isEmpty()) {
@@ -485,7 +484,7 @@ public class NewDebugScreenOverlay {
 
         this.serverChunk = level.getChunkSource()
             .getChunkFuture(this.lastPos.x, this.lastPos.z, ChunkStatus.FULL, false)
-            .thenApply((chunkResult) -> (LevelChunk) chunkResult.orElse(null));
+            .thenApply((chunkResult) -> (LevelChunk) chunkResult.orThrow()); // TODO: Check this
       }
 
       return this.serverChunk.getNow(null);
