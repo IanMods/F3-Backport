@@ -81,10 +81,6 @@ public class NewDebugScreenOverlay {
   }
 
   public void render(final @NonNull GuiGraphics graphics) {
-    // boolean renderNetworkCharts, LocalSampleLogger frameTimeLogger, LocalSampleLogger bandwidthLogger,
-    // LocalSampleLogger pingLogger) {
-
-    // if (this.minecraft.isGameLoadFinished() && (!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
     if (F3BackportClient.getEnableMod() && (!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
       DebugScreenEntries.allEntriesStatus().forEach(this.debugEntries::setStatus);
       Collection<ResourceLocation> visibleEntries = this.debugEntries.getCurrentlyEnabled();
@@ -248,7 +244,6 @@ public class NewDebugScreenOverlay {
 
   public void renderMenu(final @NonNull GuiGraphics graphics, Collection<ResourceLocation> visibleEntries,
       int debugGuiScale) {
-    // if (this.minecraft.isGameLoadFinished() && (!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
     if ((!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
       DebugScreenEntries.allEntriesStatus().forEach(this.debugEntries::setStatus);
 

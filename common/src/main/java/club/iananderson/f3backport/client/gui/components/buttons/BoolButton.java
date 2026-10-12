@@ -21,12 +21,7 @@ import net.minecraft.util.Mth;
 import org.jspecify.annotations.NonNull;
 
 public class BoolButton extends AbstractButton {
-  public static final ResourceLocation BUTTON = Common.location("widget/button");
-  public static final ResourceLocation BUTTON_DISABLED = Common.location("widget/button_disabled");
-  public static final ResourceLocation BUTTON_HIGHLIGHTED = Common.location("widget/button_highlighted");
-  public static final ResourceLocation BUTTON_HIGHLIGHTED_DISABLED = Common.location(
-      "widget/button_highlighted_disabled");
-
+  public static final ResourceLocation BOOL_BUTTONS = Common.location("textures/gui/bool_buttons.png");
   public final Component name;
   public final List<Boolean> values;
   public final Function<BoolButton, MutableComponent> narrationProvider;
@@ -56,12 +51,28 @@ public class BoolButton extends AbstractButton {
     return new Builder().withInitialValue(initialValue);
   }
 
+  private int getTextureY() {
+    int row = 2;
+    if (!this.active || !this.value) {
+      row = 0;
+    }
+
+    if (this.isHoveredOrFocused()) {
+      row += 1;
+    }
+
+    return row * 20;
+  }
+
   protected void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
     guiGraphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
     RenderSystem.enableBlend();
     RenderSystem.enableDepthTest();
     guiGraphics.pose().pushPose();
     guiGraphics.pose().scale(buttonScale, buttonScale, buttonScale);
+    guiGraphics.blitNineSliced(BOOL_BUTTONS, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200,
+                               20, 0, this.getTextureY());
+
     // guiGraphics.blitSprite(SPRITES.get(this.value, this.isHoveredOrFocused()), this.getX(), this.getY(),
     //                        this.getWidth(), this.getHeight());
     guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
