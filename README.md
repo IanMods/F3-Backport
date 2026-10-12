@@ -1,6 +1,6 @@
 # F3-Backport
 
-<ins>Current active versions are:</ins> **1.21.1**
+<ins>Current active versions are:</ins> **1.20.1**, **1.21.1**
 
 ___
 
