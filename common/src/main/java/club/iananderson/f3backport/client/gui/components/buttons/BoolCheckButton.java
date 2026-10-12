@@ -34,10 +34,9 @@ public class BoolCheckButton extends BoolButton {
     RenderSystem.enableDepthTest();
     guiGraphics.pose().pushPose();
     guiGraphics.pose().scale(buttonScale, buttonScale, buttonScale);
-    // TODO: Fix this
-    // guiGraphics.blitSprite(SPRITES.get(this.value, this.isHoveredOrFocused()), (int) (this.getX() / buttonScale),
-    //                        (int) (this.getY() / buttonScale), (int) (this.getWidth() / buttonScale),
-    //                        (int) (this.getHeight() * buttonScale));
+    guiGraphics.blitNineSliced(BOOL_BUTTONS, (int) (this.getX() / buttonScale), (int) (this.getY() / buttonScale),
+                               (int) (this.getWidth() / buttonScale), (int) (this.getHeight() * buttonScale), 20, 4,
+                               200, 20, 0, this.getTextureY());
     guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 
     Color color = this.active

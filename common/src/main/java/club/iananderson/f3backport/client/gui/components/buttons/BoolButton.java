@@ -51,7 +51,7 @@ public class BoolButton extends AbstractButton {
     return new Builder().withInitialValue(initialValue);
   }
 
-  private int getTextureY() {
+  public int getTextureY() {
     int row = 2;
     if (!this.active || !this.value) {
       row = 0;
@@ -72,9 +72,6 @@ public class BoolButton extends AbstractButton {
     guiGraphics.pose().scale(buttonScale, buttonScale, buttonScale);
     guiGraphics.blitNineSliced(BOOL_BUTTONS, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200,
                                20, 0, this.getTextureY());
-
-    // guiGraphics.blitSprite(SPRITES.get(this.value, this.isHoveredOrFocused()), this.getX(), this.getY(),
-    //                        this.getWidth(), this.getHeight());
     guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 
     Color color = this.active
