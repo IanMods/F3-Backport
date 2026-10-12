@@ -11,7 +11,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.FastColor;
 
 public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair<String, Component>> facts,
                                  List<DebugCustomRenderer> customRenderers) {

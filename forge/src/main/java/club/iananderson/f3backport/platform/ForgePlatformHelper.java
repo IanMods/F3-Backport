@@ -4,7 +4,7 @@ import club.iananderson.f3backport.platform.services.PlatformHelper;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
 
-public class NeoForgePlatformHelper implements PlatformHelper {
+public class ForgePlatformHelper implements PlatformHelper {
 
   @Override
   public String getPlatformName() {

@@ -1,14 +1,11 @@
 package club.iananderson.f3backport.client.gui.components.debug.entries.misc;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugScreenDisplayer;
-import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScreenEntry;
 import club.iananderson.f3backport.config.F3BackportClient;
-import java.util.Locale;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.server.IntegratedServer;
-import net.minecraft.network.Connection;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;
 import org.jspecify.annotations.Nullable;

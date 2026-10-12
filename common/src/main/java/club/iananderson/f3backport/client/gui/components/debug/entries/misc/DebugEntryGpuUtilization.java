@@ -6,7 +6,6 @@ import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGrou
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScreenEntry;
 import club.iananderson.f3backport.config.F3BackportClient;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunk;

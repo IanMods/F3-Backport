@@ -50,6 +50,7 @@ public class NewDebugScreenOverlay {
     this.rightColumn = new DebugColumn(Side.RIGHT);
     this.font = minecraft.font;
     this.debugEntries = new DebugScreenEntryList(minecraft);
+    debugEntries.setOverlayVisible(minecraft.options.renderDebug);
   }
 
   private static String formatChart(final KeyMapping keyDebugModifier, final KeyMapping keybind, final String name,
@@ -84,10 +85,10 @@ public class NewDebugScreenOverlay {
     // LocalSampleLogger pingLogger) {
 
     // if (this.minecraft.isGameLoadFinished() && (!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
-    if ((!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
+    if (F3BackportClient.getEnableMod() && (!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
       DebugScreenEntries.allEntriesStatus().forEach(this.debugEntries::setStatus);
-
       Collection<ResourceLocation> visibleEntries = this.debugEntries.getCurrentlyEnabled();
+
       if (visibleEntries.isEmpty()) {
         this.clearColumnCache();
       } else {
@@ -129,28 +130,27 @@ public class NewDebugScreenOverlay {
           groups.put(DebugGroups.MISC, miscContents);
         }
 
+        boolean renderFpsCharts = this.minecraft.options.renderFpsChart;
+        boolean renderProfilerChart = this.minecraft.options.renderDebugCharts;
+
         if (this.debugEntries.isOverlayVisible()) {
           boolean hasServer = this.minecraft.getSingleplayerServer() != null;
           KeyMapping keyDebugModifier = DebugKeyBinds.keyDebugOverlay;
           DebugGroup debugHelp = DebugGroups.HELP;
           // TODO: Move these to language file instead of hardcoding them
-          // TODO: Fix this
           String debugCharts = "Debug charts:";
-          // String profilerChart = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugProfilingChart, "Profiler",
-          //                                          renderProfilerChart);
-          // String fpsChart = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugFpsCharts, hasServer
-          //                                                                                        ? "fps + tps"
-          //                                                                                        : "fps",
-          //                                     renderFpsCharts);
-          // String networkChartText = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugNetworkCharts,
-          //                                             !this.minecraft.isLocalServer()
-          //                                             ? "Bandwidth + Ping"
-          //                                             : "Ping", renderNetworkCharts);
+
+          String profilerChart = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugProfilingChart, "Profiler",
+                                                   renderProfilerChart);
+          String fpsChart = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugFpsCharts, hasServer
+                                                                                                 ? "fps + tps"
+                                                                                                 : "fps",
+                                              renderFpsCharts);
           String helpText = "For help: press [F3 + Q]";
           String optionsKeyText = "To edit: press " + formatKeybind(DebugKeyBinds.keyDebugOptions);
 
           displayer.addToGroup(debugHelp, debugCharts);
-          // displayer.addToGroup(debugHelp, List.of(profilerChart, fpsChart, networkChartText));
+          displayer.addToGroup(debugHelp, List.of(profilerChart, fpsChart));
           displayer.addToGroup(debugHelp, "");
           displayer.addToGroup(debugHelp, List.of(helpText, optionsKeyText));
         }
@@ -238,51 +238,6 @@ public class NewDebugScreenOverlay {
             this.rightColumn.add(contents, graphics, this.font, scaledScreenWidth);
           }
         }
-
-        // if (renderFpsCharts) {
-        //   LocalSampleLogger tickTimeLogger = this.minecraft.gui.getDebugOverlay().getTickTimeLogger();
-        //
-        //   FpsDebugChart fpsChart = new FpsDebugChart(this.font, frameTimeLogger);
-        //
-        //   int maxWidth = graphics.guiWidth() / 2;
-        //   graphics.pose().pushPose();
-        //   graphics.pose()
-        //       .scale((float) standardGuiScale / newScale, (float) standardGuiScale / newScale,
-        //              (float) standardGuiScale / newScale);
-        //   fpsChart.drawChart(graphics, 0, fpsChart.getWidth(maxWidth));
-        //   if (tickTimeLogger.size() > 0) {
-        //     TpsDebugChart tpsChart = new TpsDebugChart(this.font, tickTimeLogger, () -> this.getLevel() == null
-        //                                                                                 ? 0.0F
-        //                                                                                 : this.getLevel()
-        //                                                                                     .tickRateManager()
-        //                                                                                     .millisecondsPerTick());
-        //
-        //     int width = tpsChart.getWidth(maxWidth);
-        //     tpsChart.drawChart(graphics, graphics.guiWidth() - width, width);
-        //     graphics.pose().popPose();
-        //   }
-        //
-        // }
-        //
-        // if (renderNetworkCharts) {
-        //   PingDebugChart pingChart = new PingDebugChart(this.font, pingLogger);
-        //
-        //   int maxWidth = scaledScreenWidth / 2;
-        //   if (!this.minecraft.isLocalServer()) {
-        //     BandwidthDebugChart bandwidthChart = new BandwidthDebugChart(this.font, bandwidthLogger);
-        //     bandwidthChart.drawChart(graphics, 0, bandwidthChart.getWidth(maxWidth));
-        //   }
-        //
-        //   int width = pingChart.getWidth(maxWidth);
-        //
-        //   graphics.pose().pushPose();
-        //   graphics.pose()
-        //       .scale((float) standardGuiScale / newScale, (float) standardGuiScale / newScale,
-        //              (float) standardGuiScale / newScale);
-        //   pingChart.drawChart(graphics, graphics.guiWidth() - width, width);
-        //   graphics.pose().popPose();
-        // }
-
         graphics.pose().popPose();
         profiler.pop();
       }

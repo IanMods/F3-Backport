@@ -16,14 +16,17 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jspecify.annotations.NonNull;
 
 public class BoolButton extends AbstractButton {
-  // public static final WidgetSprites SPRITES = new WidgetSprites(Common.location("widget/button"),
-  //                                                               Common.location("widget/button_disabled"),
-  //                                                               Common.location("widget/button_highlighted"),
-  //                                                               Common.location("widget/button_highlighted_disabled"));
+  public static final ResourceLocation BUTTON = Common.location("widget/button");
+  public static final ResourceLocation BUTTON_DISABLED = Common.location("widget/button_disabled");
+  public static final ResourceLocation BUTTON_HIGHLIGHTED = Common.location("widget/button_highlighted");
+  public static final ResourceLocation BUTTON_HIGHLIGHTED_DISABLED = Common.location(
+      "widget/button_highlighted_disabled");
+
   public final Component name;
   public final List<Boolean> values;
   public final Function<BoolButton, MutableComponent> narrationProvider;

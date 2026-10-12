@@ -3,13 +3,20 @@ plugins {
     id 'net.neoforged.moddev.legacyforge'
 }
 
-mixin {
-    add(sourceSets.main, "${mod_id}.refmap.json")
+//mixin {
+//    add(sourceSets.main, "${mod_id}.refmap.json")
+//
+//    config("${mod_id}.mixins.json")
+//
+//    if (project(":forge").file("src/main/resources/${mod_id}.forge.mixins.json").exists()) {
+//        config("${mod_id}.forge.mixins.json")
+//    }
+//
+//}
 
-    config("${mod_id}.mixins.json")
-
-    if (project(":neoforge").file("src/main/resources/${mod_id}.forge.mixins.json").exists()) {
-        config("${mod_id}.forge.mixins.json")
+sourceSets {
+    main {
+        resources.srcDir 'src/generated/resources'
     }
 }
 
@@ -52,12 +59,10 @@ legacyForge {
     mods {
         "${mod_id}" {
             sourceSet sourceSets.main
-           // sourceSet project(":common").sourceSets.main
+            // sourceSet project(":common").sourceSets.main
         }
     }
 }
-
-sourceSets.main.resources.srcDir 'src/generated/resources'
 
 repositories {
     mavenCentral()
@@ -97,15 +102,15 @@ dependencies {
 jar {
     finalizedBy('reobfJar')
 
-    if (project(":neoforge").file("src/main/resources/${mod_id}.forge.mixins.json").exists()) {
-        manifest.attributes([
-                "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
-        ])
-    } else {
-        manifest.attributes([
-                "MixinConfigs": "${mod_id}.mixins.json"
-        ])
-    }
+//    if (project(":forge").file("src/main/resources/${mod_id}.forge.mixins.json").exists()) {
+//        manifest.attributes([
+//                "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
+//        ])
+//    } else {
+//        manifest.attributes([
+//                "MixinConfigs": "${mod_id}.mixins.json"
+//        ])
+//    }
 }
 
 publishing {
@@ -141,7 +146,7 @@ sourceSets.configureEach {
 }
 
 publishMods {
-    displayName = "${mod_id}-neoforge-${minecraft_version}-${mod_version}"
+    displayName = "${mod_id}-forge-${minecraft_version}-${mod_version}"
     version = "${minecraft_version}-${mod_version}"
     file = tasks.jar.archiveFile
     modLoaders.add("neoforge")

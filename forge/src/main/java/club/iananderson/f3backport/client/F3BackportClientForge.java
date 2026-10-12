@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
-public class F3BackportClientNeoForge {
+public class F3BackportClientForge {
 
   @SubscribeEvent
   public static void onInitializeClient(FMLClientSetupEvent event) {
