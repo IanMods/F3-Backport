@@ -45,6 +45,7 @@ public class MainOptionsScreen extends F3BackportScreen {
   private final Rectangle memoryOptionsRect = new Rectangle();
   private final Rectangle systemSpecsOptionsRect = new Rectangle();
   private final Rectangle perfImpactorsOptionsRect = new Rectangle();
+  private final Rectangle spawnCountsOptionsRect = new Rectangle();
   private final int sectionWidth;
   private boolean preview = false;
   private HudScaleSlider debugGuiScaleSlider;
@@ -142,6 +143,7 @@ public class MainOptionsScreen extends F3BackportScreen {
   public void renderLeft(GuiGraphics graphics) {
     renderBacking(graphics, priorityOptionsRect, PRIORITY_SETTINGS);
     renderBacking(graphics, positionOptionsRect, POSITION_SETTINGS);
+    renderBacking(graphics, spawnCountsOptionsRect, SPAWN_COUNT_SETTINGS);
     renderBacking(graphics, miscOptionsRect, MISC_SETTINGS);
   }
 
@@ -361,6 +363,28 @@ public class MainOptionsScreen extends F3BackportScreen {
     perfImpactorsOptionsRect.setSize(sectionWidth, ((endRow - startRow) * offsetY) - (BUTTON_PADDING));
   }
 
+  public void spawnCountsOptionsButtons(Side side, int startRow, int section) {
+    spawnCountsOptionsRect.setLocation(leftButtonX, buttonStartY + (startRow * offsetY) + (section * SECTION_PADDING));
+
+    addBoolRow(side, section, F3BackportClient.enableSpawnCounts, null);
+
+    int endRow;
+
+    switch (side) {
+      case LEFT -> {
+        endRow = this.rowLeft;
+        sectionLeft += 1;
+      }
+      case RIGHT -> {
+        endRow = this.rowRight;
+        sectionRight += 1;
+      }
+      case null, default -> endRow = 0;
+    }
+
+    spawnCountsOptionsRect.setSize(sectionWidth, ((endRow - startRow) * offsetY) - (BUTTON_PADDING));
+  }
+
   @Override
   public void drawHeader() {
     super.drawHeader();
@@ -395,6 +419,7 @@ public class MainOptionsScreen extends F3BackportScreen {
     modOptionsButtons(Side.LEFT, rowLeft, sectionLeft);
     priorityOptionsButtons(Side.LEFT, rowLeft, sectionLeft);
     positionOptionsButtons(Side.LEFT, rowLeft, sectionLeft);
+    spawnCountsOptionsButtons(Side.LEFT, rowLeft, sectionLeft);
     miscOptionsButtons(Side.LEFT, rowLeft, sectionLeft);
   }
 

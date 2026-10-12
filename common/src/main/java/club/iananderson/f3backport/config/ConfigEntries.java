@@ -40,7 +40,7 @@ public enum ConfigEntries {
   ENABLE_HEIGHTMAP("menu.f3backport.config.heightMap.name", "menu.f3backport.config.heightMap.heightmap.desc",
                    F3BackportClient.enableHeightmap),
   ENABLE_SPAWN_COUNTS("menu.f3backport.config.spawnCounts.enableSpawnCounts.name",
-                      "menu.f3backport.config.spawnCounts.enableSpawnCounts.desc", F3BackportClient.enableSystemSpecs),
+                      "menu.f3backport.config.spawnCounts.enableSpawnCounts.desc", F3BackportClient.enableSpawnCounts),
   ENABLE_GPU_UTILIZATION("menu.f3backport.config.misc.enableGpuUtilization.name",
                          "menu.f3backport.config.misc.enableGpuUtilization.desc",
                          F3BackportClient.enableGpuUtilization),
