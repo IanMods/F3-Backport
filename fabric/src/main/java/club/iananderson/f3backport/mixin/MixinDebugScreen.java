@@ -5,6 +5,8 @@ import club.iananderson.f3backport.config.F3BackportClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.DebugScreenOverlay;
+import net.minecraft.client.server.IntegratedServer;
+import net.minecraft.util.FrameTimer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -22,6 +24,10 @@ public abstract class MixinDebugScreen {
   @Final
   private Minecraft minecraft;
 
+  @Shadow
+  private void drawChart(GuiGraphics guiGraphics, FrameTimer drawTimer, int x, int i, boolean drawForFps) {
+  }
+
   @Inject(method = "<init>", at = @At(value = "TAIL"))
   private void init(Minecraft minecraft, CallbackInfo ci) {
     if (F3BackportClient.getEnableMod()) {
@@ -35,6 +41,16 @@ public abstract class MixinDebugScreen {
       f3_Backport$newDebugScreenOverlay.debugEntries.setOverlayVisible(minecraft.options.renderDebug);
 
       f3_Backport$newDebugScreenOverlay.render(guiGraphics);
+      if (this.minecraft.options.renderFpsChart) {
+        int guiWidth = guiGraphics.guiWidth();
+        this.drawChart(guiGraphics, this.minecraft.getFrameTimer(), 0, guiWidth / 2, true);
+        IntegratedServer integratedServer = this.minecraft.getSingleplayerServer();
+        if (integratedServer != null) {
+          this.drawChart(guiGraphics, integratedServer.getFrameTimer(), guiWidth - Math.min(guiWidth / 2, 240),
+                         guiWidth / 2, false);
+        }
+      }
+
       ci.cancel();
     }
   }
