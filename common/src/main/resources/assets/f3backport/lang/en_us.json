@@ -9,7 +9,7 @@
   "menu.f3backport.config.boolean.default": "Default is %s.",
   "menu.f3backport.config.boolean.desc": "(true/false)",
   "menu.f3backport.config.debugGuiScale.desc": "Overrides the debug overlay with a different GUI scale than the rest of the game.,\n\nSet to -1 to follow the current Minecraft Gui Scale setting\nSet to 0 for the Minecraft 'auto' setting",
-  "menu.f3backport.config.debugGuiScale.name": "Debug Gui Scale",
+  "menu.f3backport.config.debugGuiScale.name": "Debug Gui Scale: ",
   "menu.f3backport.config.enableMod.desc": "Enable the mod",
   "menu.f3backport.config.enableMod.name": "Enable Mod",
   "menu.f3backport.config.heightMap.heightmap.desc": "Enable the Heightmap entry",

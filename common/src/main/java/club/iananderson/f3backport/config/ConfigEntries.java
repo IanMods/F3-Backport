@@ -2,8 +2,8 @@ package club.iananderson.f3backport.config;
 
 import club.iananderson.f3backport.Common;
 import java.util.EnumSet;
-import java.util.Locale;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.network.chat.MutableComponent;
 import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
 
 public enum ConfigEntries {
@@ -58,25 +58,45 @@ public enum ConfigEntries {
              F3BackportClient.enableTps);
 
   public static final EnumSet<ConfigEntries> CONFIG_ENTRIES_ENUM_LIST = EnumSet.allOf(ConfigEntries.class);
-  private final String nameSerialized;
-  private final Component nameTranslated;
+  private final MutableComponent nameTranslated;
+  private final String descKey;
   private final ConfigValue<?> configValue;
+  private final Object value;
+  private final Object defaultValue;
 
   ConfigEntries(String nameKey, String descKey, ConfigValue<?> configValue) {
-    this.nameSerialized = this.toString().toLowerCase(Locale.ROOT);
     this.nameTranslated = Common.translatedText(nameKey);
+    this.descKey = descKey;
     this.configValue = configValue;
+    this.value = configValue.get();
+    this.defaultValue = configValue.getDefault();
   }
 
-  public String getNameSerialized() {
-    return this.nameSerialized;
+  public static ConfigEntries getByConfigValue(ConfigValue<?> configValue) {
+    final ConfigEntries[] returnEntry = {null};
+
+    CONFIG_ENTRIES_ENUM_LIST.clone().forEach((entry) -> {
+      if (entry.configValue.equals(configValue)) {
+        returnEntry[0] = entry;
+      }
+    });
+
+    return returnEntry[0];
   }
 
-  public Component getNameTranslated() {
+  public MutableComponent getNameTranslated() {
     return this.nameTranslated;
   }
 
-  public ConfigValue<?> getConfigValue() {
-    return this.configValue;
+  public Tooltip getToolTip() {
+    return Common.newTooltip(this.descKey);
+  }
+
+  public Object getValue() {
+    return this.value;
+  }
+
+  public Object getDefaultValue() {
+    return this.defaultValue;
   }
 }

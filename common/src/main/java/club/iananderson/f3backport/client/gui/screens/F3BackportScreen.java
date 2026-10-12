@@ -1,16 +1,14 @@
 package club.iananderson.f3backport.client.gui.screens;
 
-import club.iananderson.f3backport.Common;
 import club.iananderson.f3backport.client.gui.components.buttons.BoolButton;
 import club.iananderson.f3backport.client.gui.components.buttons.MenuButton;
 import club.iananderson.f3backport.client.gui.components.buttons.MenuButton.MenuButtons;
-import club.iananderson.f3backport.config.F3BackportClient;
+import club.iananderson.f3backport.config.ConfigEntries;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -18,13 +16,14 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class F3BackportScreen extends Screen {
   public static final int MENU_PADDING = 30;
   public static final int TITLE_PADDING = 10;
   public static final int BUTTON_PADDING = 6;
-  private static final int MARGIN_RIGHT = 16;
-  private static final int MARGIN_LEFT = 16;
+  public static final int SECTION_PADDING = 9;
+  public static final int MARGIN_RIGHT = 16;
   public static MenuButton doneButton;
   public static MenuButton cancelButton;
   public final List<AbstractWidget> widgets = new ArrayList<>();
@@ -34,20 +33,23 @@ public class F3BackportScreen extends Screen {
   public final Map<ConfigValue<Integer>, Integer> configIntegers = new HashMap<>();
   public final Map<ConfigValue<Integer>, Integer> defaultIntegers = new HashMap<>();
   public int buttonWidth = 150;
-  public int buttonHeight = 20;
+  public int buttonHeight = 16;
   public int leftButtonX;
   public int rightButtonX;
   public int centerButtonX;
-  public int row;
   public int rowLeft;
+  public int sectionLeft;
   public int rowRight;
+  public int sectionRight;
   public int buttonStartY = MENU_PADDING;
   public int offsetY = this.buttonHeight + BUTTON_PADDING;
+  public float scale;
   protected boolean hasPendingChanges;
 
   public F3BackportScreen(Screen parentScreen, Component title) {
     super(title);
     this.parentScreen = parentScreen;
+    this.scale = 1.0F;
   }
 
   public void open() {
@@ -82,47 +84,42 @@ public class F3BackportScreen extends Screen {
     Minecraft.getInstance().setScreen(this.parentScreen);
   }
 
-  protected void rebuildWidgets() {
-    this.clearWidgets();
-    this.clearFocus();
-    this.init();
-  }
-
   @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
   public void rebuildUI() {
     this.rebuildWidgets();
   }
 
-  public void addBoolRow(Side side, Map<ConfigValue<Boolean>, Boolean> configMap, ConfigValue<Boolean> configValueLeft,
-      @Nullable ConfigValue<Boolean> configValueRight, float scale) {
-    int row = side == Side.LEFT
-              ? this.rowLeft
-              : this.rowRight;
+  public void addBooleanButton(ConfigValue<Boolean> configValue, int x, int row, int section) {
+    ConfigEntries configEntry = ConfigEntries.getByConfigValue(configValue);
+    Boolean bool = configBooleans.get(configValue);
 
-    Boolean boolLeft = configMap.get(configValueLeft);
-    BoolButton leftButton = BoolButton.builder(boolLeft)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.priority.enableFps.desc")).withScale(scale)
-        .create(centerButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.config.priority.enableFps.name"),
-                (b, val) -> configBooleans.replace(F3BackportClient.enableFps, val));
-    widgets.add(leftButton);
+    BoolButton boolButton = BoolButton.builder(bool)
+        .withTooltip(t -> configEntry.getToolTip()).withScale(scale)
+        .create(x, (buttonStartY + (row * offsetY) + (section * SECTION_PADDING)), buttonWidth, buttonHeight,
+                configEntry.getNameTranslated(), (b, val) -> configBooleans.replace(configValue, val));
+    widgets.add(boolButton);
+  }
 
-    row += 1;
+  public void addBoolRow(Side side, int section, ConfigValue<Boolean> configValueLeft,
+      @Nullable ConfigValue<Boolean> configValueRight) {
+    int startRow = side == Side.LEFT
+                   ? this.rowLeft
+                   : this.rowRight;
 
-    boolean rightBool = configMap.get(configValueRight);
-    BoolButton rightButton = BoolButton.builder(rightBool)
-        .withTooltip(t -> Common.newTooltip("menu.f3backport.config.priority.enableGameVersion.desc")).withScale(scale)
-        .create(centerButtonX, (buttonStartY + (row * offsetY)), buttonWidth, buttonHeight,
-                Common.translatedText("menu.f3backport.config.priority.enableGameVersion.name"),
-                (b, val) -> configBooleans.replace(configValueRight, val));
-    widgets.add(rightButton);
+    int leftX = configValueRight == null
+                ? centerButtonX
+                : leftButtonX;
 
-    row += 1;
+    addBooleanButton(configValueLeft, leftX, startRow, section);
+
+    if (configValueRight != null) {
+      addBooleanButton(configValueRight, rightButtonX, startRow, section);
+    }
 
     if (side == Side.LEFT) {
-      this.rowLeft = row;
+      this.rowLeft = startRow + 1;
     } else {
-      this.rowRight = row;
+      this.rowRight = startRow + 1;
     }
   }
 
@@ -181,8 +178,11 @@ public class F3BackportScreen extends Screen {
 
   @Override
   public void init() {
-    super.init();
     this.widgets.clear();
+    this.rowLeft = 0;
+    this.rowRight = 0;
+    this.sectionLeft = 0;
+    this.sectionRight = 0;
 
     this.drawHeader();
     this.drawLeft();
