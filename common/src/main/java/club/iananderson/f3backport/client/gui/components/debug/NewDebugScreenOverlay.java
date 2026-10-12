@@ -246,7 +246,11 @@ public class NewDebugScreenOverlay {
 
           FpsDebugChart fpsChart = new FpsDebugChart(this.font, frameTimeLogger);
 
-          int maxWidth = scaledScreenWidth / 2;
+          int maxWidth = graphics.guiWidth() / 2;
+          graphics.pose().pushPose();
+          graphics.pose()
+              .scale((float) standardGuiScale / newScale, (float) standardGuiScale / newScale,
+                     (float) standardGuiScale / newScale);
           fpsChart.drawChart(graphics, 0, fpsChart.getWidth(maxWidth));
           if (tickTimeLogger.size() > 0) {
             TpsDebugChart tpsChart = new TpsDebugChart(this.font, tickTimeLogger, () -> this.getLevel() == null
@@ -256,8 +260,8 @@ public class NewDebugScreenOverlay {
                                                                                             .millisecondsPerTick());
 
             int width = tpsChart.getWidth(maxWidth);
-            // TODO: Currently scales the y-position based on the MC guiScale. Update to scale off "newScale" instead
-            tpsChart.drawChart(graphics, scaledScreenWidth - width, width);
+            tpsChart.drawChart(graphics, graphics.guiWidth() - width, width);
+            graphics.pose().popPose();
           }
 
         }
@@ -272,7 +276,13 @@ public class NewDebugScreenOverlay {
           }
 
           int width = pingChart.getWidth(maxWidth);
-          pingChart.drawChart(graphics, scaledScreenWidth - width, width);
+
+          graphics.pose().pushPose();
+          graphics.pose()
+              .scale((float) standardGuiScale / newScale, (float) standardGuiScale / newScale,
+                     (float) standardGuiScale / newScale);
+          pingChart.drawChart(graphics, graphics.guiWidth() - width, width);
+          graphics.pose().popPose();
         }
 
         graphics.pose().popPose();
