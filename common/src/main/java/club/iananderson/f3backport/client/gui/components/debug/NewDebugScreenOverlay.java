@@ -8,6 +8,7 @@ import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScre
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScreenEntry;
 import club.iananderson.f3backport.client.keybinds.DebugKeyBinds;
 import club.iananderson.f3backport.config.F3BackportClient;
+import club.iananderson.f3backport.mixin.DebugAccessor;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.datafixers.DataFixUtils;
 import java.util.Collection;
@@ -21,6 +22,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.DebugScreenOverlay;
 import net.minecraft.client.gui.components.debugchart.BandwidthDebugChart;
 import net.minecraft.client.gui.components.debugchart.FpsDebugChart;
 import net.minecraft.client.gui.components.debugchart.PingDebugChart;
@@ -29,7 +31,6 @@ import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.debugchart.LocalSampleLogger;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -84,10 +85,10 @@ public class NewDebugScreenOverlay {
     this.clientChunk = null;
   }
 
-  public void render(final @NonNull GuiGraphics graphics, boolean renderProfilerChart, boolean renderFpsCharts,
-      boolean renderNetworkCharts, LocalSampleLogger frameTimeLogger, LocalSampleLogger bandwidthLogger,
-      LocalSampleLogger pingLogger) {
+  public void render(final @NonNull GuiGraphics graphics) {
     if (this.minecraft.isGameLoadFinished() && (!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
+      DebugScreenOverlay debug = minecraft.getDebugOverlay();
+
       DebugScreenEntries.allEntriesStatus().forEach(this.debugEntries::setStatus);
 
       Collection<ResourceLocation> visibleEntries = this.debugEntries.getCurrentlyEnabled();
@@ -139,15 +140,15 @@ public class NewDebugScreenOverlay {
           // TODO: Move these to language file instead of hardcoding them
           String debugCharts = "Debug charts:";
           String profilerChart = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugProfilingChart, "Profiler",
-                                                   renderProfilerChart);
+                                                   debug.showProfilerChart());
           String fpsChart = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugFpsCharts, hasServer
                                                                                                  ? "fps + tps"
                                                                                                  : "fps",
-                                              renderFpsCharts);
+                                              debug.showFpsCharts());
           String networkChartText = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugNetworkCharts,
                                                       !this.minecraft.isLocalServer()
                                                       ? "Bandwidth + Ping"
-                                                      : "Ping", renderNetworkCharts);
+                                                      : "Ping", debug.showNetworkCharts());
           String helpText = "For help: press [F3 + Q]";
           String optionsKeyText = "To edit: press " + formatKeybind(DebugKeyBinds.keyDebugOptions);
 
@@ -241,10 +242,8 @@ public class NewDebugScreenOverlay {
           }
         }
 
-        if (renderFpsCharts) {
-          LocalSampleLogger tickTimeLogger = this.minecraft.gui.getDebugOverlay().getTickTimeLogger();
-
-          FpsDebugChart fpsChart = new FpsDebugChart(this.font, frameTimeLogger);
+        if (debug.showFpsCharts()) {
+          FpsDebugChart fpsChart = new FpsDebugChart(this.font, ((DebugAccessor) debug).getFrameTimeLogger());
 
           int maxWidth = graphics.guiWidth() / 2;
           graphics.pose().pushPose();
@@ -252,12 +251,11 @@ public class NewDebugScreenOverlay {
               .scale((float) standardGuiScale / newScale, (float) standardGuiScale / newScale,
                      (float) standardGuiScale / newScale);
           fpsChart.drawChart(graphics, 0, fpsChart.getWidth(maxWidth));
-          if (tickTimeLogger.size() > 0) {
-            TpsDebugChart tpsChart = new TpsDebugChart(this.font, tickTimeLogger, () -> this.getLevel() == null
-                                                                                        ? 0.0F
-                                                                                        : this.getLevel()
-                                                                                            .tickRateManager()
-                                                                                            .millisecondsPerTick());
+          if (debug.getTickTimeLogger().size() > 0) {
+            TpsDebugChart tpsChart = new TpsDebugChart(this.font, debug.getTickTimeLogger(),
+                                                       () -> this.getLevel() == null
+                                                             ? 0.0F
+                                                             : this.getLevel().tickRateManager().millisecondsPerTick());
 
             int width = tpsChart.getWidth(maxWidth);
             tpsChart.drawChart(graphics, graphics.guiWidth() - width, width);
@@ -266,12 +264,12 @@ public class NewDebugScreenOverlay {
 
         }
 
-        if (renderNetworkCharts) {
-          PingDebugChart pingChart = new PingDebugChart(this.font, pingLogger);
+        if (debug.showNetworkCharts()) {
+          PingDebugChart pingChart = new PingDebugChart(this.font, debug.getPingLogger());
 
           int maxWidth = scaledScreenWidth / 2;
           if (!this.minecraft.isLocalServer()) {
-            BandwidthDebugChart bandwidthChart = new BandwidthDebugChart(this.font, bandwidthLogger);
+            BandwidthDebugChart bandwidthChart = new BandwidthDebugChart(this.font, debug.getBandwidthLogger());
             bandwidthChart.drawChart(graphics, 0, bandwidthChart.getWidth(maxWidth));
           }
 

@@ -7,7 +7,7 @@
   "mixins": [
   ],
   "client": [
-    "MixinDebugScreen"
+    "DebugAccessor"
   ],
   "server": [],
   "injectors": {
