@@ -8,7 +8,7 @@
   "key.f3backport.debug.profilingChart": "Profiling Chart",
   "menu.f3backport.config.boolean.default": "Default is %s.",
   "menu.f3backport.config.boolean.desc": "(true/false)",
-  "menu.f3backport.config.debugGuiScale.desc": "Overrides the debug overlay with a different GUI scale than the rest of the game.,\n\nSet to -1 to follow the current Minecraft Gui Scale setting\nSet to 0 for the Minecraft 'auto' setting",
+  "menu.f3backport.config.debugGuiScale.desc": "The scale of the Debug Overlay (F3).\n\nSet to -1 to follow the current Minecraft Gui Scale setting\nSet to 0 for the Minecraft 'auto' setting",
   "menu.f3backport.config.debugGuiScale.name": "Debug Gui Scale: ",
   "menu.f3backport.config.enableMod.desc": "Enable the mod",
   "menu.f3backport.config.enableMod.name": "Enable Mod",
@@ -62,5 +62,6 @@
   "menu.f3backport.config.title": "F3-Backport Options",
   "menu.f3backport.main.preview.button": "Preview",
   "menu.f3backport.main.preview.desc": "Enable the F3 menu debug",
-  "menu.f3backport.main.reset.button": "Reset"
+  "menu.f3backport.main.reset.button": "Reset",
+  "menu.f3backport.color.title": "Group Colors"
 }

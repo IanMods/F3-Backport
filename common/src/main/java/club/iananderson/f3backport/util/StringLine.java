@@ -39,6 +39,12 @@ public class StringLine {
   }
 
   public String boolDesc(String description, Boolean configDefault) {
-    return this.addLine(description).addLine("(true/false)").lastLine("Default is " + configDefault + ".");
+    return this.addLine(description).addLine(" (true/false)").lastLine(" Default: " + configDefault);
+  }
+
+  public String rgbDesc(String group, int configDefault) {
+    return this.addLine("The base RGB color (decimal) for " + group + " group.")
+        .addLine(" (256 * 256 * r) + (256 * g) + (b) is the formula.")
+        .lastLine(" Default: " + configDefault);
   }
 }
