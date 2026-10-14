@@ -36,7 +36,7 @@ public class ClientEvents {
     @SubscribeEvent
     public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
       ForgeNewDebugHudOverlay.init();
-      event.registerAbove(VanillaGuiOverlay.DEBUG_TEXT.id(), "seasonhud", ForgeNewDebugHudOverlay.HUD_INSTANCE);
+      event.registerAbove(VanillaGuiOverlay.DEBUG_TEXT.id(), "f3backport", ForgeNewDebugHudOverlay.HUD_INSTANCE);
     }
 
     // Key Bindings
