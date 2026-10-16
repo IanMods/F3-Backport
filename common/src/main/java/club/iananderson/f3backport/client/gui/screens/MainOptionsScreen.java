@@ -5,6 +5,7 @@ import club.iananderson.f3backport.client.gui.components.buttons.BoolCheckButton
 import club.iananderson.f3backport.client.gui.components.buttons.MenuButton;
 import club.iananderson.f3backport.client.gui.components.buttons.MenuButton.MenuButtons;
 import club.iananderson.f3backport.client.gui.components.debug.NewDebugScreenOverlay;
+import club.iananderson.f3backport.client.gui.components.debug.entries.Groups;
 import club.iananderson.f3backport.client.gui.components.sliders.HudScaleSlider;
 import club.iananderson.f3backport.config.ConfigEntries;
 import club.iananderson.f3backport.config.DefaultValues.Client;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -46,7 +48,6 @@ public class MainOptionsScreen extends F3BackportScreen {
   private final Rectangle systemSpecsOptionsRect = new Rectangle();
   private final Rectangle perfImpactorsOptionsRect = new Rectangle();
   private final Rectangle spawnCountsOptionsRect = new Rectangle();
-  private final int sectionWidth;
   private boolean preview = false;
   private HudScaleSlider debugGuiScaleSlider;
   private MenuButton resetButton;
@@ -55,8 +56,10 @@ public class MainOptionsScreen extends F3BackportScreen {
     super(parentScreen, SCREEN_TITLE);
     loadConfig();
     this.buttonWidth = 100;
-    this.sectionWidth = (2 * buttonWidth) + BUTTON_PADDING;
+    this.buttonHeight = 14;
     this.scale = 1.0F;
+    this.sectionWidth = (2 * buttonWidth) + BUTTON_PADDING;
+    this.offsetY = this.buttonHeight + BUTTON_PADDING;
   }
 
   public static MainOptionsScreen getInstance(Screen parentScreen) {
@@ -104,11 +107,11 @@ public class MainOptionsScreen extends F3BackportScreen {
     super.onClose();
   }
 
-  public void renderBacking(GuiGraphics graphics, Rectangle rect, MutableComponent categoryTitle) {
+  public void renderBacking(GuiGraphics graphics, Side side, Rectangle rect, Groups group) {
     int borderColor = new Color(0, 0, 0, 200).getRGB();
     int backgroundColor = new Color(255, 255, 255, 80).getRGB();
 
-    int stringWidth = font.width(categoryTitle);
+    int stringWidth = font.width(group.getTranslatedName());
     int stringX = (int) (rect.getCenterX());
     int stringY = (int) (rect.getMinY() - (double) font.lineHeight);
 
@@ -116,6 +119,22 @@ public class MainOptionsScreen extends F3BackportScreen {
     int boxStartY = (int) rect.getMinY() - 1;
     int boxEndX = (int) rect.getMaxX() + 2;
     int boxEndY = (int) rect.getMaxY() + 2;
+
+    int colorStartX = side == Side.LEFT
+                      ? boxStartX - 3
+                      : boxEndX + 2;
+    int colorBorderStartX = side == Side.LEFT
+                            ? colorStartX - 1
+                            : colorStartX + 1;
+    int colorBorderEndX = side == Side.LEFT
+                          ? colorStartX + 1
+                          : colorStartX - 1;
+
+    graphics.vLine(colorStartX, boxStartY - 1, boxEndY - 1, group.getGroupColor());
+    graphics.vLine(colorBorderStartX, boxStartY - 1, boxEndY - 1, borderColor);
+    graphics.vLine(colorBorderEndX, boxStartY - 1, boxEndY - 1, borderColor);
+    graphics.hLine(colorBorderStartX, colorBorderEndX, boxStartY - 1, borderColor);
+    graphics.hLine(colorBorderStartX, colorBorderEndX, boxEndY - 1, borderColor);
 
     graphics.fill(boxStartX, boxStartY, boxEndX, boxEndY, borderColor);
     graphics.fill(boxStartX + 1, boxStartY, boxEndX - 1, boxEndY - 1, backgroundColor);
@@ -134,23 +153,22 @@ public class MainOptionsScreen extends F3BackportScreen {
 
     graphics.pose().pushPose();
     graphics.pose().scale(tabScale, tabScale, tabScale);
-    graphics.drawCenteredString(font, categoryTitle, (int) (stringX / tabScale), (int) (stringY / tabScale),
+    graphics.drawCenteredString(font, group.getTranslatedName(), (int) (stringX / tabScale), (int) (stringY / tabScale),
                                 new Color(255, 255, 255).getRGB());
     graphics.pose().popPose();
-
   }
 
   public void renderLeft(GuiGraphics graphics) {
-    renderBacking(graphics, priorityOptionsRect, PRIORITY_SETTINGS);
-    renderBacking(graphics, positionOptionsRect, POSITION_SETTINGS);
-    renderBacking(graphics, spawnCountsOptionsRect, SPAWN_COUNT_SETTINGS);
-    renderBacking(graphics, miscOptionsRect, MISC_SETTINGS);
+    renderBacking(graphics, Side.LEFT, priorityOptionsRect, Groups.PRIORITY);
+    renderBacking(graphics, Side.LEFT, positionOptionsRect, Groups.POSITION);
+    renderBacking(graphics, Side.LEFT, spawnCountsOptionsRect, Groups.SPAWN_COUNTS);
+    renderBacking(graphics, Side.LEFT, miscOptionsRect, Groups.MISC);
   }
 
   public void renderRight(GuiGraphics graphics) {
-    renderBacking(graphics, memoryOptionsRect, MEMORY_SETTINGS);
-    renderBacking(graphics, systemSpecsOptionsRect, SYSTEM_SPECS_SETTINGS);
-    renderBacking(graphics, perfImpactorsOptionsRect, PERF_IMPACTORS_SETTINGS);
+    renderBacking(graphics, Side.RIGHT, memoryOptionsRect, Groups.MEMORY);
+    renderBacking(graphics, Side.RIGHT, systemSpecsOptionsRect, Groups.SYSTEM_SPECS);
+    renderBacking(graphics, Side.RIGHT, perfImpactorsOptionsRect, Groups.PERFORMANCE_IMPACTORS);
   }
 
   @Override
@@ -250,6 +268,8 @@ public class MainOptionsScreen extends F3BackportScreen {
   public void positionOptionsButtons(Side side, int startRow, int section) {
     positionOptionsRect.setLocation(leftButtonX, buttonStartY + (startRow * offsetY) + (section * SECTION_PADDING));
 
+    addGroupColorButton(Groups.POSITION, positionOptionsRect);
+
     addBoolRow(side, section, F3BackportClient.enablePlayerPosition, F3BackportClient.enablePlayerPosition);
     addBoolRow(side, section, F3BackportClient.enablePlayerSectionPosition,
                F3BackportClient.enablePlayerSectionPosition);
@@ -273,6 +293,8 @@ public class MainOptionsScreen extends F3BackportScreen {
 
   public void miscOptionsButtons(Side side, int startRow, int section) {
     miscOptionsRect.setLocation(leftButtonX, buttonStartY + (startRow * offsetY) + (section * SECTION_PADDING));
+
+    addGroupColorButton(Groups.MISC, miscOptionsRect);
 
     addBoolRow(side, section, F3BackportClient.enableLight, F3BackportClient.enableGpuUtilization);
     addBoolRow(side, section, F3BackportClient.enableDayCount, F3BackportClient.enableEntityRenderStats);
@@ -299,6 +321,8 @@ public class MainOptionsScreen extends F3BackportScreen {
   public void memoryOptionsButtons(Side side, int startRow, int section) {
     memoryOptionsRect.setLocation(leftButtonX, buttonStartY + (startRow * offsetY) + (section * SECTION_PADDING));
 
+    addGroupColorButton(Groups.MEMORY, memoryOptionsRect);
+
     addBoolRow(side, section, F3BackportClient.enableMemory, F3BackportClient.enableDetailedMemory);
 
     int endRow;
@@ -320,6 +344,8 @@ public class MainOptionsScreen extends F3BackportScreen {
 
   public void systemSpecOptionsButtons(Side side, int startRow, int section) {
     systemSpecsOptionsRect.setLocation(leftButtonX, buttonStartY + (startRow * offsetY) + (section * SECTION_PADDING));
+
+    addGroupColorButton(Groups.SYSTEM_SPECS, systemSpecsOptionsRect);
 
     addBoolRow(side, section, F3BackportClient.enableSystemSpecs, null);
 
@@ -344,6 +370,8 @@ public class MainOptionsScreen extends F3BackportScreen {
     perfImpactorsOptionsRect.setLocation(leftButtonX,
                                          buttonStartY + (startRow * offsetY) + (section * SECTION_PADDING));
 
+    addGroupColorButton(Groups.PERFORMANCE_IMPACTORS, perfImpactorsOptionsRect);
+
     addBoolRow(side, section, F3BackportClient.enableSimplePerfImpactors, null);
 
     int endRow;
@@ -365,6 +393,8 @@ public class MainOptionsScreen extends F3BackportScreen {
 
   public void spawnCountsOptionsButtons(Side side, int startRow, int section) {
     spawnCountsOptionsRect.setLocation(leftButtonX, buttonStartY + (startRow * offsetY) + (section * SECTION_PADDING));
+
+    addGroupColorButton(Groups.SPAWN_COUNTS, spawnCountsOptionsRect);
 
     addBoolRow(side, section, F3BackportClient.enableSpawnCounts, null);
 
@@ -388,6 +418,12 @@ public class MainOptionsScreen extends F3BackportScreen {
   @Override
   public void drawHeader() {
     super.drawHeader();
+
+    Button colorButton = Button.builder(Common.literalText("Color"), b -> ColorsScreen.getInstance(this).open())
+        .bounds(rightButtonX, buttonStartY, buttonWidth, buttonHeight)
+        .build();
+
+    widgets.add(colorButton);
   }
 
   @Override

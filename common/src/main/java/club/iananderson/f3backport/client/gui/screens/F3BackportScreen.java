@@ -3,7 +3,9 @@ package club.iananderson.f3backport.client.gui.screens;
 import club.iananderson.f3backport.client.gui.components.buttons.BoolButton;
 import club.iananderson.f3backport.client.gui.components.buttons.MenuButton;
 import club.iananderson.f3backport.client.gui.components.buttons.MenuButton.MenuButtons;
+import club.iananderson.f3backport.client.gui.components.debug.entries.Groups;
 import club.iananderson.f3backport.config.ConfigEntries;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,8 +43,9 @@ public class F3BackportScreen extends Screen {
   public int sectionLeft;
   public int rowRight;
   public int sectionRight;
+  public int sectionWidth;
   public int buttonStartY = MENU_PADDING;
-  public int offsetY = this.buttonHeight + BUTTON_PADDING;
+  public int offsetY;
   public float scale;
   protected boolean hasPendingChanges;
 
@@ -50,6 +53,8 @@ public class F3BackportScreen extends Screen {
     super(title);
     this.parentScreen = parentScreen;
     this.scale = 1.0F;
+    this.sectionWidth = (2 * this.buttonWidth) + BUTTON_PADDING;
+    this.offsetY = this.buttonHeight + BUTTON_PADDING;
   }
 
   public void open() {
@@ -87,6 +92,23 @@ public class F3BackportScreen extends Screen {
   @SuppressWarnings("checkstyle:AbbreviationAsWordInName")
   public void rebuildUI() {
     this.rebuildWidgets();
+  }
+
+  public void addGroupColorButton(Groups group, Rectangle rect) {
+    float colorScale = 0.75F;
+    int stringWidth = font.width(MenuButtons.COLOR.getButtonText());
+    int colorButtonWidth = (stringWidth + (BUTTON_PADDING));
+    int colorButtonHeight = (int) (font.lineHeight + 1);
+
+    int buttonX = ((int) rect.getMinX() + this.sectionWidth - colorButtonWidth);
+    int buttonY = ((int) rect.getMinY() - ((colorButtonHeight) + 1));
+
+    // TODO: Make color button create a new screen for the group to customize the color
+    MenuButton colorButton = MenuButton.builder(MenuButtons.COLOR, button -> {})
+        .withBounds(buttonX, buttonY, colorButtonWidth, colorButtonHeight).withScale(colorScale)
+        .build();
+
+    widgets.add(colorButton);
   }
 
   public void addBooleanButton(ConfigValue<Boolean> configValue, int x, int row, int section) {

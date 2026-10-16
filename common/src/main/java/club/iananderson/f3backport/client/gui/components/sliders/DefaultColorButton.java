@@ -12,7 +12,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public class DefaultColorButton extends Button {
-  private static final Component DEFAULT = Common.translatedText("menu.seasonhud.color.default.button");
+  private static final Component DEFAULT = Common.translatedText("menu.f3backport.color.default.button");
   private final ColorEditBox colorEditBox;
   private final int defaultColor;
 

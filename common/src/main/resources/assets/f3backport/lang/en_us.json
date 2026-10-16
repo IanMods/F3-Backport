@@ -6,6 +6,8 @@
   "key.f3backport.debug.networkCharts": "Network Charts",
   "key.f3backport.debug.overlay": "Toggle Overlay",
   "key.f3backport.debug.profilingChart": "Profiling Chart",
+  "menu.f3backport.color.default.button": "Default",
+  "menu.f3backport.color.title": "Group Colors",
   "menu.f3backport.config.boolean.default": "Default is %s.",
   "menu.f3backport.config.boolean.desc": "(true/false)",
   "menu.f3backport.config.debugGuiScale.desc": "The scale of the Debug Overlay (F3).\n\nSet to -1 to follow the current Minecraft Gui Scale setting\nSet to 0 for the Minecraft 'auto' setting",
@@ -60,8 +62,8 @@
   "menu.f3backport.config.systemSpecs.enableSystemSpecs.name": "System Specs",
   "menu.f3backport.config.systemSpecs.name": "System Specs",
   "menu.f3backport.config.title": "F3-Backport Options",
+  "menu.f3backport.main.color.button": "Color",
   "menu.f3backport.main.preview.button": "Preview",
   "menu.f3backport.main.preview.desc": "Enable the F3 menu debug",
-  "menu.f3backport.main.reset.button": "Reset",
-  "menu.f3backport.color.title": "Group Colors"
+  "menu.f3backport.main.reset.button": "Reset"
 }

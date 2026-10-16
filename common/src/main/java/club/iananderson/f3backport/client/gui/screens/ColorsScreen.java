@@ -72,8 +72,8 @@ public class ColorsScreen extends F3BackportScreen {
     return boxWidth;
   }
 
-  private List<AbstractWidget> seasonWidget(int x, int y, Groups season) {
-    ColorEditBox colorBox = new ColorEditBox(this.font, x, y, getBoxWidth(), buttonHeight, season);
+  private List<AbstractWidget> groupWidget(int x, int y, Groups groups) {
+    ColorEditBox colorBox = new ColorEditBox(this.font, x, y, getBoxWidth(), buttonHeight, groups);
     y += colorBox.getHeight() + BUTTON_PADDING;
     x -= 1;
     y += buttonHeight + RgbSlider.SLIDER_PADDING;
@@ -93,7 +93,7 @@ public class ColorsScreen extends F3BackportScreen {
 
     @SuppressWarnings("checkstyle:Indentation")
     DefaultColorButton defaultButton = DefaultColorButton.builder(colorBox, press -> {
-          int defaultColorInt = season.getDefaultColor();
+          int defaultColorInt = groups.getDefaultColor();
 
           if (colorBox.getNewColor() != defaultColorInt) {
             int r = Rgb.red(defaultColorInt);
@@ -125,7 +125,7 @@ public class ColorsScreen extends F3BackportScreen {
     this.posY = MENU_PADDING + buttonHeight + BUTTON_PADDING + buttonHeight;
 
     groupListSet().forEach(season -> {
-      this.widgets.addAll(seasonWidget(this.posX, this.posY, season));
+      this.widgets.addAll(groupWidget(this.posX, this.posY, season));
       this.posX += widgetWidth;
     });
 

@@ -80,7 +80,7 @@ public class ColorEditBox extends EditBox {
     return this.boxGroup;
   }
 
-  public MutableComponent getMenuText(Groups group, int newRgb, boolean seasonShort) {
+  public MutableComponent getMenuText(Groups group, int newRgb) {
     Style groupFormat = Style.EMPTY.withColor(newRgb);
 
     MutableComponent groupText = group.getTranslatedName();
@@ -94,16 +94,15 @@ public class ColorEditBox extends EditBox {
     float textScale = 1;
     int scaledWidth = mc.getWindow().getGuiScaledWidth();
     int widgetTotalSize = ((80 + ColorsScreen.BUTTON_PADDING) * groupListSet().size());
-    boolean seasonShort = (scaledWidth < widgetTotalSize);
 
-    MutableComponent seasonCombined = this.getMenuText(this.boxGroup, this.newGroupColor, seasonShort);
+    MutableComponent groupName = this.getMenuText(this.boxGroup, this.newGroupColor);
 
     graphics.pose().pushPose();
-    if ((mc.font.width(seasonCombined) > this.getWidth() - PADDING)) {
-      textScale = ((float) this.getWidth() - PADDING) / mc.font.width(seasonCombined);
+    if ((mc.font.width(groupName) > this.getWidth() - PADDING)) {
+      textScale = ((float) this.getWidth() - PADDING) / mc.font.width(groupName);
     }
     graphics.pose().scale(textScale, textScale, 1);
-    graphics.drawCenteredString(mc.font, seasonCombined, (int) ((getX() + (double) this.getWidth() / 2) / textScale),
+    graphics.drawCenteredString(mc.font, groupName, (int) ((getX() + (double) this.getWidth() / 2) / textScale),
                                 (int) ((getY() - (mc.font.lineHeight * textScale) - PADDING) / textScale), 0xffffff);
     graphics.pose().popPose();
 
