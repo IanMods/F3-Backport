@@ -10,7 +10,7 @@ public class Rgb {
   }
 
   public static int rgbInt(int r, int g, int b) {
-    return new Color(r, g, b).getRGB();
+    return (256 * 256 * r) + (256 * g) + b;
   }
 
   public static int rgbaInt(int r, int g, int b, int a) {
