@@ -10,13 +10,13 @@ import club.iananderson.f3backport.client.gui.components.sliders.HudScaleSlider;
 import club.iananderson.f3backport.config.ConfigEntries;
 import club.iananderson.f3backport.config.DefaultValues.Client;
 import club.iananderson.f3backport.config.F3BackportClient;
+import club.iananderson.f3backport.util.Rgb;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -107,6 +107,23 @@ public class MainOptionsScreen extends F3BackportScreen {
     super.onClose();
   }
 
+  public void addGroupColorButton(Groups group, Rectangle rect) {
+    float colorScale = 0.75F;
+    int stringWidth = font.width(MenuButtons.COLOR.getButtonText());
+    int colorButtonWidth = (stringWidth + (BUTTON_PADDING));
+    int colorButtonHeight = (int) (font.lineHeight + 1);
+
+    int buttonX = ((int) rect.getMinX() + this.sectionWidth - colorButtonWidth);
+    int buttonY = ((int) rect.getMinY() - ((colorButtonHeight) + 1));
+
+    MenuButton colorButton = MenuButton.builder(MenuButtons.COLOR,
+                                                button -> ColorsScreen.getInstance(this, group).open())
+        .withBounds(buttonX, buttonY, colorButtonWidth, colorButtonHeight).withScale(colorScale)
+        .build();
+
+    widgets.add(colorButton);
+  }
+
   public void renderBacking(GuiGraphics graphics, Side side, Rectangle rect, Groups group) {
     int borderColor = new Color(0, 0, 0, 200).getRGB();
     int backgroundColor = new Color(255, 255, 255, 80).getRGB();
@@ -130,7 +147,9 @@ public class MainOptionsScreen extends F3BackportScreen {
                           ? colorStartX + 1
                           : colorStartX - 1;
 
-    graphics.vLine(colorStartX, boxStartY - 1, boxEndY - 1, group.getGroupColor());
+    int groupRgbaInt = Rgb.rgbaInt(group.getGroupColor(), F3BackportClient.getAlphaColor());
+
+    graphics.vLine(colorStartX, boxStartY - 1, boxEndY - 1, groupRgbaInt);
     graphics.vLine(colorBorderStartX, boxStartY - 1, boxEndY - 1, borderColor);
     graphics.vLine(colorBorderEndX, boxStartY - 1, boxEndY - 1, borderColor);
     graphics.hLine(colorBorderStartX, colorBorderEndX, boxStartY - 1, borderColor);
@@ -418,12 +437,6 @@ public class MainOptionsScreen extends F3BackportScreen {
   @Override
   public void drawHeader() {
     super.drawHeader();
-
-    Button colorButton = Button.builder(Common.literalText("Color"), b -> ColorsScreen.getInstance(this).open())
-        .bounds(rightButtonX, buttonStartY, buttonWidth, buttonHeight)
-        .build();
-
-    widgets.add(colorButton);
   }
 
   @Override

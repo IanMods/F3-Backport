@@ -17,6 +17,10 @@ public class Rgb {
     return new Color(r, g, b, a).getRGB();
   }
 
+  public static int rgbaInt(int rgb, int a) {
+    return rgbaInt(red(rgb), green(rgb), blue(rgb), a);
+  }
+
   public static Color rgbColor(int rgb) {
     return new Color(rgb);
   }

@@ -38,7 +38,6 @@ public enum Groups {
   LOOKING_AT_ENTITY("menu.f3backport.config.lookingAt.entity.name", Color.DEFAULT_LOOKING_AT_ENTITY_COLOR,
                     F3BackportClient.getLookingAtEntityColor(), Side.LEFT);
 
-  // TODO: Change RGBA -> RGB and have a config option for the alpha
   public static final EnumSet<Groups> GROUPS_ENUM_LIST = EnumSet.allOf(Groups.class);
   private final String translationKey;
   private final int defaultColor;

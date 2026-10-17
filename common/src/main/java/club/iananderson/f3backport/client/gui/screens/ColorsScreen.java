@@ -20,36 +20,44 @@ import net.minecraft.network.chat.Component;
 
 public class ColorsScreen extends F3BackportScreen {
   private static final Component SCREEN_TITLE = Common.translatedText("menu.f3backport.color.title");
-  private final List<ColorEditBox> groupBoxes = new ArrayList<>();
-  private int posX;
-  private int posY;
+  private static final int BOX_WIDTH = 80;
+  private final Groups group;
+  private ColorEditBox colorBox;
+  private int defaultColor;
+  private int initialColor;
 
-  public ColorsScreen(Screen parentScreen) {
+  public ColorsScreen(Screen parentScreen, Groups group) {
     super(parentScreen, SCREEN_TITLE);
     this.buttonWidth = 170;
-    loadConfig();
+    this.group = group;
+    this.loadConfig(group);
   }
 
-  public static ColorsScreen getInstance(Screen parentScreen) {
-    return new ColorsScreen(parentScreen);
+  public static ColorsScreen getInstance(Screen parentScreen, Groups group) {
+    return new ColorsScreen(parentScreen, group);
   }
 
   private static EnumSet<Groups> groupListSet() {
     return Groups.GROUPS_ENUM_LIST.clone();
   }
 
-  public void loadConfig() {
+  public void loadConfig(Groups group) {
+    this.defaultColor = group.getDefaultColor();
+    this.initialColor = group.getGroupColor();
+  }
+
+  @Override
+  public void saveConfig() {
+    if (Integer.parseInt(colorBox.getValue()) != this.initialColor) {
+      colorBox.save();
+    }
+
+    F3BackportClient.CLIENT_SPEC.save();
   }
 
   @Override
   public void onDone() {
-    groupBoxes.forEach(editBox -> {
-      if (Integer.parseInt(editBox.getValue()) != editBox.getColor()) {
-        editBox.save();
-      }
-    });
-
-    F3BackportClient.CLIENT_SPEC.save();
+    this.saveConfig();
     super.onDone();
   }
 
@@ -58,58 +66,42 @@ public class ColorsScreen extends F3BackportScreen {
     super.onClose();
   }
 
-  public int getBoxWidth() {
-    int widgetCount = groupListSet().size();
-    int widgetTotalSize = ((80 + BUTTON_PADDING) * widgetCount);
-
-    int boxWidth;
-    if (this.width < widgetTotalSize) {
-      boxWidth = 60;
-    } else {
-      boxWidth = 80;
-    }
-
-    return boxWidth;
-  }
-
   private List<AbstractWidget> groupWidget(int x, int y, Groups groups) {
-    ColorEditBox colorBox = new ColorEditBox(this.font, x, y, getBoxWidth(), buttonHeight, groups);
+    ColorEditBox colorBox = new ColorEditBox(this.font, x, y, BOX_WIDTH, buttonHeight, groups);
     y += colorBox.getHeight() + BUTTON_PADDING;
     x -= 1;
     y += buttonHeight + RgbSlider.SLIDER_PADDING;
 
-    int initialR = Rgb.red(colorBox.getColor());
+    int initialR = Rgb.red(this.initialColor);
     RedSlider redSlider = new RedSlider(x, y, initialR, colorBox);
     y += redSlider.getHeight() + RgbSlider.SLIDER_PADDING;
 
-    int initialG = Rgb.green(colorBox.getColor());
+    int initialG = Rgb.green(this.initialColor);
     GreenSlider greenSlider = new GreenSlider(x, y, initialG, colorBox);
     y += greenSlider.getHeight() + RgbSlider.SLIDER_PADDING;
 
-    int initialB = Rgb.blue(colorBox.getColor());
+    int initialB = Rgb.blue(this.initialColor);
     BlueSlider blueSlider = new BlueSlider(x, y, initialB, colorBox);
     y -= (greenSlider.getHeight() + redSlider.getHeight() + RgbSlider.SLIDER_PADDING + buttonHeight
         + RgbSlider.SLIDER_PADDING);
 
     @SuppressWarnings("checkstyle:Indentation")
     DefaultColorButton defaultButton = DefaultColorButton.builder(colorBox, press -> {
-          int defaultColorInt = groups.getDefaultColor();
-
-          if (colorBox.getNewColor() != defaultColorInt) {
-            int r = Rgb.red(defaultColorInt);
-            int g = Rgb.green(defaultColorInt);
-            int b = Rgb.blue(defaultColorInt);
+          if (colorBox.getNewColor() != this.defaultColor) {
+            int r = Rgb.red(this.defaultColor);
+            int g = Rgb.green(this.defaultColor);
+            int b = Rgb.blue(this.defaultColor);
 
             redSlider.setValue(r);
             greenSlider.setValue(g);
             blueSlider.setValue(b);
-            colorBox.setValue(String.valueOf(defaultColorInt));
+            colorBox.setValue(String.valueOf(this.defaultColor));
           }
         })
         .withPos(x, y)
         .build();
 
-    groupBoxes.add(colorBox);
+    this.colorBox = colorBox;
 
     return new ArrayList<>(Arrays.asList(colorBox, defaultButton, redSlider, greenSlider, blueSlider));
   }
@@ -118,16 +110,12 @@ public class ColorsScreen extends F3BackportScreen {
   public void init() {
     super.init();
 
-    int widgetWidth = getBoxWidth() + BUTTON_PADDING;
-    int totalWidgetWidth = (groupListSet().size() * widgetWidth) - BUTTON_PADDING;
+    int widgetWidth = BOX_WIDTH + BUTTON_PADDING;
 
-    this.posX = (this.width / 2) - (totalWidgetWidth / 2);
-    this.posY = MENU_PADDING + buttonHeight + BUTTON_PADDING + buttonHeight;
+    int posX = (this.width / 2) - (widgetWidth / 2);
+    int posY = MENU_PADDING + buttonHeight + BUTTON_PADDING + buttonHeight;
 
-    groupListSet().forEach(season -> {
-      this.widgets.addAll(groupWidget(this.posX, this.posY, season));
-      this.posX += widgetWidth;
-    });
+    this.widgets.addAll(groupWidget(posX, posY, this.group));
 
     this.widgets.forEach(this::addRenderableWidget);
   }

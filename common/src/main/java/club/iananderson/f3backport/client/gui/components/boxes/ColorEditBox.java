@@ -15,16 +15,15 @@ import org.jspecify.annotations.NonNull;
 public class ColorEditBox extends EditBox {
   private static final int PADDING = 4;
   private final Groups boxGroup;
-  private final int groupColor;
   private int newGroupColor;
 
   public ColorEditBox(Font font, int x, int y, int width, int height, Groups group) {
     super(font, x, y, width, height, group.getTranslatedName());
     this.boxGroup = group;
-    this.groupColor = boxGroup.getGroupColor();
-    this.newGroupColor = groupColor;
-    this.setMaxLength(8);
+    int groupColor = group.getGroupColor();
     this.setValue(String.valueOf(groupColor));
+    this.newGroupColor = group.getGroupColor();
+    this.setMaxLength(8);
     this.setResponder(colorString -> {
       if (validate(colorString)) {
         this.setTextColor(0xffffff);
@@ -66,10 +65,6 @@ public class ColorEditBox extends EditBox {
   public void save() {
     Rgb.setRgb(this.boxGroup, this.newGroupColor);
     this.boxGroup.setGroupColor(this.newGroupColor);
-  }
-
-  public int getColor() {
-    return this.groupColor;
   }
 
   public int getNewColor() {

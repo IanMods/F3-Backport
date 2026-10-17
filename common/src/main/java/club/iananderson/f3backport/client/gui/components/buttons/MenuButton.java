@@ -29,6 +29,17 @@ public class MenuButton extends Button {
     this.scale = scale;
   }
 
+  public static Builder builder(MenuButtons button, OnPress onPress) {
+    return new Builder(button, onPress);
+  }
+
+  public static Builder builder(MenuButtons button, F3BackportScreen currentScreen, F3BackportScreen newScreen) {
+    return new Builder(button, b -> {
+      currentScreen.saveConfig();
+      newScreen.open();
+    });
+  }
+
   @Override
   protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
     graphics.pose().pushPose();
@@ -77,17 +88,6 @@ public class MenuButton extends Button {
     graphics.pose().popPose();
   }
 
-  public static Builder builder(MenuButtons button, OnPress onPress) {
-    return new Builder(button, onPress);
-  }
-
-  public static Builder builder(MenuButtons button, F3BackportScreen currentScreen, F3BackportScreen newScreen) {
-    return new Builder(button, b -> {
-      currentScreen.saveConfig();
-      newScreen.open();
-    });
-  }
-
   public enum MenuButtons {
     DONE(CommonComponents.GUI_DONE),
 
@@ -115,8 +115,8 @@ public class MenuButton extends Button {
     protected int posY;
     protected int width = 150;
     protected int height = 20;
-    private float scale = 1;
     protected Tooltip tooltip;
+    private float scale = 1;
 
     public Builder(MenuButtons buttonType, OnPress onPress) {
       this.buttonType = buttonType;
