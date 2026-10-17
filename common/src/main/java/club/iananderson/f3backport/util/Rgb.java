@@ -1,6 +1,6 @@
 package club.iananderson.f3backport.util;
 
-import club.iananderson.f3backport.client.gui.components.debug.entries.Groups;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroups;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +48,7 @@ public class Rgb {
     return rgbMap;
   }
 
-  public static Map<String, Integer> defaultGroupMap(Groups group) {
+  public static Map<String, Integer> defaultGroupMap(DebugGroups group) {
     Map<String, Integer> defaultRgbMap = new HashMap<>();
 
     int rgb = group.getDefaultColor();
@@ -61,26 +61,26 @@ public class Rgb {
     return defaultRgbMap;
   }
 
-  public static void setRgb(Groups group, int rgb) {
+  public static void setRgb(DebugGroups group, int rgb) {
     group.getRgbMap().put("r", red(rgb));
     group.getRgbMap().put("g", green(rgb));
     group.getRgbMap().put("b", blue(rgb));
     group.getRgbMap().put("rgb", rgb);
   }
 
-  public static int getRgb(Groups groups) {
-    return groups.getRgbMap().get("rgb");
+  public static int getRgb(DebugGroups debugGroups) {
+    return debugGroups.getRgbMap().get("rgb");
   }
 
-  public static int getRed(Groups groups) {
-    return groups.getRgbMap().get("r");
+  public static int getRed(DebugGroups debugGroups) {
+    return debugGroups.getRgbMap().get("r");
   }
 
-  public static int getGreen(Groups groups) {
-    return groups.getRgbMap().get("g");
+  public static int getGreen(DebugGroups debugGroups) {
+    return debugGroups.getRgbMap().get("g");
   }
 
-  public static int getBlue(Groups groups) {
-    return groups.getRgbMap().get("b");
+  public static int getBlue(DebugGroups debugGroups) {
+    return debugGroups.getRgbMap().get("b");
   }
 }

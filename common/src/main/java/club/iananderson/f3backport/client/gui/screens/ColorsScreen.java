@@ -2,7 +2,7 @@ package club.iananderson.f3backport.client.gui.screens;
 
 import club.iananderson.f3backport.Common;
 import club.iananderson.f3backport.client.gui.components.boxes.ColorEditBox;
-import club.iananderson.f3backport.client.gui.components.debug.entries.Groups;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.sliders.DefaultColorButton;
 import club.iananderson.f3backport.client.gui.components.sliders.rgb.BlueSlider;
 import club.iananderson.f3backport.client.gui.components.sliders.rgb.GreenSlider;
@@ -21,27 +21,27 @@ import net.minecraft.network.chat.Component;
 public class ColorsScreen extends F3BackportScreen {
   private static final Component SCREEN_TITLE = Common.translatedText("menu.f3backport.color.title");
   private static final int BOX_WIDTH = 80;
-  private final Groups group;
+  private final DebugGroups group;
   private ColorEditBox colorBox;
   private int defaultColor;
   private int initialColor;
 
-  public ColorsScreen(Screen parentScreen, Groups group) {
+  public ColorsScreen(Screen parentScreen, DebugGroups group) {
     super(parentScreen, SCREEN_TITLE);
     this.buttonWidth = 170;
     this.group = group;
     this.loadConfig(group);
   }
 
-  public static ColorsScreen getInstance(Screen parentScreen, Groups group) {
+  public static ColorsScreen getInstance(Screen parentScreen, DebugGroups group) {
     return new ColorsScreen(parentScreen, group);
   }
 
-  private static EnumSet<Groups> groupListSet() {
-    return Groups.GROUPS_ENUM_LIST.clone();
+  private static EnumSet<DebugGroups> groupListSet() {
+    return DebugGroups.DEBUG_GROUPS_ENUM_LIST.clone();
   }
 
-  public void loadConfig(Groups group) {
+  public void loadConfig(DebugGroups group) {
     this.defaultColor = group.getDefaultColor();
     this.initialColor = group.getGroupColor();
   }
@@ -68,8 +68,8 @@ public class ColorsScreen extends F3BackportScreen {
     super.onClose();
   }
 
-  private List<AbstractWidget> groupWidget(int x, int y, Groups groups) {
-    ColorEditBox colorBox = new ColorEditBox(this.font, x, y, BOX_WIDTH, buttonHeight, groups);
+  private List<AbstractWidget> groupWidget(int x, int y, DebugGroups debugGroups) {
+    ColorEditBox colorBox = new ColorEditBox(this.font, x, y, BOX_WIDTH, buttonHeight, debugGroups);
     y += colorBox.getHeight() + BUTTON_PADDING;
     x -= 1;
     y += buttonHeight + RgbSlider.SLIDER_PADDING;

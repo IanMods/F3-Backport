@@ -13,14 +13,14 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FastColor;
 
-public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair<String, Component>> facts,
+public record DebugGroupContents(DebugGroups group, List<String> lines, List<Pair<String, Component>> facts,
                                  List<DebugCustomRenderer> customRenderers) {
   private static final int MARGIN_RIGHT = 3;
   private static final int MARGIN_LEFT = 3;
   private static final int TITLE_LEFT_PADDING = 3;
   private static final int FACT_NAME_VALUE_PADDING = 5;
 
-  public DebugGroupContents(final DebugGroup group) {
+  public DebugGroupContents(final DebugGroups group) {
     this(group, new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
   }
 
@@ -36,7 +36,7 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
       final int scaledScreenWidth) {
     Objects.requireNonNull(font);
     int fullWidth = this.lines.stream().mapToInt(font::width).max().orElse(0);
-    int titleWidth = font.width(this.group.title());
+    int titleWidth = font.width(this.group.getTranslatedName());
     if (titleWidth + TITLE_LEFT_PADDING > fullWidth) {
       fullWidth = titleWidth + TITLE_LEFT_PADDING;
     }
@@ -74,7 +74,7 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
       int titleBottom = top + font.lineHeight - 1;
       Objects.requireNonNull(font);
       graphics.fill(titleLeft, titleTop, titleRight, titleBottom, -1875890128);
-      graphics.drawString(font, this.group.title(), left + TITLE_LEFT_PADDING, top, -1, false);
+      graphics.drawString(font, this.group.getTranslatedName(), left + TITLE_LEFT_PADDING, top, -1, false);
       Objects.requireNonNull(font);
       y = top + font.lineHeight;
     }
@@ -107,13 +107,11 @@ public record DebugGroupContents(DebugGroup group, List<String> lines, List<Pair
       y += customRenderer.height();
     }
 
-    if (this.group.accentColor().isPresent()) {
-      int accentColor = FastColor.ARGB32.opaque(this.group.accentColor().getAsInt());
-      if (side == Side.LEFT) {
-        graphics.fill(0, top - 1, 1, top + fullHeight + 1, accentColor);
-      } else {
-        graphics.fill(scaledScreenWidth - 1, top - 1, scaledScreenWidth, top + fullHeight + 1, accentColor);
-      }
+    int accentColor = FastColor.ARGB32.opaque(this.group.getGroupColor());
+    if (side == Side.LEFT) {
+      graphics.fill(0, top - 1, 1, top + fullHeight + 1, accentColor);
+    } else {
+      graphics.fill(scaledScreenWidth - 1, top - 1, scaledScreenWidth, top + fullHeight + 1, accentColor);
     }
 
     return new Rect2i(left, top, fullWidth, fullHeight);

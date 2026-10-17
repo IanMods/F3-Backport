@@ -1,7 +1,6 @@
 package club.iananderson.f3backport.client.gui.components.debug;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugColumn.Side;
-import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroup;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroupContents;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugScreenEntries;
@@ -85,6 +84,7 @@ public class NewDebugScreenOverlay {
     this.clientChunk = null;
   }
 
+  // TODO: Make misc and priority not display name
   public void render(final @NonNull GuiGraphics graphics) {
     if (this.minecraft.isGameLoadFinished() && (!this.minecraft.options.hideGui || this.minecraft.screen != null)) {
       DebugScreenOverlay debug = minecraft.getDebugOverlay();
@@ -116,7 +116,7 @@ public class NewDebugScreenOverlay {
         }
 
         DebugScreenDisplayer displayer = new DebugScreenDisplayer();
-        Map<DebugGroup, DebugGroupContents> groups = displayer.groups;
+        Map<DebugGroups, DebugGroupContents> groups = displayer.groups;
 
         Level level = this.getLevel();
 
@@ -136,7 +136,7 @@ public class NewDebugScreenOverlay {
         if (this.debugEntries.isOverlayVisible()) {
           boolean hasServer = this.minecraft.getSingleplayerServer() != null;
           KeyMapping keyDebugModifier = DebugKeyBinds.keyDebugOverlay;
-          DebugGroup debugHelp = DebugGroups.HELP;
+          DebugGroups debugHelp = DebugGroups.HELP;
           // TODO: Move these to language file instead of hardcoding them
           String debugCharts = "Debug charts:";
           String profilerChart = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugProfilingChart, "Profiler",
@@ -196,10 +196,10 @@ public class NewDebugScreenOverlay {
 
         groups.values()
             .removeIf(
-                (contentsx) -> contentsx.lines().isEmpty() && contentsx.facts().isEmpty() && contentsx.customRenderers()
+                (contents) -> contents.lines().isEmpty() && contents.facts().isEmpty() && contents.customRenderers()
                     .isEmpty());
 
-        for (DebugGroup group : this.leftColumn.getPreviousGroups()) {
+        for (DebugGroups group : this.leftColumn.getPreviousGroups()) {
           if (!this.leftColumn.isFull(scaledScreenHeight)) {
             DebugGroupContents contents = groups.remove(group);
             if (contents != null) {
@@ -208,7 +208,7 @@ public class NewDebugScreenOverlay {
           }
         }
 
-        for (DebugGroup group : this.rightColumn.getPreviousGroups()) {
+        for (DebugGroups group : this.rightColumn.getPreviousGroups()) {
           if (!this.rightColumn.isFull(scaledScreenHeight)) {
             DebugGroupContents contents = groups.remove(group);
             if (contents != null) {
@@ -221,15 +221,13 @@ public class NewDebugScreenOverlay {
 
         while (iterator.hasNext()) {
           DebugGroupContents contents = iterator.next();
-          Optional<DebugColumn.Side> preferredSide = contents.group().preferredColumn();
-          if (preferredSide.isPresent()) {
-            if (preferredSide.get() == Side.LEFT && !this.leftColumn.isFull(scaledScreenHeight)) {
-              this.leftColumn.add(contents, graphics, this.font, scaledScreenWidth);
-              iterator.remove();
-            } else if (preferredSide.get() == Side.RIGHT && !this.rightColumn.isFull(scaledScreenHeight)) {
-              this.rightColumn.add(contents, graphics, this.font, scaledScreenWidth);
-              iterator.remove();
-            }
+          DebugColumn.Side preferredSide = contents.group().getPreferredColumn();
+          if (preferredSide == Side.LEFT && !this.leftColumn.isFull(scaledScreenHeight)) {
+            this.leftColumn.add(contents, graphics, this.font, scaledScreenWidth);
+            iterator.remove();
+          } else if (preferredSide == Side.RIGHT && !this.rightColumn.isFull(scaledScreenHeight)) {
+            this.rightColumn.add(contents, graphics, this.font, scaledScreenWidth);
+            iterator.remove();
           }
         }
 
@@ -318,7 +316,7 @@ public class NewDebugScreenOverlay {
         }
 
         DebugScreenDisplayer displayer = new DebugScreenDisplayer();
-        Map<DebugGroup, DebugGroupContents> groups = displayer.groups;
+        Map<DebugGroups, DebugGroupContents> groups = displayer.groups;
 
         Level level = this.getLevel();
 
@@ -338,7 +336,7 @@ public class NewDebugScreenOverlay {
         if (this.debugEntries.isOverlayVisible()) {
           boolean hasServer = this.minecraft.getSingleplayerServer() != null;
           KeyMapping keyDebugModifier = DebugKeyBinds.keyDebugOverlay;
-          DebugGroup debugHelp = DebugGroups.HELP;
+          DebugGroups debugHelp = DebugGroups.HELP;
           // TODO: Move these to language file instead of hardcoding them
           String debugCharts = "Debug charts:";
           String profilerChart = " " + formatChart(keyDebugModifier, DebugKeyBinds.keyDebugProfilingChart, "Profiler");
@@ -399,7 +397,7 @@ public class NewDebugScreenOverlay {
                 (contentsx) -> contentsx.lines().isEmpty() && contentsx.facts().isEmpty() && contentsx.customRenderers()
                     .isEmpty());
 
-        for (DebugGroup group : this.leftColumn.getPreviousGroups()) {
+        for (DebugGroups group : this.leftColumn.getPreviousGroups()) {
           if (!this.leftColumn.isFull(scaledScreenHeight)) {
             DebugGroupContents contents = groups.remove(group);
             if (contents != null) {
@@ -408,7 +406,7 @@ public class NewDebugScreenOverlay {
           }
         }
 
-        for (DebugGroup group : this.rightColumn.getPreviousGroups()) {
+        for (DebugGroups group : this.rightColumn.getPreviousGroups()) {
           if (!this.rightColumn.isFull(scaledScreenHeight)) {
             DebugGroupContents contents = groups.remove(group);
             if (contents != null) {
@@ -421,15 +419,14 @@ public class NewDebugScreenOverlay {
 
         while (iterator.hasNext()) {
           DebugGroupContents contents = iterator.next();
-          Optional<DebugColumn.Side> preferredSide = contents.group().preferredColumn();
-          if (preferredSide.isPresent()) {
-            if (preferredSide.get() == Side.LEFT && !this.leftColumn.isFull(scaledScreenHeight)) {
-              this.leftColumn.add(contents, graphics, this.font, scaledScreenWidth);
-              iterator.remove();
-            } else if (preferredSide.get() == Side.RIGHT && !this.rightColumn.isFull(scaledScreenHeight)) {
-              this.rightColumn.add(contents, graphics, this.font, scaledScreenWidth);
-              iterator.remove();
-            }
+          DebugColumn.Side preferredSide = contents.group().getPreferredColumn();
+
+          if (preferredSide == Side.LEFT && !this.leftColumn.isFull(scaledScreenHeight)) {
+            this.leftColumn.add(contents, graphics, this.font, scaledScreenWidth);
+            iterator.remove();
+          } else if (preferredSide == Side.RIGHT && !this.rightColumn.isFull(scaledScreenHeight)) {
+            this.rightColumn.add(contents, graphics, this.font, scaledScreenWidth);
+            iterator.remove();
           }
         }
 

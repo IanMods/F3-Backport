@@ -5,7 +5,7 @@ import club.iananderson.f3backport.client.gui.components.buttons.BoolCheckButton
 import club.iananderson.f3backport.client.gui.components.buttons.MenuButton;
 import club.iananderson.f3backport.client.gui.components.buttons.MenuButton.MenuButtons;
 import club.iananderson.f3backport.client.gui.components.debug.NewDebugScreenOverlay;
-import club.iananderson.f3backport.client.gui.components.debug.entries.Groups;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.sliders.HudScaleSlider;
 import club.iananderson.f3backport.config.ConfigEntries;
 import club.iananderson.f3backport.config.DefaultValues.Client;
@@ -107,7 +107,7 @@ public class MainOptionsScreen extends F3BackportScreen {
     super.onClose();
   }
 
-  public void addGroupColorButton(Groups group, Rectangle rect) {
+  public void addGroupColorButton(DebugGroups group, Rectangle rect) {
     float colorScale = 0.75F;
     int stringWidth = font.width(MenuButtons.COLOR.getButtonText());
     int colorButtonWidth = (stringWidth + (BUTTON_PADDING));
@@ -124,7 +124,7 @@ public class MainOptionsScreen extends F3BackportScreen {
     widgets.add(colorButton);
   }
 
-  public void renderBacking(GuiGraphics graphics, Side side, Rectangle rect, Groups group) {
+  public void renderBacking(GuiGraphics graphics, Side side, Rectangle rect, DebugGroups group) {
     int borderColor = new Color(0, 0, 0, 200).getRGB();
     int backgroundColor = new Color(255, 255, 255, 80).getRGB();
 
@@ -178,16 +178,16 @@ public class MainOptionsScreen extends F3BackportScreen {
   }
 
   public void renderLeft(GuiGraphics graphics) {
-    renderBacking(graphics, Side.LEFT, priorityOptionsRect, Groups.PRIORITY);
-    renderBacking(graphics, Side.LEFT, positionOptionsRect, Groups.POSITION);
-    renderBacking(graphics, Side.LEFT, spawnCountsOptionsRect, Groups.SPAWN_COUNTS);
-    renderBacking(graphics, Side.LEFT, miscOptionsRect, Groups.MISC);
+    renderBacking(graphics, Side.LEFT, priorityOptionsRect, DebugGroups.PRIORITY);
+    renderBacking(graphics, Side.LEFT, positionOptionsRect, DebugGroups.POSITION);
+    renderBacking(graphics, Side.LEFT, spawnCountsOptionsRect, DebugGroups.SPAWN_COUNTS);
+    renderBacking(graphics, Side.LEFT, miscOptionsRect, DebugGroups.MISC);
   }
 
   public void renderRight(GuiGraphics graphics) {
-    renderBacking(graphics, Side.RIGHT, memoryOptionsRect, Groups.MEMORY);
-    renderBacking(graphics, Side.RIGHT, systemSpecsOptionsRect, Groups.SYSTEM_SPECS);
-    renderBacking(graphics, Side.RIGHT, perfImpactorsOptionsRect, Groups.PERFORMANCE_IMPACTORS);
+    renderBacking(graphics, Side.RIGHT, memoryOptionsRect, DebugGroups.MEMORY);
+    renderBacking(graphics, Side.RIGHT, systemSpecsOptionsRect, DebugGroups.SYSTEM_SPECS);
+    renderBacking(graphics, Side.RIGHT, perfImpactorsOptionsRect, DebugGroups.PERFORMANCE_IMPACTORS);
   }
 
   @Override
@@ -287,7 +287,7 @@ public class MainOptionsScreen extends F3BackportScreen {
   public void positionOptionsButtons(Side side, int startRow, int section) {
     positionOptionsRect.setLocation(leftButtonX, buttonStartY + (startRow * offsetY) + (section * SECTION_PADDING));
 
-    addGroupColorButton(Groups.POSITION, positionOptionsRect);
+    addGroupColorButton(DebugGroups.POSITION, positionOptionsRect);
 
     addBoolRow(side, section, F3BackportClient.enablePlayerPosition, F3BackportClient.enablePlayerPosition);
     addBoolRow(side, section, F3BackportClient.enablePlayerSectionPosition,
@@ -313,7 +313,7 @@ public class MainOptionsScreen extends F3BackportScreen {
   public void miscOptionsButtons(Side side, int startRow, int section) {
     miscOptionsRect.setLocation(leftButtonX, buttonStartY + (startRow * offsetY) + (section * SECTION_PADDING));
 
-    addGroupColorButton(Groups.MISC, miscOptionsRect);
+    addGroupColorButton(DebugGroups.MISC, miscOptionsRect);
 
     addBoolRow(side, section, F3BackportClient.enableLight, F3BackportClient.enableGpuUtilization);
     addBoolRow(side, section, F3BackportClient.enableDayCount, F3BackportClient.enableEntityRenderStats);
@@ -340,7 +340,7 @@ public class MainOptionsScreen extends F3BackportScreen {
   public void memoryOptionsButtons(Side side, int startRow, int section) {
     memoryOptionsRect.setLocation(leftButtonX, buttonStartY + (startRow * offsetY) + (section * SECTION_PADDING));
 
-    addGroupColorButton(Groups.MEMORY, memoryOptionsRect);
+    addGroupColorButton(DebugGroups.MEMORY, memoryOptionsRect);
 
     addBoolRow(side, section, F3BackportClient.enableMemory, F3BackportClient.enableDetailedMemory);
 
@@ -364,7 +364,7 @@ public class MainOptionsScreen extends F3BackportScreen {
   public void systemSpecOptionsButtons(Side side, int startRow, int section) {
     systemSpecsOptionsRect.setLocation(leftButtonX, buttonStartY + (startRow * offsetY) + (section * SECTION_PADDING));
 
-    addGroupColorButton(Groups.SYSTEM_SPECS, systemSpecsOptionsRect);
+    addGroupColorButton(DebugGroups.SYSTEM_SPECS, systemSpecsOptionsRect);
 
     addBoolRow(side, section, F3BackportClient.enableSystemSpecs, null);
 
@@ -389,7 +389,7 @@ public class MainOptionsScreen extends F3BackportScreen {
     perfImpactorsOptionsRect.setLocation(leftButtonX,
                                          buttonStartY + (startRow * offsetY) + (section * SECTION_PADDING));
 
-    addGroupColorButton(Groups.PERFORMANCE_IMPACTORS, perfImpactorsOptionsRect);
+    addGroupColorButton(DebugGroups.PERFORMANCE_IMPACTORS, perfImpactorsOptionsRect);
 
     addBoolRow(side, section, F3BackportClient.enableSimplePerfImpactors, null);
 
@@ -413,7 +413,7 @@ public class MainOptionsScreen extends F3BackportScreen {
   public void spawnCountsOptionsButtons(Side side, int startRow, int section) {
     spawnCountsOptionsRect.setLocation(leftButtonX, buttonStartY + (startRow * offsetY) + (section * SECTION_PADDING));
 
-    addGroupColorButton(Groups.SPAWN_COUNTS, spawnCountsOptionsRect);
+    addGroupColorButton(DebugGroups.SPAWN_COUNTS, spawnCountsOptionsRect);
 
     addBoolRow(side, section, F3BackportClient.enableSpawnCounts, null);
 

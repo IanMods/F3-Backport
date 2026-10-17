@@ -17,6 +17,7 @@
   "menu.f3backport.config.heightMap.heightmap.desc": "Enable the Heightmap entry",
   "menu.f3backport.config.heightMap.heightmap.name": "Heightmap",
   "menu.f3backport.config.heightMap.name": "Heightmap",
+  "menu.f3backport.config.help.name": "Help",
   "menu.f3backport.config.light.enableLight.desc": "Enable the Light entry",
   "menu.f3backport.config.light.enableLight.name": "Light",
   "menu.f3backport.config.light.name": "Light",

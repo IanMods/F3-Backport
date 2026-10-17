@@ -2,7 +2,7 @@ package club.iananderson.f3backport.client.gui.components.sliders.rgb;
 
 import club.iananderson.f3backport.Common;
 import club.iananderson.f3backport.client.gui.components.boxes.ColorEditBox;
-import club.iananderson.f3backport.client.gui.components.debug.entries.Groups;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroups;
 import club.iananderson.f3backport.client.gui.components.sliders.BasicSlider;
 import club.iananderson.f3backport.util.Rgb;
 import net.minecraft.ChatFormatting;
@@ -13,7 +13,7 @@ import org.jspecify.annotations.NonNull;
 
 public class RgbSlider extends BasicSlider {
   public static final int SLIDER_PADDING = 2;
-  protected final Groups group;
+  protected final DebugGroups group;
   protected ColorEditBox groupBox;
   protected int red;
   protected int green;

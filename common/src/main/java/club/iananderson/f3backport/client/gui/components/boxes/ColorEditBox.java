@@ -1,6 +1,6 @@
 package club.iananderson.f3backport.client.gui.components.boxes;
 
-import club.iananderson.f3backport.client.gui.components.debug.entries.Groups;
+import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroups;
 import club.iananderson.f3backport.client.gui.screens.ColorsScreen;
 import java.util.EnumSet;
 import net.minecraft.client.Minecraft;
@@ -13,11 +13,11 @@ import org.jspecify.annotations.NonNull;
 
 public class ColorEditBox extends EditBox {
   private static final int PADDING = 4;
-  private final Groups boxGroup;
+  private final DebugGroups boxGroup;
   private final int groupColor;
   private int newGroupColor;
 
-  public ColorEditBox(Font font, int x, int y, int width, int height, Groups group) {
+  public ColorEditBox(Font font, int x, int y, int width, int height, DebugGroups group) {
     super(font, x, y, width, height, group.getTranslatedName());
     this.boxGroup = group;
     this.groupColor = boxGroup.getGroupColor();
@@ -42,8 +42,8 @@ public class ColorEditBox extends EditBox {
     });
   }
 
-  private static EnumSet<Groups> groupListSet() {
-    return Groups.GROUPS_ENUM_LIST.clone();
+  private static EnumSet<DebugGroups> groupListSet() {
+    return DebugGroups.DEBUG_GROUPS_ENUM_LIST.clone();
   }
 
   private boolean inBounds(int color) {
@@ -70,11 +70,11 @@ public class ColorEditBox extends EditBox {
     return this.newGroupColor;
   }
 
-  public Groups getGroup() {
+  public DebugGroups getGroup() {
     return this.boxGroup;
   }
 
-  public MutableComponent getMenuText(Groups group, int newRgb) {
+  public MutableComponent getMenuText(DebugGroups group, int newRgb) {
     Style groupFormat = Style.EMPTY.withColor(newRgb);
 
     MutableComponent groupText = group.getTranslatedName();
