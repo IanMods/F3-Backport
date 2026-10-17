@@ -29,20 +29,20 @@ public class DefaultValues {
 
   public static class Color {
     public static final int DEFAULT_ALPHA_COLOR = 255;
-    public static final int DEFAULT_MEMORY_COLOR = -25856;
-    public static final int DEFAULT_POSITION_COLOR = -1;
-    public static final int DEFAULT_CHUNK_RENDERING_COLOR = -1003360;
-    public static final int DEFAULT_PERF_IMPACTORS_COLOR = -16711936;
-    public static final int DEFAULT_SYSTEM_SPECS_COLOR = -65536;
-    public static final int DEFAULT_HEIGHTMAP_COLOR = -14405479;
-    public static final int DEFAULT_CHUNK_GENERATION_COLOR = -6684758;
-    public static final int DEFAULT_SPAWN_COUNTS_COLOR = -48060;
-    public static final int DEFAULT_MISC_COLOR = 0;
-    public static final int DEFAULT_HELP_COLOR = -3618616;
-    public static final int DEFAULT_PRIORITY_COLOR = 0;
-    public static final int DEFAULT_LIGHT_COLOR = -256;
-    public static final int DEFAULT_LOOKING_AT_BLOCK_COLOR = -3407617;
-    public static final int DEFAULT_LOOKING_AT_FLUID_COLOR = -13312;
-    public static final int DEFAULT_LOOKING_AT_ENTITY_COLOR = -16711732;
+    public static final int DEFAULT_MEMORY_COLOR = 16751360;
+    public static final int DEFAULT_POSITION_COLOR = 16777215;
+    public static final int DEFAULT_CHUNK_RENDERING_COLOR = 15773856;
+    public static final int DEFAULT_PERF_IMPACTORS_COLOR = 65280;
+    public static final int DEFAULT_SYSTEM_SPECS_COLOR = 16711680;
+    public static final int DEFAULT_HEIGHTMAP_COLOR = 2371737;
+    public static final int DEFAULT_CHUNK_GENERATION_COLOR = 10092458;
+    public static final int DEFAULT_SPAWN_COUNTS_COLOR = 16729156;
+    public static final int DEFAULT_MISC_COLOR = 0; // Should have alpha of 0
+    public static final int DEFAULT_HELP_COLOR = 13158600;
+    public static final int DEFAULT_PRIORITY_COLOR = 0; // Should have alpha of 0
+    public static final int DEFAULT_LIGHT_COLOR = 16776960;
+    public static final int DEFAULT_LOOKING_AT_BLOCK_COLOR = 13369599;
+    public static final int DEFAULT_LOOKING_AT_FLUID_COLOR = 16763904;
+    public static final int DEFAULT_LOOKING_AT_ENTITY_COLOR = 65484;
   }
 }
