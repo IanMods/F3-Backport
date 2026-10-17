@@ -2,7 +2,6 @@ package club.iananderson.f3backport.client.gui.components.boxes;
 
 import club.iananderson.f3backport.client.gui.components.debug.entries.Groups;
 import club.iananderson.f3backport.client.gui.screens.ColorsScreen;
-import club.iananderson.f3backport.util.Rgb;
 import java.util.EnumSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -61,11 +60,6 @@ public class ColorEditBox extends EditBox {
     } catch (NumberFormatException formatException) {
       return false;
     }
-  }
-
-  public void save() {
-    Rgb.setRgb(this.boxGroup, this.newGroupColor);
-    this.boxGroup.setGroupColor(this.newGroupColor);
   }
 
   public int getColor() {

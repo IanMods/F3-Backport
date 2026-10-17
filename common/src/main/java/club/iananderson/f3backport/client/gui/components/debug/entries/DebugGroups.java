@@ -2,7 +2,6 @@ package club.iananderson.f3backport.client.gui.components.debug.entries;
 
 import club.iananderson.f3backport.client.gui.components.debug.DebugColumn.Side;
 import club.iananderson.f3backport.client.gui.components.debug.entries.DebugGroup.Builder;
-import java.awt.Color;
 
 public class DebugGroups {
   public static final DebugGroup HELP;
@@ -22,37 +21,41 @@ public class DebugGroups {
   public static final DebugGroup SPAWN_COUNTS;
 
   static {
-    MEMORY = Builder.titled("Memory").withAccentColor((new Color(255, 155, 0))).withPreferredColumn(Side.RIGHT)
+    MEMORY = Builder.titled("Memory").withAccentColor(Groups.MEMORY.getGroupColor()).withPreferredColumn(Side.RIGHT)
         .build();
-    POSITION = Builder.titled("Position").withAccentColor(new Color(255, 255, 255)).withPreferredColumn(Side.LEFT)
+    POSITION = Builder.titled("Position")
+        .withAccentColor(Groups.POSITION.getGroupColor())
+        .withPreferredColumn(Side.LEFT)
         .build();
-    CHUNK_RENDERING = Builder.titled("Chunk Rendering").withAccentColor(new Color(240, 176, 160))
+    CHUNK_RENDERING = Builder.titled("Chunk Rendering").withAccentColor(Groups.CHUNK_RENDERING.getGroupColor())
         .build();
     PERFORMANCE_IMPACTORS = Builder.titled("Performance Impactors")
-        .withAccentColor(new Color(0, 255, 0))
+        .withAccentColor(Groups.PERFORMANCE_IMPACTORS.getGroupColor())
         .withPreferredColumn(Side.RIGHT)
         .build();
-    SYSTEM_SPECS = Builder.titled("System Specs").withAccentColor(new Color(255, 0, 0)).withPreferredColumn(Side.RIGHT)
+    SYSTEM_SPECS = Builder.titled("System Specs")
+        .withAccentColor(Groups.SYSTEM_SPECS.getGroupColor())
+        .withPreferredColumn(Side.RIGHT)
         .build();
-    HEIGHTMAP = Builder.titled("Heightmap").withAccentColor(43775)
+    HEIGHTMAP = Builder.titled("Heightmap").withAccentColor(Groups.HEIGHTMAP.getGroupColor())
         .build();
-    CHUNK_GENERATION = Builder.titled("Chunk Generation").withAccentColor(new Color(153, 255, 170))
+    CHUNK_GENERATION = Builder.titled("Chunk Generation").withAccentColor(Groups.CHUNK_GENERATION.getGroupColor())
         .build();
-    SPAWN_COUNTS = Builder.titled("Entity Spawn Counts").withAccentColor(new Color(255, 68, 68))
+    SPAWN_COUNTS = Builder.titled("Entity Spawn Counts").withAccentColor(Groups.SPAWN_COUNTS.getGroupColor())
         .build();
     MISC = Builder.titleless()
         .build();
-    HELP = Builder.titled("Help").withAccentColor(new Color(200, 200, 200))
+    HELP = Builder.titled("Help").withAccentColor(Groups.HELP.getGroupColor())
         .build();
     PRIORITY = Builder.titleless()
         .build();
-    LIGHT = Builder.titled("Light").withAccentColor(new Color(255, 255, 0))
+    LIGHT = Builder.titled("Light").withAccentColor(Groups.LIGHT.getGroupColor())
         .build();
-    LOOKING_AT_BLOCK = Builder.titled("Looking At Block").withAccentColor(new Color(204, 0, 255))
+    LOOKING_AT_BLOCK = Builder.titled("Looking At Block").withAccentColor(Groups.LOOKING_AT_BLOCK.getGroupColor())
         .build();
-    LOOKING_AT_FLUID = Builder.titled("Looking At Fluid").withAccentColor(new Color(255, 204, 0))
+    LOOKING_AT_FLUID = Builder.titled("Looking At Fluid").withAccentColor(Groups.LOOKING_AT_FLUID.getGroupColor())
         .build();
-    LOOKING_AT_ENTITY = Builder.titled("Looking At Entity").withAccentColor(new Color(0, 255, 204))
+    LOOKING_AT_ENTITY = Builder.titled("Looking At Entity").withAccentColor(Groups.LOOKING_AT_ENTITY.getGroupColor())
         .build();
   }
 

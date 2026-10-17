@@ -48,8 +48,10 @@ public class ColorsScreen extends F3BackportScreen {
 
   @Override
   public void saveConfig() {
-    if (Integer.parseInt(colorBox.getValue()) != this.initialColor) {
-      colorBox.save();
+    int newColorInt = Integer.parseInt(colorBox.getValue());
+
+    if (newColorInt != this.initialColor) {
+      this.group.setGroupColor(newColorInt);
     }
 
     F3BackportClient.CLIENT_SPEC.save();

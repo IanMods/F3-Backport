@@ -32,6 +32,8 @@ public class F3BackportScreen extends Screen {
   public final Map<ConfigValue<Boolean>, Boolean> defaultBooleans = new HashMap<>();
   public final Map<ConfigValue<Integer>, Integer> configIntegers = new HashMap<>();
   public final Map<ConfigValue<Integer>, Integer> defaultIntegers = new HashMap<>();
+  public final Map<ConfigValue<Integer>, Integer> configColors = new HashMap<>();
+  public final Map<ConfigValue<Integer>, Integer> defaultColors = new HashMap<>();
   public int buttonWidth = 150;
   public int buttonHeight = 16;
   public int leftButtonX;
