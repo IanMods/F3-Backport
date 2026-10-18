@@ -35,8 +35,14 @@ public record DebugGroupContents(DebugGroups group, List<String> lines, List<Pai
   public Rect2i extract(final GuiGraphics graphics, final int top, final Font font, final Side side,
       final int scaledScreenWidth) {
     Objects.requireNonNull(font);
+    Component title = this.group.getTranslatedName();
+
+    if (group == DebugGroups.PRIORITY || group == DebugGroups.MISC) {
+      title = Component.empty();
+    }
+
     int fullWidth = this.lines.stream().mapToInt(font::width).max().orElse(0);
-    int titleWidth = font.width(this.group.getTranslatedName());
+    int titleWidth = font.width(title);
     if (titleWidth + TITLE_LEFT_PADDING > fullWidth) {
       fullWidth = titleWidth + TITLE_LEFT_PADDING;
     }
@@ -74,7 +80,7 @@ public record DebugGroupContents(DebugGroups group, List<String> lines, List<Pai
       int titleBottom = top + font.lineHeight - 1;
       Objects.requireNonNull(font);
       graphics.fill(titleLeft, titleTop, titleRight, titleBottom, -1875890128);
-      graphics.drawString(font, this.group.getTranslatedName(), left + TITLE_LEFT_PADDING, top, -1, false);
+      graphics.drawString(font, title, left + TITLE_LEFT_PADDING, top, -1, false);
       Objects.requireNonNull(font);
       y = top + font.lineHeight;
     }

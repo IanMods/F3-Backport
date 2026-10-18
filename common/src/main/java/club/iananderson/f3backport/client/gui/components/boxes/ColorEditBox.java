@@ -8,7 +8,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
 import org.jspecify.annotations.NonNull;
 
 public class ColorEditBox extends EditBox {
@@ -74,22 +73,16 @@ public class ColorEditBox extends EditBox {
     return this.boxGroup;
   }
 
-  public MutableComponent getMenuText(DebugGroups group, int newRgb) {
-    Style groupFormat = Style.EMPTY.withColor(newRgb);
-
-    MutableComponent groupText = group.getTranslatedName();
-
-    return groupText.withStyle(groupFormat);
+  public MutableComponent getMenuText(DebugGroups group) {
+    return group.getTranslatedName();
   }
 
   @Override
   public void renderWidget(@NonNull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
     Minecraft mc = Minecraft.getInstance();
     float textScale = 1;
-    int scaledWidth = mc.getWindow().getGuiScaledWidth();
-    int widgetTotalSize = ((80 + ColorsScreen.BUTTON_PADDING) * groupListSet().size());
 
-    MutableComponent groupName = this.getMenuText(this.boxGroup, this.newGroupColor);
+    MutableComponent groupName = this.getMenuText(this.boxGroup);
 
     graphics.pose().pushPose();
     if ((mc.font.width(groupName) > this.getWidth() - PADDING)) {

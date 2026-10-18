@@ -125,50 +125,40 @@ public class MainOptionsScreen extends F3BackportScreen {
   }
 
   public void renderBacking(GuiGraphics graphics, Side side, Rectangle rect, DebugGroups group) {
-    int borderColor = new Color(0, 0, 0, 200).getRGB();
-    int backgroundColor = new Color(255, 255, 255, 80).getRGB();
+    int borderColor = new Color(0, 0, 0, 0).getRGB();
+    int backgroundColor = -1873784752;
+    int titleColor = -1875890128;
 
     int stringWidth = font.width(group.getTranslatedName());
     int stringX = (int) (rect.getCenterX());
     int stringY = (int) (rect.getMinY() - (double) font.lineHeight);
 
-    int boxStartX = (int) rect.getMinX() - 2;
+    int boxStartX = (int) rect.getMinX() - 1;
     int boxStartY = (int) rect.getMinY() - 1;
-    int boxEndX = (int) rect.getMaxX() + 2;
-    int boxEndY = (int) rect.getMaxY() + 2;
+    int boxEndX = (int) rect.getMaxX() + 1;
+    int boxEndY = (int) rect.getMaxY() + 1;
 
     int colorStartX = side == Side.LEFT
-                      ? boxStartX - 3
-                      : boxEndX + 2;
-    int colorBorderStartX = side == Side.LEFT
-                            ? colorStartX - 1
-                            : colorStartX + 1;
-    int colorBorderEndX = side == Side.LEFT
-                          ? colorStartX + 1
-                          : colorStartX - 1;
+                      ? boxStartX - 1
+                      : boxEndX;
 
     int groupRgbaInt = Rgb.rgbaInt(group.getGroupColor(), F3BackportClient.getAlphaColor());
 
-    graphics.vLine(colorStartX, boxStartY - 1, boxEndY - 1, groupRgbaInt);
-    graphics.vLine(colorBorderStartX, boxStartY - 1, boxEndY - 1, borderColor);
-    graphics.vLine(colorBorderEndX, boxStartY - 1, boxEndY - 1, borderColor);
-    graphics.hLine(colorBorderStartX, colorBorderEndX, boxStartY - 1, borderColor);
-    graphics.hLine(colorBorderStartX, colorBorderEndX, boxEndY - 1, borderColor);
+    int tabStartY = stringY - 2;
+    int tabEndY = (int) rect.getMinY() - 1;
 
-    graphics.fill(boxStartX, boxStartY, boxEndX, boxEndY, borderColor);
-    graphics.fill(boxStartX + 1, boxStartY, boxEndX - 1, boxEndY - 1, backgroundColor);
+    graphics.fill(boxStartX, boxStartY, boxEndX, boxEndY, backgroundColor);
+    graphics.fill(boxStartX, tabStartY, boxEndX, tabEndY, titleColor);
+    graphics.vLine(colorStartX, tabStartY - 1, boxEndY, groupRgbaInt);
 
     float tabScale = (float) (0.75);
     int tabStartX = (int) (stringX - ((double) stringWidth / 2 * tabScale) - 4);
     int tabEndX = (int) (stringX + ((double) stringWidth / 2 * tabScale) + 4);
-    int tabStartY = stringY - 3;
-    int tabEndY = (int) rect.getMinY() - 1;
 
     graphics.fill(boxStartX, boxStartY - 1, tabStartX, boxStartY, borderColor);
     graphics.fill(tabEndX, boxStartY - 1, boxEndX, boxStartY, borderColor);
 
     graphics.fill(tabStartX, tabStartY, tabEndX, tabEndY, borderColor);
-    graphics.fill(tabStartX + 1, tabStartY + 1, tabEndX - 1, tabEndY, backgroundColor);
 
     graphics.pose().pushPose();
     graphics.pose().scale(tabScale, tabScale, tabScale);

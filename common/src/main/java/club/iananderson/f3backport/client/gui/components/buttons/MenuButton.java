@@ -22,11 +22,17 @@ public class MenuButton extends Button {
                                                                      "widget/button_disabled"),
                                                                  ResourceLocation.withDefaultNamespace(
                                                                      "widget/button_highlighted"));
+
+  private static final WidgetSprites COLOR_SPRITES = new WidgetSprites(Common.location("widget/color_button"),
+                                                                       Common.location(
+                                                                           "widget/color_button_highlighted"));
   float scale;
+  private final MenuButtons buttonType;
 
   protected MenuButton(int x, int y, int width, int height, MenuButtons buttonType, OnPress onPress, float scale) {
     super(x, y, width, height, buttonType.getButtonText(), onPress, DEFAULT_NARRATION);
     this.scale = scale;
+    this.buttonType = buttonType;
   }
 
   public static Builder builder(MenuButtons button, OnPress onPress) {
@@ -46,8 +52,14 @@ public class MenuButton extends Button {
     graphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
     RenderSystem.enableBlend();
     RenderSystem.enableDepthTest();
-    graphics.blitSprite(SPRITES.get(this.active, this.isHoveredOrFocused()), this.getX(), this.getY(), this.getWidth(),
-                        this.getHeight());
+    if (this.buttonType == MenuButtons.COLOR) {
+      graphics.blitSprite(COLOR_SPRITES.get(this.active, this.isHoveredOrFocused()), this.getX(), this.getY(),
+                          this.getWidth(), this.getHeight());
+    } else {
+      graphics.blitSprite(SPRITES.get(this.active, this.isHoveredOrFocused()), this.getX(), this.getY(),
+                          this.getWidth(), this.getHeight());
+    }
+
     graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 
     graphics.pose().scale(this.scale, this.scale, this.scale);
